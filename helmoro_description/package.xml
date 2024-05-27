@@ -5,7 +5,7 @@
   <version>2.0.0</version>
   <description>Hosts models required for simulation of HelMoRo.</description>
   <maintainer email="samuel.bamert@helbling.ch">Samuel Bamert</maintainer>
-  <license>ToDo</license>
+  <license>BSD</license>
 
   <author>Helbling Technik AG</author>
 
@@ -19,6 +19,9 @@
 
   <export>
     <build_type>ament_cmake</build_type>
+    <gazebo_ros                                                                 
+      gazebo_plugin_path="${prefix}/lib"
+      gazebo_model_path="${prefix}/../.." /> 
   </export>
 
 </package>

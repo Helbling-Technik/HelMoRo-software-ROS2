@@ -32,7 +32,7 @@ The packages included support ROS Humble on Ubuntu 20.04 and Ubuntu 22.04.
 4. Install the ROS 2 dependencies
 
       ```sh
-      cd ~/create3_ws
+      cd ~/ros2_ws
       sudo apt-get update
       rosdep install --from-path src -yi
       ```
