@@ -13,6 +13,14 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_python REQUIRED)
 
+find_package(gazebo_ros QUIET)
+if(NOT gazebo_ros_FOUND)
+  message(WARNING "Gazebo not found. Skipping ${PROJECT_NAME} package.")
+  ament_package()
+  return()
+endif()
+
+
 install(
   DIRECTORY
     launch

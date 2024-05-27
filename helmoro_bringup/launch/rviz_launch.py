@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 
 # Launch RViz.
 
@@ -9,10 +10,10 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     # Get the path to the 'helmoro_bringup' package
-    helmoro_bringup = get_package_share_directory('helmoro_bringup')
+    pkg_helmoro_bringup = get_package_share_directory('helmoro_bringup')
 
     # Define the path to the RViz configuration file
-    rviz_config = PathJoinSubstitution([helmoro_bringup, 'rviz', 'rviz_config.rviz'])
+    rviz_config = PathJoinSubstitution([pkg_helmoro_bringup, 'rviz', 'rviz_config.rviz'])
 
     # Define the RViz node
     rviz = Node(
