@@ -29,8 +29,15 @@ The packages included support ROS Humble on Ubuntu 20.04 and Ubuntu 22.04.
       ```sh
       git clone https://github.com/Helbling-Technik/HelMoRo-software-ROS2.git
       ```
+4. Install the ROS 2 dependencies
 
-4. Build and source the Helmoro software package using
+      ```sh
+      cd ~/create3_ws
+      sudo apt-get update
+      rosdep install --from-path src -yi
+      ```
+
+5. Build and source the Helmoro software package using
 
       ```sh
       colcon build --symlink-install
