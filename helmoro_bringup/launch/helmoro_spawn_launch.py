@@ -52,7 +52,7 @@ def generate_launch_description():
     yaw = LaunchConfiguration('yaw')
     use_rviz = LaunchConfiguration('use_rviz')
 
-    robot_name = GetNamespacedName(namespace, 'helmoro_blue')
+    robot_name = GetNamespacedName(namespace, 'robot')
 
     spawn_robot_group_action = GroupAction([
         PushRosNamespace(namespace),

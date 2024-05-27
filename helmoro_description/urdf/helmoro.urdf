@@ -4,48 +4,38 @@
   <xacro:include filename="$(find helmoro_description)/urdf/helmoro_parameters.urdf" />
   <xacro:include filename="$(find helmoro_description)/urdf/helmoro_segments.urdf" />
 
-  <gazebo>
+  <!-- <gazebo>
     <plugin name="helmoro_gazebo_plugin" filename="libhelmoro_gazebo_plugin.so"></plugin>
-  </gazebo>
+  </gazebo> -->
 
   <gazebo reference="camera_rgb_frame">
-    <sensor name="camera" type="depth">
-      <update_rate>30</update_rate>
-      <camera>
-        <horizontal_fov>${PI/3}</horizontal_fov>
-        <image>
-          <width>640</width>
-          <height>480</height>
-          <format>R8G8B8</format>
-        </image>
-        <clip>
-          <near>0.45</near>
-          <far>8</far>
-        </clip>
+    <sensor type="depth" name="camera">
+      <always_on>0</always_on>
+      <update_rate>1</update_rate>
+      <camera name="camera_name">
+        <distortion>
+          <k1>0.1</k1>
+          <k2>0.2</k2>
+          <k3>0.3</k3>
+          <p1>0.4</p1>
+          <p2>0.5</p2>
+          <center>0.5 0.5</center>
+        </distortion>
       </camera>
-      <plugin name="camera_link_controller" filename="libgazebo_ros_openni_kinect.so">
-        <baseline>0.2</baseline>
-        <alwaysOn>true</alwaysOn>
-        <updateRate>0.0</updateRate> <!--1.0-->
-        <cameraName>astra_pro_ir</cameraName>
-        <imageTopicName>/camera/rgb/image_raw</imageTopicName>
-        <cameraInfoTopicName>/camera/rgb/camera_info</cameraInfoTopicName>
-        <depthImageTopicName>/camera/depth/image_raw</depthImageTopicName>
-        <depthImageInfoTopicName>/camera/depth/camera_info</depthImageInfoTopicName>
-        <pointCloudTopicName>/camera/depth/points</pointCloudTopicName>
-        <frameName>camera_rgb_optical_frame</frameName>
-        <pointCloudCutoff>0.45</pointCloudCutoff>
-        <pointCloudCutoffMax>8</pointCloudCutoffMax>
-        <distortionK1>0.00000001</distortionK1>
-        <distortionK2>0.00000001</distortionK2>
-        <distortionK3>0.00000001</distortionK3>
-        <distortionT1>0.00000001</distortionT1>
-        <distortionT2>0.00000001</distortionT2>
-        <CxPrime>0</CxPrime>
-        <Cx>0</Cx>
-        <Cy>0</Cy>
-        <focalLength>0</focalLength>
-        <hackBaseline>0</hackBaseline>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <ros>
+          <namespace>custom_ns</namespace>
+          <remapping>custom_camera/image_raw:=custom_camera/custom_image</remapping>
+          <remapping>custom_camera/image_depth:=custom_camera/custom_image_depth</remapping>
+          <remapping>custom_camera/camera_info:=custom_camera/custom_info_raw</remapping>
+          <remapping>custom_camera/camera_info_depth:=custom_camera/custom_info_depth</remapping>
+          <remapping>custom_camera/points:=custom_camera/custom_points</remapping>
+        </ros>
+        <camera_name>custom_camera</camera_name>
+        <frame_name>camera_rgb_optical_frame</frame_name>
+        <hack_baseline>0.07</hack_baseline>
+        <min_depth>0.45</min_depth>
+        <max_depth>8</max_depth>
       </plugin>
     </sensor>
   </gazebo>
@@ -79,9 +69,13 @@
           <stddev>0.01</stddev>
         </noise>
       </ray>
-      <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
-        <topicName>/scan</topicName>
-        <frameName>laser</frameName>
+      <plugin name="lidar_controller" filename="libgazebo_ros_ray_sensor.so">
+        <ros>
+        <namespace></namespace>
+        <remapping>~/out:=scan</remapping>
+      </ros>
+      <!-- Set output to sensor_msgs/LaserScan to get same output type as gazebo_ros_laser -->
+      <output_type>sensor_msgs/LaserScan</output_type>
       </plugin>
     </sensor>
   </gazebo>
@@ -90,17 +84,15 @@
     <gravity>true</gravity>
     <sensor name="imu_sensor" type="imu">
       <always_on>true</always_on>
-      <update_rate>100</update_rate>
-      <visualize>true</visualize>
-      <topic>__default_topic__</topic>
-      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
-        <topicName>imu/data</topicName>
-        <bodyName>imu_link</bodyName>
-        <updateRateHZ>10.0</updateRateHZ>
-        <gaussianNoise>0.0</gaussianNoise>
-        <xyzOffset>0 0 0</xyzOffset>
-        <rpyOffset>0 0 0</rpyOffset>
-        <frameName>imu_link</frameName>
+      <update_rate>10</update_rate>
+      <!-- <visualize>true</visualize> -->
+      <plugin name="imu_plugin" filename="libgazebo_ros_imu_sensor.so">
+        <ros>
+          <!-- Will publish to /imu/data -->
+          <namespace>/imu</namespace>
+          <remapping>~/out:=data</remapping>
+        </ros>
+        <initial_orientation_as_reference>false</initial_orientation_as_reference>
       </plugin>
       <pose>0 0 0 0 0 0</pose>
     </sensor>
