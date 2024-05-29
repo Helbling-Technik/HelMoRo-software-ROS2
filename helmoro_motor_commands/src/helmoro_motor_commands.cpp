@@ -198,6 +198,19 @@ void HelmoroMotorCommands::getWheelVelocitiesCommand()
   wheel_vel_cmd_[3] = wheel_vel_cmd_[1];
 }
 
+void HelmoroMotorCommands::PublishJointStates()
+{
+  sensor_msgs::msg::JointState joint_states;
+  joint_states.header.stamp = this->now();
+  for (unsigned int i = 0; i < nb_actuators_; i++) {
+    joint_states.name.push_back(helmoro_description::HelmoroJointNames::getName(i));
+    joint_states.position.push_back(wheel_pos_[i]);
+    joint_states.velocity.push_back(wheel_vel_state_[i]);
+  }
+
+  joint_state_pub_->publish(joint_states);
+}
+
 void HelmoroMotorCommands::PublishMotorCommands()
 {
   auto motor_commands_msg = std::make_unique<helmoro_msgs::msg::HelmoroJointCommands>();
