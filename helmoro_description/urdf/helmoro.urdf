@@ -25,7 +25,7 @@
         </clip>
 
       </camera>
-      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+      <!-- <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
         <ros>
           <namespace>camera</namespace>
           <remapping>astra_pro_ir/image_raw:=color/image_raw</remapping>
@@ -39,7 +39,7 @@
         <hack_baseline>0</hack_baseline>
         <min_depth>0.45</min_depth>
         <max_depth>8</max_depth>
-      </plugin>
+      </plugin> -->
     </sensor>
   </gazebo>
 

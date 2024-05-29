@@ -13,7 +13,7 @@ ARGUMENTS = [
         DeclareLaunchArgument('use_gazebo_gui', default_value='true',
                           choices=['true', 'false'],
                           description='Set "false" to run gazebo headless.'),
-        DeclareLaunchArgument('use_rviz', default_value='true',
+        DeclareLaunchArgument('use_rviz', default_value='false',
                           choices=['true', 'false'],
                           description='Start RViz.'),
         DeclareLaunchArgument('world_path', default_value='',
@@ -31,6 +31,8 @@ def generate_launch_description():
 
     # Get the path to the 'helmoro_bringup' package
     pkg_helmoro_bringup = get_package_share_directory('helmoro_bringup')
+    pkg_helmoro_motor_commands = get_package_share_directory('helmoro_motor_commands')
+    pkg_helmoro_joymanager = get_package_share_directory('helmoro_joymanager')
     
     # Paths
     gazebo_launch = PathJoinSubstitution(
@@ -39,6 +41,10 @@ def generate_launch_description():
         [pkg_helmoro_bringup, 'launch', 'rviz_launch.py'])
     robot_spawn_launch = PathJoinSubstitution(
         [pkg_helmoro_bringup, 'launch', 'helmoro_spawn_launch.py'])
+    motor_commands_launch = PathJoinSubstitution(
+        [pkg_helmoro_motor_commands, 'launch', 'motor_commands_launch.py'])
+    joystick_launch = PathJoinSubstitution(
+        [pkg_helmoro_joymanager, 'launch', 'joymanager_launch.py'])
 
     # Launch Gazebo
     gazebo = IncludeLaunchDescription(
@@ -60,10 +66,21 @@ def generate_launch_description():
         ('z', LaunchConfiguration('z')),
         ('yaw', LaunchConfiguration('yaw'))])
 
+    # Launch Motor Commands Node
+    motor_commands = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([motor_commands_launch]),
+    )
+
+    # Launch Joystick Navigation
+    joystick = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([joystick_launch]),
+    )
+
     # Define LaunchDescription variable
     ld = LaunchDescription(ARGUMENTS)
-    # Gazebo
+
     ld.add_action(gazebo)
-    # Robot spawn
     ld.add_action(robot_spawn)
+    ld.add_action(motor_commands)
+    ld.add_action(joystick)
     return ld
