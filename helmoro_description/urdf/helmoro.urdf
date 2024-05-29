@@ -4,14 +4,14 @@
   <xacro:include filename="$(find helmoro_description)/urdf/helmoro_parameters.urdf" />
   <xacro:include filename="$(find helmoro_description)/urdf/helmoro_segments.urdf" />
 
-  <!-- <gazebo>
+  <gazebo>
     <plugin name="helmoro_gazebo_plugin" filename="libhelmoro_gazebo_plugin.so"></plugin>
-  </gazebo> -->
+  </gazebo>
 
   <gazebo reference="camera_rgb_frame">
     <sensor type="depth" name="camera">
       <always_on>0</always_on>
-      <update_rate>20</update_rate>
+      <update_rate>30</update_rate>
       <camera>
         <horizontal_fov>${PI/3}</horizontal_fov>
         <image>
