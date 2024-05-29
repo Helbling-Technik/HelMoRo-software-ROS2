@@ -35,6 +35,7 @@ private:
   void getWheelVelocitiesCommand();
   void PublishMotorCommands();
   void PublishJointStates();
+  void GetParams();
 
   /// \brief Callback for new velocity commands
   void CmdVelocityCallback(geometry_msgs::msg::Twist::ConstSharedPtr msg);

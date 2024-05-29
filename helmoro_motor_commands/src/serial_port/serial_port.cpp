@@ -153,7 +153,7 @@ int SerialPort::Write(const void* buffer, const unsigned int length) {
 
 int SerialPort::Read(void* buffer, const unsigned int bufferLength) { return read(fd_, buffer, bufferLength); }
 
-void SerialPort::Flush(int dir) {
+void SerialPort::Flush() {
   //tcflush(fd_, )
   ioctl(fd_, TCFLSH, 2);
 }

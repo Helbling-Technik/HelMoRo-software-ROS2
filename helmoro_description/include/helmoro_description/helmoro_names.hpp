@@ -13,7 +13,7 @@ constexpr char const *names[] = {
   		"base_link_to_LEFT_BACK_WHEEL"};
 
 constexpr const char* getName(const unsigned int joint) { return names[joint]; }
-constexpr const char* getName(const helmoro_description::JointEnum joint) { return names[static_cast<const unsigned int>(joint)]; }
+constexpr const char* getName(const helmoro_description::JointEnum joint) { return names[static_cast<unsigned int>(joint)]; }
 }
 
 
@@ -25,7 +25,7 @@ constexpr char const *names[] = {
 	"base_link_to_LEFT_BACK_WHEEL"};
 
 constexpr const char* getName(const unsigned int actuator) { return names[actuator]; }
-constexpr const char* getName(const helmoro_description::ActuatorEnum actuator) { return names[static_cast<const unsigned int>(actuator)]; }
+constexpr const char* getName(const helmoro_description::ActuatorEnum actuator) { return names[static_cast<unsigned int>(actuator)]; }
 }
 
 namespace HelmoroLinkNames {
@@ -38,7 +38,7 @@ constexpr char const *names[] = {
 		"CAMERA_LINK"};
 
 constexpr const char* getName(const unsigned int link) { return names[link]; }
-constexpr const char* getName(const helmoro_description::LinkEnum link) { return names[static_cast<const unsigned int>(link)]; }
+constexpr const char* getName(const helmoro_description::LinkEnum link) { return names[static_cast<unsigned int>(link)]; }
 }
 
 } // namespace manipulator:description

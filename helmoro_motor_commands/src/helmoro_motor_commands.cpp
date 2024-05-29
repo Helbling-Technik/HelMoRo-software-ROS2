@@ -7,11 +7,12 @@
 namespace helmoro_motor_commands
 {
 using namespace std::placeholders;
-using namespace std::chrono_literals;
 
 HelmoroMotorCommands::HelmoroMotorCommands(const rclcpp::NodeOptions & options)
-  : rclcpp::Node("wheels_publisher_node", options), motors_left_("/dev/ttyACM1", 115200), motors_right_("/dev/ttyACM0", 115200)
+  : rclcpp::Node("helmoro_motor_commands", options), motors_left_("/dev/ttyACM1", 115200), motors_right_("/dev/ttyACM0", 115200)
 { 
+  // read parameters
+  GetParams();
 
   // Create subscription to let other applications drive the robot
   move_base_sub_ = this->create_subscription<geometry_msgs::msg::Twist>(
@@ -47,6 +48,7 @@ HelmoroMotorCommands::HelmoroMotorCommands(const rclcpp::NodeOptions & options)
 
   omega_imu_ = 0.0;
 
+  // Create timer to periodically update motor commands
   constexpr auto control_period = std::chrono::duration<double>(1.0 / 40.0);
   control_timer_ = rclcpp::create_timer(
     this,
@@ -119,6 +121,41 @@ void HelmoroMotorCommands::motorStatesCallback(sensor_msgs::msg::JointState::Con
   }
 }
 
+void HelmoroMotorCommands::GetParams()
+{
+  // Helmoro specs
+  if (this->has_parameter("use_sim_time")) {
+    is_real_robot_ = false;
+    RCLCPP_INFO(this->get_logger(), "[Motor commands]: Commanding in simulation");
+  }
+  this->declare_parameter("/helmoro_motor_commands/dimensions/wheel_spacing_x", 5.0);
+  dx_wheels_ = this->get_parameter("/helmoro_motor_commands/dimensions/wheel_spacing_x").as_double();
+  this->declare_parameter("/helmoro_motor_commands/dimensions/wheel_spacing_y", 5.0);
+  dy_wheels_ = this->get_parameter("/helmoro_motor_commands/dimensions/wheel_spacing_y").as_double();
+  this->declare_parameter("/helmoro_motor_commands/dimensions/wheel_diameter", 5.0);
+  dia_wheels_ = this->get_parameter("/helmoro_motor_commands/dimensions/wheel_diameter").as_double();
+  this->declare_parameter("/helmoro_motor_commands/actuators/max_wheel_rot_vel", 14.0);
+  max_wheel_rot_vel_ = this->get_parameter("/helmoro_motor_commands/actuators/max_wheel_rot_vel").as_double();
+  this->declare_parameter("/helmoro_motor_commands/velocities/max_ang_vel", 6.3);
+  max_ang_vel_ = this->get_parameter("/helmoro_motor_commands/velocities/max_ang_vel").as_double();
+  this->declare_parameter("/helmoro_motor_commands/velocities/max_lin_vel", 1.0);
+  max_lin_vel_ = this->get_parameter("/helmoro_motor_commands/velocities/max_lin_vel").as_double();
+
+  // Motor controller ports, addresses & baudrate
+  this->declare_parameter("helmoro_motor_commands/address_left", 128);
+  addr_left_ = this->get_parameter("helmoro_motor_commands/address_left").as_int();
+  this->declare_parameter("helmoro_motor_commands/address_right", 129);
+  addr_right_ = this->get_parameter("helmoro_motor_commands/address_right").as_int();
+  this->declare_parameter("helmoro_motor_commands/baudrate", 115200);
+  baud_ = this->get_parameter("helmoro_motor_commands/baudrate").as_int();
+  this->declare_parameter("/helmoro_motor_commands/actuators/encoder_resolution", 2797);
+  tics_per_rad_ = this->get_parameter("/helmoro_motor_commands/actuators/encoder_resolution").as_int() / (2 * M_PI);
+
+  // integral factor
+  this->declare_parameter("helmoro_motor_commands/integral/ki_factor", 1.0);
+  ki_ = this->get_parameter("helmoro_motor_commands/integral/ki_factor").as_double();
+}
+
 void HelmoroMotorCommands::getWheelVelocitiesCommand()
 {
   // max rot speed for distinct radius
@@ -174,3 +211,5 @@ void HelmoroMotorCommands::PublishMotorCommands()
 }
 
 }  // namespace helmoro_motor_commands
+
+RCLCPP_COMPONENTS_REGISTER_NODE(helmoro_motor_commands::HelmoroMotorCommands)

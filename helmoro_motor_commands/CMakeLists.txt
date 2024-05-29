@@ -35,7 +35,9 @@ add_library(helmoro_motor_commands_lib SHARED)
 target_sources(
   helmoro_motor_commands_lib
   PRIVATE
+    src/motor_interface/motor_interface.cpp
     src/helmoro_motor_commands.cpp
+    src/serial_port/serial_port.cpp
 )
 target_include_directories(helmoro_motor_commands_lib PUBLIC include)
 ament_target_dependencies(helmoro_motor_commands_lib

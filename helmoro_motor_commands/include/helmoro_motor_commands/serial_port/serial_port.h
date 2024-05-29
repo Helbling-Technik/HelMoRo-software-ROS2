@@ -1,8 +1,7 @@
 #pragma once
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <string>
 
 #include <errno.h>
 #include <fcntl.h>
@@ -24,7 +23,7 @@ class SerialPort {
     // public read/write functions
     int Write(const void* buffer, const unsigned int length);
     int Read(void* buffer, const unsigned int bufferLength);
-    void Flush(int dir);
+    void Flush();
 
   private:
     // general variables

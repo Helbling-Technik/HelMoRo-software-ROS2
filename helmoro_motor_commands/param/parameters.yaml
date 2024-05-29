@@ -6,18 +6,30 @@ helmoro_motor_commands:
       baudrate: 115200
 
     integral:
-      ki_factor: 0.4 #1.0
+      ki_factor: 0.4
 
     publishers:
       joint_states_publisher:
-        topic: /helmoro_joint_states
+        topic: "helmoro_joint_states"
         queue_size: 1
         latch: false
+
       motor_commands_publisher:
-        topic: /helmoro_motor_commands
+        topic: "helmoro_motor_commands"
         queue_size: 1
         latch: false
+        
+    time_step_pub: 0.05
 
-    time_step_pub: 0.05 #0.02
+    actuators:
+        encoder_resolution: 2796.8 #qcpr
+        max_wheel_rot_vel: 21.4 #rad/s rotvel of a wheel
 
-# if changing the rate of the loop, you may have to change the ki_factor as well! (v_i += ki_factor * time_step_pub * error)
+    dimensions:
+        wheel_spacing_x: 0.115 #m
+        wheel_spacing_y: 0.195 #m
+        wheel_diameter: 0.09 #m
+
+    velocities:
+        max_lin_vel: 1.1 #m/s
+        max_ang_vel: 10.5 #rad/s
