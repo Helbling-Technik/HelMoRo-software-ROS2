@@ -1,35 +1,19 @@
-helmoro_motor_commands:
-  ros__parameters:
-    motor_controllers:
-      address_left: 128
-      address_right: 129
-      baudrate: 115200
-
-    integral:
+---
+/**:
+  helmoro_motor_commands:
+    ros__parameters:
+      # Motor Parameters
+      motor_address_left: 128
+      motor_address_left: 129
+      motor_baudrate: 115200
+      # Encoder REsolution for Actuators
+      encoder_resolution: 2797 #qcpr
+      # Integral Factor
       ki_factor: 0.4
-
-    publishers:
-      joint_states_publisher:
-        topic: "helmoro_joint_states"
-        queue_size: 1
-        latch: false
-
-      motor_commands_publisher:
-        topic: "helmoro_motor_commands"
-        queue_size: 1
-        latch: false
-        
-    time_step_pub: 0.05
-
-    actuators:
-        encoder_resolution: 2796.8 #qcpr
-        max_wheel_rot_vel: 21.4 #rad/s rotvel of a wheel
-
-    dimensions:
-        wheel_spacing_x: 0.115 #m
-        wheel_spacing_y: 0.195 #m
-        wheel_diameter: 0.09 #m
-
-    velocities:
-        max_lin_vel: 1.1 #m/s
-        max_ang_vel: 10.5 #rad/s
+      # Robot Dimensions
+      wheel_spacing_x: 0.115 #m
+      wheel_spacing_y: 0.195 #m
+      wheel_diameter: 0.09 #m
+      # Velocity Constraints
+      max_lin_vel: 1.1 #m/s
+      max_ang_vel: 10.5 #rad/s

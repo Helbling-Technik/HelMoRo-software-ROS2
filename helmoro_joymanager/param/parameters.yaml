@@ -1,6 +1,11 @@
-helmoro_joymanager:
-    ros__parameters:
-        scaling_factors:
+---
+/**:
+    helmoro_joymanager:
+        ros__parameters:
+            # Scaling Factors
             linear_velocity: 0.25
             angular_velocity: 0.2
+            # Velocity Constraints
+            max_lin_vel: 1.1 #m/s
+            max_ang_vel: 10.5 #rad/s
     

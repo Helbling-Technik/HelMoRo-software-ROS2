@@ -128,32 +128,21 @@ void HelmoroMotorCommands::GetParams()
     is_real_robot_ = false;
     RCLCPP_INFO(this->get_logger(), "[Motor commands]: Commanding in simulation");
   }
-  this->declare_parameter("/helmoro_motor_commands/dimensions/wheel_spacing_x", 5.0);
-  dx_wheels_ = this->get_parameter("/helmoro_motor_commands/dimensions/wheel_spacing_x").as_double();
-  this->declare_parameter("/helmoro_motor_commands/dimensions/wheel_spacing_y", 5.0);
-  dy_wheels_ = this->get_parameter("/helmoro_motor_commands/dimensions/wheel_spacing_y").as_double();
-  this->declare_parameter("/helmoro_motor_commands/dimensions/wheel_diameter", 5.0);
-  dia_wheels_ = this->get_parameter("/helmoro_motor_commands/dimensions/wheel_diameter").as_double();
-  this->declare_parameter("/helmoro_motor_commands/actuators/max_wheel_rot_vel", 14.0);
-  max_wheel_rot_vel_ = this->get_parameter("/helmoro_motor_commands/actuators/max_wheel_rot_vel").as_double();
-  this->declare_parameter("/helmoro_motor_commands/velocities/max_ang_vel", 6.3);
-  max_ang_vel_ = this->get_parameter("/helmoro_motor_commands/velocities/max_ang_vel").as_double();
-  this->declare_parameter("/helmoro_motor_commands/velocities/max_lin_vel", 1.0);
-  max_lin_vel_ = this->get_parameter("/helmoro_motor_commands/velocities/max_lin_vel").as_double();
+  dx_wheels_ = this->declare_parameter("wheel_spacing_x", 5.0);
+  dy_wheels_ = this->declare_parameter("wheel_spacing_y", 5.0);
+  dia_wheels_ = this->declare_parameter("wheel_diameter", 5.0);
+  max_wheel_rot_vel_ = this->declare_parameter("max_wheel_rot_vel", 14.0);
+  max_ang_vel_ = this->declare_parameter("max_ang_vel", 6.3);
+  max_lin_vel_ = this->declare_parameter("max_lin_vel", 1.0);
+  tics_per_rad_ = this->declare_parameter("encoder_resolution", 2797);
 
   // Motor controller ports, addresses & baudrate
-  this->declare_parameter("helmoro_motor_commands/address_left", 128);
-  addr_left_ = this->get_parameter("helmoro_motor_commands/address_left").as_int();
-  this->declare_parameter("helmoro_motor_commands/address_right", 129);
-  addr_right_ = this->get_parameter("helmoro_motor_commands/address_right").as_int();
-  this->declare_parameter("helmoro_motor_commands/baudrate", 115200);
-  baud_ = this->get_parameter("helmoro_motor_commands/baudrate").as_int();
-  this->declare_parameter("/helmoro_motor_commands/actuators/encoder_resolution", 2797);
-  tics_per_rad_ = this->get_parameter("/helmoro_motor_commands/actuators/encoder_resolution").as_int() / (2 * M_PI);
+  addr_left_ = this->declare_parameter("address_left", 128);
+  addr_right_ = this->declare_parameter("address_right", 129);
+  baud_ = this->declare_parameter("baudrate", 115200);
 
   // integral factor
-  this->declare_parameter("helmoro_motor_commands/integral/ki_factor", 1.0);
-  ki_ = this->get_parameter("helmoro_motor_commands/integral/ki_factor").as_double();
+  ki_ = this->declare_parameter("ki_factor", 1.0);
 }
 
 void HelmoroMotorCommands::getWheelVelocitiesCommand()

@@ -19,8 +19,6 @@ public:
   explicit HelmoroJoyManager(const rclcpp::NodeOptions & options = rclcpp::NodeOptions());
 
 private:
-  void update();
-
   void joystickCallback(sensor_msgs::msg::Joy::ConstSharedPtr msg);
 
   rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr user_input_pub_;

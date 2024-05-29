@@ -16,15 +16,10 @@ HelmoroJoyManager::HelmoroJoyManager(const rclcpp::NodeOptions & options)
       std::bind(&HelmoroJoyManager::joystickCallback, this, _1));
 
   // load scaling factors from parameter file
-  this->declare_parameter("/helmoro_joymanager/scaling_factors/linear_velocity", 1.0);
-  linearVelocityScalingFactor_ = this->get_parameter("/helmoro_joymanager/scaling_factors/linear_velocity").as_double();
-  this->declare_parameter("/helmoro_joymanager/scaling_factors/angular_velocity", 1.0);
-  angularVelocityScalingFactor_ = this->get_parameter("/helmoro_joymanager/scaling_factors/angular_velocity").as_double();
-
-  this->declare_parameter("/helmoro_motor_commands/velocities/max_lin_vel", 1.0);
-  maxLinVel_ = this->get_parameter("/helmoro_motor_commands/velocities/max_lin_vel").as_double();
-  this->declare_parameter("/helmoro_motor_commands/velocities/max_ang_vel", 6.3);
-  maxAngVel_ = this->get_parameter("/helmoro_motor_commands/velocities/max_ang_vel").as_double();
+  linearVelocityScalingFactor_ = this->declare_parameter("linear_velocity", 1.0);
+  angularVelocityScalingFactor_ = this->declare_parameter("angular_velocity", 1.0);
+  maxLinVel_ = this->declare_parameter("max_lin_vel", 1.0);
+  maxAngVel_ = this->declare_parameter("max_ang_vel", 6.3);
 
   right_trigger_initalized_ = false;  // needs to be 0 so that velocity commands are accepted
   left_trigger_initalized_ = false;

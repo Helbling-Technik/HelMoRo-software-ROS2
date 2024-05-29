@@ -73,7 +73,7 @@ private:
   MotorInterface motors_right_;
 
   // encoder
-  double tics_per_rad_;
+  int tics_per_rad_;
 
   // battery voltages
   double batt_volt_left_;
