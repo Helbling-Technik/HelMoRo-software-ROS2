@@ -11,22 +11,19 @@ from launch_ros.actions import Node
 
 
 ARGUMENTS = [
-    # DeclareLaunchArgument('gazebo', default_value='classic',
-    #                       choices=['classic', 'ignition'],
-    #                       description='Which gazebo simulator to use'),
-    # DeclareLaunchArgument('visualize_rays', default_value='false',
-    #                       choices=['true', 'false'],
-    #                       description='Enable/disable ray visualization'),
     DeclareLaunchArgument('namespace', default_value='',
                           description='Robot namespace'),
 ]
 
 
 def generate_launch_description():
+    # Directroies
     pkg_helmoro_description = get_package_share_directory('helmoro_description')
+
+    # Paths
     xacro_file = PathJoinSubstitution([pkg_helmoro_description, 'urdf', 'helmoro.urdf'])
-    gazebo_simulator = LaunchConfiguration('gazebo')
-    visualize_rays = LaunchConfiguration('visualize_rays')
+
+    # Launch Configuration
     namespace = LaunchConfiguration('namespace')
 
     robot_state_publisher = Node(
@@ -39,14 +36,8 @@ def generate_launch_description():
             {'robot_description':
              Command(
                   ['xacro', ' ', xacro_file, ' ',
-                #    'gazebo:=', gazebo_simulator, ' ',
-                #    'visualize_rays:=', visualize_rays, ' ',
                    'namespace:=', namespace])},
         ],
-        remappings=[
-            ('/tf', 'tf'),
-            ('/tf_static', 'tf_static')
-        ]
     )
 
     # Define LaunchDescription variable

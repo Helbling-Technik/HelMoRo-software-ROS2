@@ -1,53 +1,63 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://ros.org/xacro" name="Helmoro">
+<robot name="Helmoro" xmlns:xacro="http://ros.org/wiki/xacro">
 
   <xacro:include filename="$(find helmoro_description)/urdf/helmoro_parameters.urdf" />
   <xacro:include filename="$(find helmoro_description)/urdf/helmoro_segments.urdf" />
 
+  <!-- Sensor Plugins-->
   <gazebo>
-    <plugin name="helmoro_gazebo_plugin" filename="libhelmoro_gazebo_plugin.so"></plugin>
+    <plugin filename="libignition-gazebo-imu-system.so" name="ignition::gazebo::systems::Imu">
+    </plugin>
+    <plugin
+        filename="libignition-gazebo-sensors-system.so"
+        name="ignition::gazebo::systems::Sensors">
+        <render_engine>ogre2</render_engine>
+    </plugin>
   </gazebo>
 
+  <!--Control Plugin-->
+  <gazebo>
+    <plugin filename="libignition-gazebo-diff-drive-system.so"
+        name="ignition::gazebo::systems::DiffDrive">
+      <left_joint>base_link_to_LEFT_FRONT_WHEEL</left_joint>
+      <left_joint>base_link_to_LEFT_BACK_WHEEL</left_joint>
+      <right_joint>base_link_to_RIGHT_FRONT_WHEEL</right_joint>
+      <right_joint>base_link_to_RIGHT_BACK_WHEEL</right_joint>
+      <wheel_separation>0.185</wheel_separation>
+      <wheel_radius>0.045</wheel_radius>
+      <odom_publish_frequency>1</odom_publish_frequency>
+      <topic>cmd_vel</topic>
+    </plugin>
+  </gazebo>
+
+  <!--Camera-->
   <gazebo reference="camera_rgb_frame">
-    <sensor type="depth" name="camera">
+    <sensor name="camera" type="depth_camera">
       <always_on>0</always_on>
       <update_rate>30</update_rate>
+      <topic>depth_camera</topic>
       <camera>
-        <horizontal_fov>${PI/3}</horizontal_fov>
-        <image>
-          <width>640</width>
-          <height>480</height>
-          <format>R8G8B8</format>
-        </image>
-        <clip>
-          <near>0.45</near>
-          <far>8</far>
-        </clip>
-
+          <horizontal_fov>${PI/3}</horizontal_fov> <!-- PI/3 -->
+          <image>
+              <width>640</width>
+              <height>480</height>
+              <format>R8G8B8</format>
+          </image>
+          <clip>
+              <near>0.45</near>
+              <far>8.0</far>
+          </clip>
       </camera>
-      <!-- <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
-        <ros>
-          <namespace>camera</namespace>
-          <remapping>astra_pro_ir/image_raw:=color/image_raw</remapping>
-          <remapping>astra_pro_ir/image_depth:=depth/image_raw</remapping>
-          <remapping>astra_pro_ir/camera_info:=color/camera_info</remapping>
-          <remapping>astra_pro_ir/camera_info_depth:=depth/camera_info</remapping>
-          <remapping>astra_pro_ir/points:=depth/points</remapping>
-        </ros>
-        <camera_name>astra_pro_ir</camera_name>
-        <frame_name>camera_rgb_optical_frame</frame_name>
-        <hack_baseline>0</hack_baseline>
-        <min_depth>0.45</min_depth>
-        <max_depth>8</max_depth>
-      </plugin> -->
     </sensor>
   </gazebo>
 
+  <!--LiDar-->
   <gazebo reference="${link_7_name}">
-    <sensor type="ray" name="rplidar">
+    <sensor type="gpu_lidar" name="rplidar">
       <pose>0 0 0 0 0 0</pose>
-      <visualize>false</visualize>
+      <topic>scan</topic>
       <update_rate>10</update_rate>
+      <visualize>false</visualize>
       <ray>
         <scan>
           <horizontal>
@@ -72,14 +82,6 @@
           <stddev>0.01</stddev>
         </noise>
       </ray>
-      <plugin name="lidar_controller" filename="libgazebo_ros_ray_sensor.so">
-        <ros>
-        <namespace></namespace>
-        <remapping>~/out:=scan</remapping>
-      </ros>
-      <!-- Set output to sensor_msgs/LaserScan to get same output type as gazebo_ros_laser -->
-      <output_type>sensor_msgs/LaserScan</output_type>
-      </plugin>
     </sensor>
   </gazebo>
 
@@ -87,16 +89,9 @@
     <gravity>true</gravity>
     <sensor name="imu_sensor" type="imu">
       <always_on>true</always_on>
-      <update_rate>10</update_rate>
-      <!-- <visualize>true</visualize> -->
-      <plugin name="imu_plugin" filename="libgazebo_ros_imu_sensor.so">
-        <ros>
-          <!-- Will publish to /imu/data -->
-          <namespace>/imu</namespace>
-          <remapping>~/out:=data</remapping>
-        </ros>
-        <initial_orientation_as_reference>false</initial_orientation_as_reference>
-      </plugin>
+      <update_rate>100</update_rate>
+      <visualize>true</visualize>
+      <topic>imu</topic>
       <pose>0 0 0 0 0 0</pose>
     </sensor>
   </gazebo>

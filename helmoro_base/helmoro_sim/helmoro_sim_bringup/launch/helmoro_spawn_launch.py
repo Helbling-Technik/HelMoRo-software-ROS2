@@ -6,7 +6,7 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 
-from helmoro_bringup.namespace import GetNamespacedName
+from helmoro_common_bringup.namespace import GetNamespacedName
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, GroupAction
@@ -26,25 +26,28 @@ ARGUMENTS = [
 ]
 
 for pose_element in ['x', 'y', 'z', 'yaw']:
-    ARGUMENTS.append(DeclareLaunchArgument(pose_element, default_value='0.0',
-                     description=f'{pose_element} component of the robot pose.'))
-
-
-# Rviz requires US locale to correctly display the wheels
-# os.environ['LC_NUMERIC'] = 'en_US.UTF-8'
+    if pose_element != 'z':
+        ARGUMENTS.append(DeclareLaunchArgument(pose_element, default_value='0.0',
+                        description=f'{pose_element} component of the robot pose.'))
+    else:
+        ARGUMENTS.append(DeclareLaunchArgument(pose_element, default_value='0.1',
+                        description=f'{pose_element} component of the robot pose.'))
 
 
 def generate_launch_description():
     # Directories
-    pkg_helmoro_bringup = get_package_share_directory('helmoro_bringup')
+    pkg_helmoro_common_bringup = get_package_share_directory('helmoro_common_bringup')
+    pkg_helmoro_sim_bringup = get_package_share_directory('helmoro_sim_bringup')
 
     # Paths
     # create3_nodes_launch_file = PathJoinSubstitution(
     #     [pkg_create3_common_bringup, 'launch', 'create3_nodes.launch.py'])  //ToDo
     robot_description_launch_file = PathJoinSubstitution(
-        [pkg_helmoro_bringup, 'launch', 'helmoro_description_launch.py'])
+        [pkg_helmoro_common_bringup, 'launch', 'helmoro_description_launch.py'])
     rviz_launch_file = PathJoinSubstitution(
-        [pkg_helmoro_bringup, 'launch', 'rviz_launch.py'])
+        [pkg_helmoro_common_bringup, 'launch', 'rviz_launch.py'])
+    ros_gazebo_bridge_launch = PathJoinSubstitution(
+        [pkg_helmoro_sim_bringup, 'launch', 'helmoro_ros_bridge_launch.py'])
 
     # Launch configurations
     namespace = LaunchConfiguration('namespace')
@@ -60,32 +63,25 @@ def generate_launch_description():
         # Helmoro robot model and description
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([robot_description_launch_file]),
-            launch_arguments={'gazebo': 'classic'}.items(),
         ),
 
-        # helmoro spawn
+        # Spawn HelMoRo
         Node(
-            package='gazebo_ros',
-            executable='spawn_entity.py',
-            name='spawn_helmoro',
-            arguments=['-entity',
-                       robot_name,
-                       '-topic',
-                       'robot_description',
+            package='ros_ign_gazebo',
+            executable='create',
+            arguments=['-name', robot_name,
                        '-x', x,
                        '-y', y,
                        '-z', z,
-                       '-Y', yaw],
+                       '-Y', yaw,
+                       '-topic', 'robot_description'],
             output='screen',
         ),
 
-        # Create 3 nodes //ToDo
-        # IncludeLaunchDescription(
-        #     PythonLaunchDescriptionSource([create3_nodes_launch_file]),
-        #     launch_arguments=[
-        #         ('namespace', namespace)
-        #     ]
-        # ),
+        # ROS Ign Bridge
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([ros_gazebo_bridge_launch]),
+        ),
 
         # RVIZ2
         IncludeLaunchDescription(
