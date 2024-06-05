@@ -1,30 +1,15 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>helmoro_sim_bringup</name>
+  <name>helmoro_gazebo_tools</name>
   <version>2.0.0</version>
-  <description>Provides simulation launch and configuration scripts for HelMoRo.</description>
+  <description>Provides simulation tools and configuration scripts for HelMoRo.</description>
   <maintainer email="samuel.bamert@helbling.ch">Samuel Bamert</maintainer>
   <license>BSD</license>
 
   <author>Helbling Technik AG</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
-
-  <depend>ros_ign_interfaces</depend>
-
-  <exec_depend>helmoro_common_bringup</exec_depend>
-  <exec_depend>helmoro_gazebo_tools</exec_depend>
-  <exec_depend>helmoro_description</exec_depend>
-
-    <!-- ROS IGN -->
-  <exec_depend>ign_ros2_control</exec_depend>
-  <exec_depend>ros_ign_gazebo</exec_depend>
-  <exec_depend>ros_ign_bridge</exec_depend>
-
-  <!--Messages-->
-  <exec_depend>std_msgs</exec_depend>
-  <exec_depend>geometry_msgs</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_cmake_cppcheck</test_depend>

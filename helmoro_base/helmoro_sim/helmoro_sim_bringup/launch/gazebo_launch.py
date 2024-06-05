@@ -22,14 +22,14 @@ ARGUMENTS = [
 
 def generate_launch_description():
     # Directories
-    pkg_helmoro_sim_bringup = get_package_share_directory('helmoro_sim_bringup')
+    pkg_helmoro_gazebo_tools = get_package_share_directory('helmoro_gazebo_tools')
     pkg_helmoro_description = get_package_share_directory('helmoro_description')
     pkg_ros_ign_gazebo = get_package_share_directory('ros_gz_sim')
 
     # Set gazebo resource path
     gz_resource_path = SetEnvironmentVariable(name='IGN_GAZEBO_RESOURCE_PATH',
                                             value=[os.path.join(
-                                                    pkg_helmoro_sim_bringup,
+                                                    pkg_helmoro_gazebo_tools,
                                                     'worlds'), ':' +
                                                     str(Path(
                                                         pkg_helmoro_description).
