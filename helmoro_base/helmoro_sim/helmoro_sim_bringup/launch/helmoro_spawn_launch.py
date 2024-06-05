@@ -6,8 +6,6 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 
-from helmoro_common_bringup.namespace import GetNamespacedName
-
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, GroupAction
 from launch.actions import IncludeLaunchDescription
@@ -21,8 +19,6 @@ ARGUMENTS = [
     DeclareLaunchArgument('use_rviz', default_value='true',
                           choices=['true', 'false'],
                           description='Start rviz.'),
-    DeclareLaunchArgument('namespace', default_value='',
-                          description='Robot namespace'),
 ]
 
 for pose_element in ['x', 'y', 'z', 'yaw']:
@@ -36,14 +32,13 @@ for pose_element in ['x', 'y', 'z', 'yaw']:
 
 def generate_launch_description():
     # Directories
+    pkg_helmoro_description = get_package_share_directory('helmoro_description')
     pkg_helmoro_common_bringup = get_package_share_directory('helmoro_common_bringup')
     pkg_helmoro_sim_bringup = get_package_share_directory('helmoro_sim_bringup')
 
     # Paths
-    # create3_nodes_launch_file = PathJoinSubstitution(
-    #     [pkg_create3_common_bringup, 'launch', 'create3_nodes.launch.py'])  //ToDo
     robot_description_launch_file = PathJoinSubstitution(
-        [pkg_helmoro_common_bringup, 'launch', 'helmoro_description_launch.py'])
+        [pkg_helmoro_description, 'launch', 'helmoro_description_launch.py'])
     rviz_launch_file = PathJoinSubstitution(
         [pkg_helmoro_common_bringup, 'launch', 'rviz_launch.py'])
     ros_gazebo_bridge_launch = PathJoinSubstitution(
@@ -55,10 +50,7 @@ def generate_launch_description():
     yaw = LaunchConfiguration('yaw')
     use_rviz = LaunchConfiguration('use_rviz')
 
-    robot_name = GetNamespacedName(namespace, 'robot')
-
     spawn_robot_group_action = GroupAction([
-        PushRosNamespace(namespace),
 
         # Helmoro robot model and description
         IncludeLaunchDescription(
@@ -69,7 +61,7 @@ def generate_launch_description():
         Node(
             package='ros_ign_gazebo',
             executable='create',
-            arguments=['-name', robot_name,
+            arguments=['-name', 'helmoro',
                        '-x', x,
                        '-y', y,
                        '-z', z,
@@ -78,7 +70,7 @@ def generate_launch_description():
             output='screen',
         ),
 
-        # ROS Ign Bridge
+        # ROS Gazebo Bridge
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([ros_gazebo_bridge_launch]),
         ),

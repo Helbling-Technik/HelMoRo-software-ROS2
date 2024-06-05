@@ -18,7 +18,7 @@
     <link name="${link_1_name}">
 
       <visual>
-        <origin xyz="${link_1_origin_xyz}" rpy="${link_1_origin_xyz}" />
+        <origin xyz="${link_1_origin_xyz}" rpy="${link_1_origin_rpy}" />
         <geometry>
           <mesh filename="${link_1_mesh}" />
         </geometry>
