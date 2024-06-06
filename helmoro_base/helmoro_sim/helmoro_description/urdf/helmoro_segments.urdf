@@ -5,24 +5,23 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <material name="HELMORO_BLUE">
-    <color rgba="0.3 0.78 1.0 1.0"/> <!-- rviz green color -->
+    <color rgba="0.3 0.78 1.0 1.0"/>
   </material>
 
   <material name="HELMORO_BLACK">
-    <color rgba="0.0 0.0 0.0 1.0"/> <!-- rviz green color -->
+    <color rgba="0.0 0.0 0.0 1.0"/> 
   </material>
 
   <xacro:macro name="link_1" params="">
-
     <!-- Link 1 -->
     <link name="${link_1_name}">
-
+      
       <visual>
         <origin xyz="${link_1_origin_xyz}" rpy="${link_1_origin_rpy}" />
         <geometry>
           <mesh filename="${link_1_mesh}" />
         </geometry>
-        <material name="HELMORO_BLUE"/> <!-- rviz will use this color -->
+        <material name="HELMORO_BLUE"/>
       </visual>
       <collision>
         <origin xyz="${link_1_collision_origin_xyz}" rpy="${link_1_collision_origin_rpy}" />
@@ -59,7 +58,7 @@
         <geometry>
           <cylinder length="${link_2_length}" radius="${link_2_radius}" />
         </geometry>
-        <material name="HELMORO_BLACK"/> <!-- rviz will use this color -->
+        <material name="HELMORO_BLACK"/> 
       </visual>
       <collision>
         <origin xyz="${link_2_origin_xyz}" rpy="${link_2_origin_rpy}" />
@@ -103,14 +102,14 @@
         <geometry>
           <cylinder length="${link_3_length}" radius="${link_3_radius}" />
         </geometry>
-        <material name="HELMORO_BLACK"/> <!-- rviz will use this color -->
+        <material name="HELMORO_BLACK"/>
       </visual>
       <collision>
         <origin xyz="${link_3_origin_xyz}" rpy="${link_3_origin_rpy}" />
         <geometry>
           <cylinder length="${link_3_length}" radius="${link_3_radius}" />
         </geometry>
-        <material name="HELMORO_BLACK"/> <!-- rviz will use this color -->
+        <material name="HELMORO_BLACK"/>
         <surface>
           <friction>
             <fdir1>1 0 0</fdir1>
@@ -148,7 +147,7 @@
         <geometry>
           <cylinder length="${link_4_length}" radius="${link_4_radius}" />
         </geometry>
-        <material name="HELMORO_BLACK"/> <!-- rviz will use this color -->
+        <material name="HELMORO_BLACK"/>
       </visual>
       <collision>
         <origin xyz="${link_4_origin_xyz}" rpy="${link_4_origin_rpy}" />
@@ -192,7 +191,7 @@
         <geometry>
           <cylinder length="${link_5_length}" radius="${link_5_radius}" />
         </geometry>
-        <material name="HELMORO_BLACK"/> <!-- rviz will use this color -->
+        <material name="HELMORO_BLACK"/>
       </visual>
       <collision>
         <origin xyz="${link_5_origin_xyz}" rpy="${link_5_origin_rpy}" />
@@ -236,7 +235,7 @@
         <geometry>
           <mesh filename="${link_6_mesh}" />
         </geometry>
-        <material name="HELMORO_BLACK"/> <!-- rviz will use this color -->
+        <material name="HELMORO_BLACK"/>
       </visual>
       <inertial>
         <origin xyz="${link_6_cog}" rpy="${link_6_inertia_rpy}" />
@@ -308,7 +307,7 @@
         <geometry>
           <mesh filename="${link_7_mesh}" />
         </geometry>
-        <material name="HELMORO_BLACK"/> <!-- rviz will use this color -->
+        <material name="HELMORO_BLACK"/>
       </visual>
       <inertial>
         <origin xyz="${link_7_cog}" rpy="${link_7_inertia_rpy}" />

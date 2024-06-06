@@ -20,10 +20,12 @@
     <plugin filename="libignition-gazebo-diff-drive-system.so"
         name="ignition::gazebo::systems::DiffDrive">
       <left_joint>base_link_to_LEFT_FRONT_WHEEL</left_joint>
-      <left_joint>base_link_to_LEFT_BACK_WHEEL</left_joint>
       <right_joint>base_link_to_RIGHT_FRONT_WHEEL</right_joint>
+      <left_joint>base_link_to_LEFT_BACK_WHEEL</left_joint>
       <right_joint>base_link_to_RIGHT_BACK_WHEEL</right_joint>
       <wheel_separation>0.185</wheel_separation>
+      <wheel_separation>0.185</wheel_separation>
+      <wheel_radius>0.045</wheel_radius>
       <wheel_radius>0.045</wheel_radius>
       <odom_publish_frequency>1</odom_publish_frequency>
       <topic>cmd_vel</topic>

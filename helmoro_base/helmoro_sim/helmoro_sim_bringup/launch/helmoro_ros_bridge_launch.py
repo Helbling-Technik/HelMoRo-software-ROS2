@@ -16,7 +16,7 @@ def generate_launch_description():
     # Directories
     pkg_helmoro_gazebo_tools = get_package_share_directory('helmoro_gazebo_tools')
 
-    # ROS Gazebo Bridge bridge
+    # ROS Gazebo Bridge Node
     bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
