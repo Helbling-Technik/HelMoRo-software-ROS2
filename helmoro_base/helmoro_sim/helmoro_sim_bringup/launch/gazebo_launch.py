@@ -24,7 +24,7 @@ def generate_launch_description():
     # Directories
     pkg_helmoro_gazebo_tools = get_package_share_directory('helmoro_gazebo_tools')
     pkg_helmoro_description = get_package_share_directory('helmoro_description')
-    pkg_ros_ign_gazebo = get_package_share_directory('ros_gz_sim')
+    pkg_ros_gz_sim = get_package_share_directory('ros_gz_sim')
 
     # Set gazebo resource path
     gz_resource_path = SetEnvironmentVariable(name='IGN_GAZEBO_RESOURCE_PATH',
@@ -42,11 +42,11 @@ def generate_launch_description():
 
     # Gazebo
     ign_gazebo_launch = PathJoinSubstitution(
-        [pkg_ros_ign_gazebo, 'launch', 'gz_sim.launch.py'])
+        [pkg_ros_gz_sim, 'launch', 'gz_sim.launch.py'])
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([ign_gazebo_launch]),
         launch_arguments=[
-            ('ign_args', [LaunchConfiguration('world'),
+            ('gz_args', [LaunchConfiguration('world'),
                           '.sdf',
                           ' -v 4',])
         ]

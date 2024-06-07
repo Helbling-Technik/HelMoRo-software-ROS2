@@ -59,7 +59,7 @@ def generate_launch_description():
 
         # Spawn HelMoRo
         Node(
-            package='ros_ign_gazebo',
+            package='ros_gz_sim',
             executable='create',
             arguments=['-name', 'helmoro',
                        '-x', x,
@@ -68,11 +68,6 @@ def generate_launch_description():
                        '-Y', yaw,
                        '-topic', 'robot_description'],
             output='screen',
-        ),
-
-        # ROS Gazebo Bridge
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([ros_gazebo_bridge_launch]),
         ),
 
         # RVIZ2
