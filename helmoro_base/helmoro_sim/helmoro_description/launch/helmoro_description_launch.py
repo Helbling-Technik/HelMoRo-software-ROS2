@@ -4,9 +4,10 @@
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, ExecuteProcess, RegisterEventHandler
+from launch.actions import DeclareLaunchArgument, ExecuteProcess, RegisterEventHandler, IncludeLaunchDescription
 from launch.event_handlers import OnProcessExit
 from launch.substitutions import Command, PathJoinSubstitution
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions.launch_configuration import LaunchConfiguration
 from launch_ros.actions import Node
 
@@ -21,10 +22,12 @@ def generate_launch_description():
     # Directroies
     pkg_helmoro_description = get_package_share_directory('helmoro_description')
     pkg_helmoro_sim_controller = get_package_share_directory('helmoro_sim_control')
+    pkg_helmoro_gazebo_tools = get_package_share_directory('helmoro_gazebo_tools')
 
     # Paths
     xacro_file = PathJoinSubstitution([pkg_helmoro_description, 'urdf', 'helmoro.urdf'])
     robot_controller = PathJoinSubstitution([pkg_helmoro_sim_controller, 'config', 'helmoro_controller.yaml'])
+    ros_bridge_launch = PathJoinSubstitution([pkg_helmoro_gazebo_tools, 'launch', 'helmoro_ros_bridge_launch.py'])
 
     # Launch Configuration
     namespace = LaunchConfiguration('namespace')
@@ -67,11 +70,8 @@ def generate_launch_description():
     )
 
     # Bridge
-    bridge = Node(
-        package='ros_gz_bridge',
-        executable='parameter_bridge',
-        arguments=['/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock'],
-        output='screen'
+    bridge = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([ros_bridge_launch]),
     )
   
     nodes = [
