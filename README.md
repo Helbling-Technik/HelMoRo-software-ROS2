@@ -47,5 +47,5 @@ The packages included support ROS Humble on Ubuntu 20.04 and Ubuntu 22.04.
 6. Run the Simulation
 
       ```sh
-      ros2 launch helmoro_bringup gazebo_sim_launch.py
+      ros2 launch helmoro_sim_bringup gazebo_sim_launch.py
       ```

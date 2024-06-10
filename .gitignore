@@ -2,3 +2,6 @@
 __pycache__
 
 COLCON_IGNORE
+
+setting.json
+c_cpp_properties.json
