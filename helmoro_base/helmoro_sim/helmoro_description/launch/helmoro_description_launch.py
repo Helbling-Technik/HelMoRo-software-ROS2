@@ -77,7 +77,7 @@ def generate_launch_description():
     nodes = [
         bridge,
         robot_state_pub_node,
-        load_diff_drive_controller,
+        load_joint_state_controller,
         delay_diff_drive_controller_after_joint_state_broadcaster,
     ]
 
