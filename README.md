@@ -22,6 +22,7 @@ The packages included support ROS Humble on Ubuntu 20.04 and Ubuntu 22.04.
 
       ```sh
       mkdir -p ~/ros2_ws/src
+      cd ~/ros2_ws/src
       ```
 
 3. Clone the repository into your catkin workspace. The commands are stated in the following.
@@ -29,7 +30,14 @@ The packages included support ROS Humble on Ubuntu 20.04 and Ubuntu 22.04.
       ```sh
       git clone https://github.com/Helbling-Technik/HelMoRo-software-ROS2.git
       ```
-4. Install the ROS 2 dependencies
+
+4. Clone repositories for sensors
+
+      ```sh
+      git clone https://github.com/flynneva/bno055.git
+      ```
+
+5. Install the ROS 2 dependencies
 
       ```sh
       cd ~/ros2_ws
@@ -37,7 +45,7 @@ The packages included support ROS Humble on Ubuntu 20.04 and Ubuntu 22.04.
       rosdep install --from-path src -yi
       ```
 
-5. Build and source the Helmoro software package using
+6. Build and source the Helmoro software package using
 
       ```sh
       colcon build --symlink-install
