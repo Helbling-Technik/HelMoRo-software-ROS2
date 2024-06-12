@@ -153,7 +153,7 @@
 
 	<!-- Link 6 -->
 	<xacro:property name="link_6_name" value="camera_mesh" />
-	<xacro:property name="link_6_mesh" value="package://helmoro_description/meshes/Orbbec Astra Camera No Mount 2.STL" />
+	<xacro:property name="link_6_mesh" value="package://helmoro_description/meshes/Camera.STL" />
 	<xacro:property name="link_6_origin_xyz" value="0 0 0" />
 	<xacro:property name="link_6_origin_rpy" value="0 0 0" />
 	<xacro:property name="link_6_mass" value="0.1" />
