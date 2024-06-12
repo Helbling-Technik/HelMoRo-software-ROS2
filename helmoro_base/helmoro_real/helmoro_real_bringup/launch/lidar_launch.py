@@ -14,7 +14,7 @@ def generate_launch_description():
     pkg_rplidar_ros = get_package_share_directory('rplidar_ros')
 
     # Paths
-    rplidar_launch = PathJoinSubstitution([pkg_rplidar_ros, 'launch', 'view_rplidar_a2m8_launch.py'])
+    rplidar_launch = PathJoinSubstitution([pkg_rplidar_ros, 'launch', 'rplidar_a2m8_launch.py'])
 
     # ROS2 RPLidar A2M8 Node
     rplidar_node = IncludeLaunchDescription(
