@@ -35,6 +35,7 @@ The packages included support ROS Humble on Ubuntu 20.04 and Ubuntu 22.04.
 
       ```sh
       git clone https://github.com/flynneva/bno055.git
+      git clone -b ros2 https://github.com/Slamtec/rplidar_ros.git
       ```
 
 5. Install the ROS 2 dependencies
