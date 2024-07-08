@@ -120,6 +120,8 @@
     </sensor>
   </gazebo>
 
+  <link name="base_footprint"></link>
+
   <xacro:link_1 />
   <xacro:link_2 />
   <xacro:link_3 />

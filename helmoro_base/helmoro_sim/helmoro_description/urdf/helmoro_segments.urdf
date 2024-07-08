@@ -31,6 +31,12 @@
       </collision>
     </link>
 
+    <joint name="base_footprint_to_${link_1_name}" type="fixed">
+      <parent link="base_footprint"/>
+      <child link="${link_1_name}"/>
+      <origin xyz="0 0 ${link_5_radius+0.035}" rpy="0 0 0"/>
+    </joint>
+
     <!-- Dummy inertia link, because KDL cannot have inertia on the base link -->
     <link name="${link_1_name}_inertia">
       <inertial>
@@ -347,9 +353,5 @@
       <child link="${joint_7_child}" />
       <origin xyz="${joint_7_origin_xyz}" rpy="${joint_7_origin_rpy}" />
     </joint>
-
-
   </xacro:macro>
-
-
 </robot>
