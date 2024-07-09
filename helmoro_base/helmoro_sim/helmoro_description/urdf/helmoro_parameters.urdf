@@ -14,12 +14,12 @@
 	<!-- Link 1 -->
 	<xacro:property name="link_1_name" value="base_link" />
 	<xacro:property name="link_1_mesh" value="package://helmoro_description/meshes/Cover.STL" />
-	<xacro:property name="link_1_length" value="0.256" />
-	<xacro:property name="link_1_width" value="0.09" />
-	<xacro:property name="link_1_height" value="0.110" />
+	<xacro:property name="link_1_length" value="0.18" />
+	<xacro:property name="link_1_width" value="0.256" />
+	<xacro:property name="link_1_height" value="0.1" />
 	<xacro:property name="link_1_origin_xyz" value="0 0 0" />
 	<xacro:property name="link_1_origin_rpy" value="0 0 0" />
-	<xacro:property name="link_1_collision_origin_xyz" value="0 0 0.034" />
+	<xacro:property name="link_1_collision_origin_xyz" value="0 0 0" />
 	<xacro:property name="link_1_collision_origin_rpy" value="0 0 0" />
 	<xacro:property name="link_1_mass" value="1.0" />
 	<xacro:property name="link_1_cog" value="0 0 0" />
@@ -213,4 +213,14 @@
 	<xacro:property name="link_8_ixz" value="0" />
 	<xacro:property name="link_8_ixy" value="0" />
 
+	<!-- Joint 8 -->
+	<xacro:property name="joint_8_name" value="${link_1_name}_to_${link_9_name}" />
+	<xacro:property name="joint_8_type" value="fixed" />
+	<xacro:property name="joint_8_origin_xyz" value="0 0 -${wheel_radius+0.035}" />
+	<xacro:property name="joint_8_origin_rpy" value="0 0 0" />
+	<xacro:property name="joint_8_parent" value="${link_1_name}" />
+	<xacro:property name="joint_8_child" value="${link_9_name}" />
+
+	<!-- Link 8 -->
+	<xacro:property name="link_9_name" value="base_footprint" />
 </robot>

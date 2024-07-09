@@ -120,8 +120,6 @@
     </sensor>
   </gazebo>
 
-  <link name="base_footprint"></link>
-
   <xacro:link_1 />
   <xacro:link_2 />
   <xacro:link_3 />
@@ -130,6 +128,7 @@
   <xacro:link_6 />
   <xacro:link_7 />
   <xacro:link_8 />
+  <xacro:link_9 />
 
   <gazebo reference="RIGHT_FRONT_WHEEL">
     <collision>
