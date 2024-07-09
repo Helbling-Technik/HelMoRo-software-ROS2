@@ -61,5 +61,5 @@ def generate_launch_description():
     ld = LaunchDescription(ARGUMENTS)
     ld.add_action(gazebo)
     ld.add_action(robot_spawn)
-    # ld.add_action(localization)
+    ld.add_action(localization)
     return ld
