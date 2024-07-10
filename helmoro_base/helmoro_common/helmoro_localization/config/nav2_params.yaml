@@ -37,7 +37,8 @@ amcl:
     z_max: 0.05
     z_rand: 0.5
     z_short: 0.05
-    scan_topic: scan
+    scan_topic: sensors/lidar/scan
+    map_topic: helmoro_localization/map
     set_initial_pose: true
     initial_pose:
       x: 0.0
