@@ -4,7 +4,6 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /TF1/Frames1
         - /Object Map1/Namespaces1
       Splitter Ratio: 0.8253968358039856
     Tree Height: 588
@@ -25,7 +24,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: ""
+    SyncSource: LaserScan
 Visualization Manager:
   Class: ""
   Displays:
@@ -85,6 +84,10 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        base_footprint:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         base_link:
           Alpha: 1
           Show Axes: false
@@ -154,6 +157,8 @@ Visualization Manager:
           Value: false
         RIGHT_FRONT_WHEEL:
           Value: false
+        base_footprint:
+          Value: false
         base_link:
           Value: true
         base_link_inertia:
@@ -176,6 +181,8 @@ Visualization Manager:
           Value: false
         laser:
           Value: false
+        map:
+          Value: true
         odom:
           Value: true
       Marker Scale: 1
@@ -184,32 +191,35 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        odom:
-          base_link:
-            LEFT_BACK_WHEEL:
-              {}
-            LEFT_FRONT_WHEEL:
-              {}
-            RIGHT_BACK_WHEEL:
-              {}
-            RIGHT_FRONT_WHEEL:
-              {}
-            base_link_inertia:
-              {}
-            camera_mesh:
-              camera_link:
-                camera_depth_frame:
-                  camera_depth_optical_frame:
-                    {}
-                camera_rgb_frame:
-                  camera_rgb_optical_frame:
-                    {}
-            fork_frame:
-              {}
-            imu_link:
-              {}
-            laser:
-              {}
+        map:
+          odom:
+            base_link:
+              LEFT_BACK_WHEEL:
+                {}
+              LEFT_FRONT_WHEEL:
+                {}
+              RIGHT_BACK_WHEEL:
+                {}
+              RIGHT_FRONT_WHEEL:
+                {}
+              base_footprint:
+                {}
+              base_link_inertia:
+                {}
+              camera_mesh:
+                camera_link:
+                  camera_depth_frame:
+                    camera_depth_optical_frame:
+                      {}
+                  camera_rgb_frame:
+                    camera_rgb_optical_frame:
+                      {}
+              fork_frame:
+                {}
+              imu_link:
+                {}
+              laser:
+                {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -227,9 +237,9 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 47
+      Max Intensity: 0
       Min Color: 0; 0; 0
-      Min Intensity: 47
+      Min Intensity: 0
       Name: LaserScan
       Position Transformer: XYZ
       Selectable: true
@@ -242,7 +252,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /scan
+        Value: /sensors/lidar/scan
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
@@ -526,7 +536,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /image
+        Value: /sensors/camera/image
       Value: true
       Visibility:
         Current Goal: false
@@ -577,7 +587,7 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: odom
+    Fixed Frame: map
     Frame Rate: 30
   Name: root
   Tools:
@@ -597,7 +607,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /initialpose
+        Value: /helmoro_localization/initialpose
     - Class: rviz_default_plugins/SetGoal
       Topic:
         Depth: 5
@@ -620,25 +630,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 15.542016983032227
+      Distance: 6.870028495788574
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 1.0921188592910767
-        Y: -3.0014235973358154
-        Z: 1.0553771257400513
+        X: 1.4630497694015503
+        Y: -1.0841264724731445
+        Z: -0.5408620238304138
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.609797477722168
+      Pitch: 0.39479759335517883
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 2.940399646759033
+      Yaw: 2.4354007244110107
     Saved: ~
 Window Geometry:
   Camera:

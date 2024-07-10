@@ -26,12 +26,16 @@ def generate_launch_description():
     # Directories
     pkg_helmoro_sim_bringup = get_package_share_directory(
         'helmoro_sim_bringup')
+    pkg_helmoro_localization = get_package_share_directory(
+        'helmoro_localization')
 
     # Paths
     gazebo_launch = PathJoinSubstitution(
         [pkg_helmoro_sim_bringup, 'launch', 'gazebo_launch.py'])
     robot_spawn_launch = PathJoinSubstitution(
         [pkg_helmoro_sim_bringup, 'launch', 'helmoro_spawn_launch.py'])
+    localization_launch = PathJoinSubstitution(
+        [pkg_helmoro_localization, 'launch', 'helmoro_localization_launch.py'])
 
     # Launch Descriptions
     gazebo = IncludeLaunchDescription(
@@ -49,9 +53,17 @@ def generate_launch_description():
             ('y', LaunchConfiguration('y')),
             ('z', LaunchConfiguration('z')),
             ('yaw', LaunchConfiguration('yaw'))])
+    
+    # AMCL Localization (responsilby for map->odom tf)
+    localization = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([localization_launch]),
+        launch_arguments=[
+            ('use_simtime', 'true')]
+    )
 
     # Create launch description and add actions
     ld = LaunchDescription(ARGUMENTS)
     ld.add_action(gazebo)
     ld.add_action(robot_spawn)
+    ld.add_action(localization)
     return ld

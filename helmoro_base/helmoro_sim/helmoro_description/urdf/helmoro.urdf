@@ -60,6 +60,7 @@
       <always_on>0</always_on>
       <update_rate>30</update_rate>
       <topic>depth_camera</topic>
+      <ignition_frame_id>camera_rgb_frame</ignition_frame_id>
       <camera>
           <horizontal_fov>${PI/3}</horizontal_fov> <!-- PI/3 -->
           <image>
@@ -78,10 +79,11 @@
   <!--LiDar-->
   <gazebo reference="${link_7_name}">
     <sensor type="gpu_lidar" name="rplidar">
-      <pose>0 0 0 0 0 0</pose>
+      <pose relative_to='${link_7_name}'>0 0 0 0 0 0</pose>
       <topic>scan</topic>
       <update_rate>10</update_rate>
       <visualize>false</visualize>
+      <ignition_frame_id>${link_7_name}</ignition_frame_id>
       <ray>
         <scan>
           <horizontal>
@@ -111,6 +113,7 @@
 
   <gazebo reference="${link_8_name}">
     <gravity>true</gravity>
+    <ignition_frame_id>${link_8_name}</ignition_frame_id>
     <sensor name="imu_sensor" type="imu">
       <always_on>true</always_on>
       <update_rate>100</update_rate>
@@ -128,6 +131,7 @@
   <xacro:link_6 />
   <xacro:link_7 />
   <xacro:link_8 />
+  <xacro:link_9 />
 
   <gazebo reference="RIGHT_FRONT_WHEEL">
     <collision>

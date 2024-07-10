@@ -347,9 +347,18 @@
       <child link="${joint_7_child}" />
       <origin xyz="${joint_7_origin_xyz}" rpy="${joint_7_origin_rpy}" />
     </joint>
-
-
   </xacro:macro>
 
+  <!-- Link 9 -->
+  <xacro:macro name="link_9" params="">
 
+    <link name="${link_9_name}">
+    </link>
+
+    <joint name="${joint_8_name}" type="${joint_8_type}">
+      <parent link="${joint_8_parent}" />
+      <child link="${joint_8_child}" />
+      <origin xyz="${joint_8_origin_xyz}" rpy="${joint_8_origin_rpy}" />
+    </joint>
+  </xacro:macro>
 </robot>
