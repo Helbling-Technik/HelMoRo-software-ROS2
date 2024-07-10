@@ -26,8 +26,7 @@ def generate_launch_description():
       package='helmoro_motor_commands',
       name='helmoro_motor_commands',
       executable='helmoro_motor_commands',
-      parameters=[param_yaml_file,
-                  {'use_sim_time': True}],
+      parameters=[param_yaml_file],
       output='screen',
   )
 

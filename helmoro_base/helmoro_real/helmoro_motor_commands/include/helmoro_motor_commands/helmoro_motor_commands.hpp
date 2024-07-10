@@ -48,7 +48,6 @@ private:
   void motorStatesCallback(sensor_msgs::msg::JointState::ConstSharedPtr msg);
 
   static constexpr unsigned int nb_actuators_ = static_cast<int>(helmoro_description::ActuatorEnum::NrActuators);
-  bool is_real_robot_{true};
 
   // Subscribers
   rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr move_base_sub_;

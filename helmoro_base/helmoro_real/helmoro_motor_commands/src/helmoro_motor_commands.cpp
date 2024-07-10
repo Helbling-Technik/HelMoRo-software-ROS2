@@ -27,16 +27,6 @@ HelmoroMotorCommands::HelmoroMotorCommands(const rclcpp::NodeOptions & options)
   joint_state_pub_ = this->create_publisher<sensor_msgs::msg::JointState>(
     "helmoro_joint_states", rclcpp::SystemDefaultsQoS());
 
-  if (!is_real_robot_) {
-    // Create subscription for imu data
-    motor_states_sub_ = this->create_subscription<sensor_msgs::msg::JointState>(
-      "helmoro_motor_states", rclcpp::SensorDataQoS(),
-      std::bind(&HelmoroMotorCommands::motorStatesCallback, this, _1));
-
-    motor_commands_pub_ = this->create_publisher<helmoro_msgs::msg::HelmoroJointCommands>(
-      "helmoro_motor_commands", rclcpp::SensorDataQoS().reliable());
-  }
-
   // cmd_vel commands
   vx_cmd_ = 0.0;
   dtheta_cmd_ = 0.0;
@@ -62,40 +52,34 @@ void HelmoroMotorCommands::update()
   std::unique_lock<std::mutex> lock(m_lock_);
   getWheelVelocitiesCommand();
   lock.unlock();
-  if (is_real_robot_) {
-    // read voltages
-    // motors_right_.GetMainBatteryVoltage(addr_right_, batt_volt_right_);
 
-    // read wheel positions
-    motors_left_.GetM1M2Pos(addr_left_, wheel_pos_[1], wheel_pos_[3]);
-    motors_right_.GetM1M2Pos(addr_right_, wheel_pos_[0], wheel_pos_[2]);
+  // read wheel positions
+  motors_left_.GetM1M2Pos(addr_left_, wheel_pos_[1], wheel_pos_[3]);
+  motors_right_.GetM1M2Pos(addr_right_, wheel_pos_[0], wheel_pos_[2]);
 
-    wheel_pos_[0] = wheel_pos_[0] / tics_per_rad_;
-    wheel_pos_[1] = wheel_pos_[1] / tics_per_rad_;
-    wheel_pos_[1] = wheel_pos_[2] / tics_per_rad_;
-    wheel_pos_[3] = wheel_pos_[3] / tics_per_rad_;
+  wheel_pos_[0] = wheel_pos_[0] / tics_per_rad_;
+  wheel_pos_[1] = wheel_pos_[1] / tics_per_rad_;
+  wheel_pos_[1] = wheel_pos_[2] / tics_per_rad_;
+  wheel_pos_[3] = wheel_pos_[3] / tics_per_rad_;
 
-    // read wheel speeds
-    motors_left_.GetM1SpeedFiltered(addr_left_, wheel_vel_state_[1]);
-    motors_left_.GetM2SpeedFiltered(addr_left_, wheel_vel_state_[3]);
-    motors_right_.GetM1SpeedFiltered(addr_right_, wheel_vel_state_[0]);
-    motors_right_.GetM2SpeedFiltered(addr_right_, wheel_vel_state_[2]);
+  // read wheel speeds
+  motors_left_.GetM1SpeedFiltered(addr_left_, wheel_vel_state_[1]);
+  motors_left_.GetM2SpeedFiltered(addr_left_, wheel_vel_state_[3]);
+  motors_right_.GetM1SpeedFiltered(addr_right_, wheel_vel_state_[0]);
+  motors_right_.GetM2SpeedFiltered(addr_right_, wheel_vel_state_[2]);
 
-    wheel_vel_state_[0] = wheel_vel_state_[0] / tics_per_rad_;
-    wheel_vel_state_[1] = wheel_vel_state_[1] / tics_per_rad_;
-    wheel_vel_state_[2] = wheel_vel_state_[2] / tics_per_rad_;
-    wheel_vel_state_[3] = wheel_vel_state_[3] / tics_per_rad_;
+  wheel_vel_state_[0] = wheel_vel_state_[0] / tics_per_rad_;
+  wheel_vel_state_[1] = wheel_vel_state_[1] / tics_per_rad_;
+  wheel_vel_state_[2] = wheel_vel_state_[2] / tics_per_rad_;
+  wheel_vel_state_[3] = wheel_vel_state_[3] / tics_per_rad_;
 
-    // send wheel commands
-    if (!motors_left_.SendSpeedM1M2Command(addr_left_, wheel_vel_cmd_[1] * tics_per_rad_,
-                                           wheel_vel_cmd_[3] * tics_per_rad_))
-      std::printf("Could not sent speed to left motors \n");
-    if (!motors_right_.SendSpeedM1M2Command(addr_right_, wheel_vel_cmd_[0] * tics_per_rad_,
-                                            wheel_vel_cmd_[2] * tics_per_rad_))
-      std::printf("Could not send speed to right motors \n");
-  } else {
-    PublishMotorCommands();
-  }
+  // send wheel commands
+  if (!motors_left_.SendSpeedM1M2Command(addr_left_, wheel_vel_cmd_[1] * tics_per_rad_,
+                                          wheel_vel_cmd_[3] * tics_per_rad_))
+    std::printf("Could not sent speed to left motors \n");
+  if (!motors_right_.SendSpeedM1M2Command(addr_right_, wheel_vel_cmd_[0] * tics_per_rad_,
+                                          wheel_vel_cmd_[2] * tics_per_rad_))
+    std::printf("Could not send speed to right motors \n");
 
   // publish joint states
   PublishJointStates();
@@ -124,10 +108,6 @@ void HelmoroMotorCommands::motorStatesCallback(sensor_msgs::msg::JointState::Con
 void HelmoroMotorCommands::GetParams()
 {
   // Helmoro specs
-  if (this->has_parameter("use_sim_time")) {
-    is_real_robot_ = false;
-    RCLCPP_INFO(this->get_logger(), "[Motor commands]: Commanding in simulation");
-  }
   dx_wheels_ = this->declare_parameter("wheel_spacing_x", 5.0);
   dy_wheels_ = this->declare_parameter("wheel_spacing_y", 5.0);
   dia_wheels_ = this->declare_parameter("wheel_diameter", 5.0);
