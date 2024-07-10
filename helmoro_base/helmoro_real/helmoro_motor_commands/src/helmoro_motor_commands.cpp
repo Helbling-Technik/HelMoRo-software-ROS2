@@ -21,11 +21,11 @@ HelmoroMotorCommands::HelmoroMotorCommands(const rclcpp::NodeOptions & options)
 
   // Create subscription for imu data
   imu_sub_ = this->create_subscription<sensor_msgs::msg::Imu>(
-    "imu/data", rclcpp::SensorDataQoS(),
+    "sensors/imu/imu", rclcpp::SensorDataQoS(),
     std::bind(&HelmoroMotorCommands::imuDataCallback, this, _1));
 
   joint_state_pub_ = this->create_publisher<sensor_msgs::msg::JointState>(
-    "helmoro_joint_states", rclcpp::SystemDefaultsQoS());
+    "joint_states", rclcpp::SystemDefaultsQoS());
 
   // cmd_vel commands
   vx_cmd_ = 0.0;
