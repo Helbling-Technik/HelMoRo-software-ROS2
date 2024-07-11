@@ -28,18 +28,19 @@ def generate_launch_description():
     # Directories
     pkg_helmoro_sim_bringup = get_package_share_directory(
         'helmoro_sim_bringup')
-    pkg_helmoro_localization = get_package_share_directory(
-        'helmoro_localization')
+    pkg_helmoro_state_estimation = get_package_share_directory('helmoro_state_estimation')
+    pkg_helmoro_slam = get_package_share_directory(
+        'helmoro_slam')
 
     # Paths
     gazebo_launch = PathJoinSubstitution(
         [pkg_helmoro_sim_bringup, 'launch', 'gazebo_launch.py'])
     robot_spawn_launch = PathJoinSubstitution(
         [pkg_helmoro_sim_bringup, 'launch', 'helmoro_spawn_launch.py'])
-    localization_launch = PathJoinSubstitution(
-        [pkg_helmoro_localization, 'launch', 'helmoro_localization_launch.py'])
+    slam_launch = PathJoinSubstitution(
+        [pkg_helmoro_slam, 'launch', 'helmoro_slam_launch.py'])
     state_estimation_launch = PathJoinSubstitution(
-        [pkg_helmoro_localization, 'launch', 'helmoro_state_estimation_launch.py'])
+        [pkg_helmoro_state_estimation, 'launch', 'helmoro_state_estimation_launch.py'])
 
     # Launch Descriptions
     gazebo = IncludeLaunchDescription(
@@ -58,9 +59,9 @@ def generate_launch_description():
             ('z', str(0.1)),
             ('yaw', LaunchConfiguration('yaw'))])
     
-    # AMCL Localization (responsilby for map->odom tf)
-    localization = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([localization_launch]),
+    # SLAM (responsilby for map->odom tf and map generation)
+    slam = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([slam_launch]),
         launch_arguments=[
             ('use_sim_time', 'true')]    
     )
@@ -75,6 +76,6 @@ def generate_launch_description():
     ld = LaunchDescription(ARGUMENTS)
     ld.add_action(gazebo)
     ld.add_action(robot_spawn)
-    ld.add_action(localization)
+    ld.add_action(slam)
     ld.add_action(state_estimation)
     return ld
