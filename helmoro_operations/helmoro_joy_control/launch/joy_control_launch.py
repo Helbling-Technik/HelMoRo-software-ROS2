@@ -4,10 +4,9 @@
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
-from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
-from launch_ros.actions import Node
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import PathJoinSubstitution
+from launch_ros.actions import Node, PushRosNamespace
 
 ARGUMENTS = [
     DeclareLaunchArgument('namespace', default_value='',
@@ -40,12 +39,14 @@ def generate_launch_description():
       parameters=[param_yaml_file,
                   {'use_sim_time': True}],
       output='screen',
+      remappings=[('/helmoro_joy_control/cmd_vel', '/cmd_vel')]
   )
 
   # Create the launch description and populate
   ld = LaunchDescription(ARGUMENTS)
 
   # Add the helmoro joy manager node to the launch description
+  ld.add_action(PushRosNamespace('helmoro_joy_control'))
   ld.add_action(joy_node)
   ld.add_action(helmoro_joymanager_node)
 

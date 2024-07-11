@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>helmoro_joymanager</name>
+  <name>helmoro_joy_control</name>
   <version>2.0.0</version>
   <description>The Helbling mobile robot joystick manager package</description>
   <maintainer email="samuel.bamert@helbling.ch">Samuel Bamert</maintainer>
@@ -16,8 +16,6 @@
   <depend>rclcpp_action</depend>
   <depend>sensor_msgs</depend>
   <depend>geometry_msgs</depend>
-
-  <exec_depend>helmoro_motor_commands</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_cmake_cppcheck</test_depend>
