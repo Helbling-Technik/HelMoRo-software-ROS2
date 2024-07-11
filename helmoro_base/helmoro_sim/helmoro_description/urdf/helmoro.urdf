@@ -81,7 +81,7 @@
     <sensor type="gpu_lidar" name="rplidar">
       <pose relative_to='${link_7_name}'>0 0 0 0 0 0</pose>
       <topic>scan</topic>
-      <update_rate>10</update_rate>
+      <update_rate>60</update_rate>
       <visualize>false</visualize>
       <ignition_frame_id>${link_7_name}</ignition_frame_id>
       <ray>

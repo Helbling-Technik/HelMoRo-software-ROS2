@@ -13,11 +13,11 @@ diff_drive_base_controller:
     left_wheel_names: ["base_link_to_LEFT_FRONT_WHEEL", "base_link_to_LEFT_BACK_WHEEL"]
     right_wheel_names: ["base_link_to_RIGHT_FRONT_WHEEL", "base_link_to_RIGHT_BACK_WHEEL"]
 
-    wheel_separation: 0.195
+    wheel_separation: 0.185
     wheels_per_side: 2  
     wheel_radius: 0.045
 
-    wheel_separation_multiplier: 1.0
+    wheel_separation_multiplier: 1.5
     left_wheel_radius_multiplier: 1.0
     right_wheel_radius_multiplier: 1.0
 
@@ -28,7 +28,7 @@ diff_drive_base_controller:
     twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
 
     open_loop: true
-    enable_odom_tf: true
+    enable_odom_tf: false
 
     publish_wheel_data: true
 
@@ -40,20 +40,11 @@ diff_drive_base_controller:
     # Velocity and acceleration limits
     # Whenever a min_* is unspecified, default to -max_*
     linear.x.has_velocity_limits: true
-    linear.x.has_acceleration_limits: false
-    linear.x.has_jerk_limits: false
     linear.x.max_velocity: 1.1
-    linear.x.min_velocity: -1.1
+    linear.x.has_acceleration_limits: false
     linear.x.max_acceleration: 1.0
-    linear.x.max_jerk: 0.0
-    linear.x.min_jerk: 0.0
 
     angular.z.has_velocity_limits: true
-    angular.z.has_acceleration_limits: false
-    angular.z.has_jerk_limits: false
     angular.z.max_velocity: 10.5
-    angular.z.min_velocity: -10.5
+    angular.z.has_acceleration_limits: false
     angular.z.max_acceleration: 1.0
-    angular.z.min_acceleration: -1.0
-    angular.z.max_jerk: 0.0
-    angular.z.min_jerk: 0.0

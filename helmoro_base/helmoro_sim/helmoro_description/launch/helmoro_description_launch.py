@@ -30,7 +30,6 @@ def generate_launch_description():
     ros_bridge_launch = PathJoinSubstitution([pkg_helmoro_gazebo_tools, 'launch', 'helmoro_ros_bridge_launch.py'])
 
     # Launch Configuration
-    namespace = LaunchConfiguration('namespace')
 
     robot_state_pub_node = Node(
         package='robot_state_publisher',

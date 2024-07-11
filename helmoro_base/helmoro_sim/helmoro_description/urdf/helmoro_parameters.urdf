@@ -14,7 +14,7 @@
 	<!-- Link 1 -->
 	<xacro:property name="link_1_name" value="base_link" />
 	<xacro:property name="link_1_mesh" value="package://helmoro_description/meshes/Cover.STL" />
-	<xacro:property name="link_1_length" value="0.18" />
+	<xacro:property name="link_1_length" value="0.185" />
 	<xacro:property name="link_1_width" value="0.256" />
 	<xacro:property name="link_1_height" value="0.1" />
 	<xacro:property name="link_1_origin_xyz" value="0 0 0" />
