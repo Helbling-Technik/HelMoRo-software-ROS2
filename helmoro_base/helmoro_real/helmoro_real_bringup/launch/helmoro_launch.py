@@ -16,13 +16,13 @@ from launch_ros.actions import Node
 def generate_launch_description():
     # Directories
     pkg_helmoro_real_bringup = get_package_share_directory('helmoro_real_bringup')
-    pkg_helmoro_motor_commands = get_package_share_directory('helmoro_motor_commands')
+    pkg_helmoro_motors = get_package_share_directory('helmoro_motors')
     pkg_helmoro_description = get_package_share_directory('helmoro_description')
 
     # Paths
     imu_launch = PathJoinSubstitution([pkg_helmoro_real_bringup, 'launch', 'imu_launch.py'])
     lidar_launch = PathJoinSubstitution([pkg_helmoro_real_bringup, 'launch', 'lidar_launch.py'])
-    motor_commands_launch = PathJoinSubstitution([pkg_helmoro_motor_commands, 'launch', 'motor_commands_launch.py'])
+    motor_controller_launch = PathJoinSubstitution([pkg_helmoro_motors, 'launch', 'helmoro_motors.launch.py'])
     xacro_file = PathJoinSubstitution([pkg_helmoro_description, 'urdf', 'helmoro.urdf'])
 
     # Launch Sensors
@@ -35,8 +35,8 @@ def generate_launch_description():
     )
     
     # Motor Controllers and Motor Command
-    motor_commands = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([motor_commands_launch]),
+    motor_controllers = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([motor_controller_launch]),
     )
 
     #Robot State Publisher
@@ -60,6 +60,6 @@ def generate_launch_description():
     ld = LaunchDescription()
     ld.add_action(imu)
     ld.add_action(lidar)
-    ld.add_action(motor_commands)
+    ld.add_action(motor_controllers)
     ld.add_action(robot_state_pub_node)
     return ld
