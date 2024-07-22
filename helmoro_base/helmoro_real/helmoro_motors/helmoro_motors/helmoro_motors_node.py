@@ -9,10 +9,6 @@ from sensor_msgs.msg import Imu, JointState
 
 
 class RosHandler(Node):
-
-    # Integration Error as static variable
-    v_i = 0.0
-
     def __init__(self):
         super().__init__('helmoro_motor_commands_node')
 
@@ -26,10 +22,13 @@ class RosHandler(Node):
         self.max_ang_vel = 10.5 #rad/s
 
         # Variables
+        self._v_i = 0.0 # Integration Error
+        self._ki = 0.4 # Integration facto
         self.vx_cmd = 0.0
         self.yaw_cmd = 0.0
         self.omega_imu = 0.0 # Derivative of yaw
-        self.wheel_vel_cmd = [0.0, 0.0, 0.0, 0.0]
+        self.wheel_pos = [0.0, 0.0, 0.0, 0.0]
+        self.wheel_vel = [0.0, 0.0, 0.0, 0.0]
         self.last_update_time = time.time()
 
         # Subscribers and Publishers
@@ -42,17 +41,27 @@ class RosHandler(Node):
         self.robot_handler = RobotHandler()
 
         # Perodically send Motor Commands
-        self.update_timer = self.create_timer(1, self.update)
+        self.update_timer = self.create_timer(0.1, self.update)
 
     def update(self):
+        self.get_logger().info('1')
+        self.wheel_pos = self.robot_handler.get_wheel_positions()
+        self.get_logger().info(str(self.wheel_pos))
+        self.get_logger().info('2')
+        self.wheel_vel = self.robot_handler.get_wheel_velocities()
+        self.get_logger().info(str(self.wheel_vel))
+        self.get_logger().info('3')
         self.wheel_vel_cmd = self.calculate_wheel_vel_cmd()
-        self.robot_handler.send_command(self.wheel_vel_cmd)
+        self.get_logger().info(str([int(x * 2797) for x in self.wheel_vel_cmd]))
+        self.get_logger().info('4')
+        self.get_logger().info(str(self.robot_handler.send_command([int(x * 2797) for x in self.wheel_vel_cmd])))
+        self.get_logger().info('5')
         self.publish_odom_and_joint_state()
+        self.get_logger().info('6')
 
     def cmd_vel_callback(self, msg):
         self.vx_cmd = msg.linear.x
         self.yaw_cmd = msg.angular.z
-        self.get_logger().info('I heard: "%f"' % msg.linear.x)
 
     def imu_callback(self, msg):
         self.omega_imu = msg.angular_velocity.z
@@ -77,17 +86,18 @@ class RosHandler(Node):
 
         # integration term on angular velocity error
         dt = self._constrain(time.time()-self.last_update_time, 0.0, 0.1)
+        self.last_update_time = time.time()
+        
+        if (self.vx_cmd + rot_lin_vel != 0):
+            self._v_i += self._ki * (self.yaw_cmd - self.omega_imu) * dt
+            self._v_i = self._constrain(self._v_i, -0.15, 0.15)
 
-        if (self.vx_cmd + rot_lin_vel != 0) {
-            v_i += self.ki * (self.yaw_cmd - self.omega_imu) * dt;
-            v_i = self._constrain(v_i, -0.15, 0.15);
-
-            rot_lin_vel = rot_lin_vel + v_i;
-        }
+            rot_lin_vel = rot_lin_vel + self._v_i
 
         vel_sum_left = (self.vx_cmd + rot_lin_vel) * linear_scaling_factor
         vel_sum_right = (self.vx_cmd - rot_lin_vel) * linear_scaling_factor
 
+        wheel_vel_cmd = [0.0, 0.0, 0.0, 0.0]
         wheel_vel_cmd[0] = 2.0 * vel_sum_left / self.dia_wheels
         wheel_vel_cmd[1] = 2.0 * vel_sum_right / self.dia_wheels
         wheel_vel_cmd[2] = wheel_vel_cmd[0]

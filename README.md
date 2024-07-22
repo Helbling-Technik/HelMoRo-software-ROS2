@@ -2,7 +2,7 @@
 
 # Installation
 
-The packages included support ROS Humble on Ubuntu 20.04 and Ubuntu 22.04.
+The packages included support ROS Humble on Ubuntu 22.04.
 
 1. Install [ROS Humble](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html) on Helmoro and on your local machine.
 
