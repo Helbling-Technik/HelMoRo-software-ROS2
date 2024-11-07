@@ -54,9 +54,15 @@ def generate_launch_description():
         output='screen'
     )
 
+    load_imu_broadcaster = ExecuteProcess(
+        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
+             'test_imu_sensor_broadcaster'],
+        output='screen'
+    )
+
     load_diff_drive_controller = ExecuteProcess(
         cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
-             'diff_drive_base_controller'],
+             'helmoro_controller'],
         output='screen'
     )
 
@@ -77,6 +83,7 @@ def generate_launch_description():
         bridge,
         robot_state_pub_node,
         load_joint_state_controller,
+        load_imu_broadcaster,
         delay_diff_drive_controller_after_joint_state_broadcaster,
     ]
 

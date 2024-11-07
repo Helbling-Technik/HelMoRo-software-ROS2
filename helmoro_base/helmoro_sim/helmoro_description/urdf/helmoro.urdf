@@ -48,8 +48,7 @@
     <plugin filename="ign_ros2_control-system" name="ign_ros2_control::IgnitionROS2ControlPlugin">
       <parameters>$(find helmoro_sim_control)/config/helmoro_controller.yaml</parameters>
       <ros>
-        <remapping>/diff_drive_base_controller/cmd_vel_unstamped:=/cmd_vel</remapping>
-        <remapping>/diff_drive_base_controller/odom:=/odom</remapping>
+        <remapping>/helmoro_controller/cmd_vel_unstamped:=/cmd_vel</remapping>
       </ros>
     </plugin>
   </gazebo>
