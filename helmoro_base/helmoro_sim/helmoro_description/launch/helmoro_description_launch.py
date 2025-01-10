@@ -48,28 +48,22 @@ def generate_launch_description():
         ]
     )
 
-    load_joint_state_controller = ExecuteProcess(
+    load_joint_state_broadcaster = ExecuteProcess(
         cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
              'joint_state_broadcaster'],
         output='screen'
     )
 
-    load_imu_broadcaster = ExecuteProcess(
-        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
-             'test_imu_sensor_broadcaster'],
-        output='screen'
-    )
-
     load_diff_drive_controller = ExecuteProcess(
         cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
-             'helmoro_controller'],
+             'diff_drive_controller'],
         output='screen'
     )
 
     # Delay start of robot_controller after `joint_state_broadcaster`
     delay_diff_drive_controller_after_joint_state_broadcaster = RegisterEventHandler(
         event_handler=OnProcessExit(
-            target_action=load_joint_state_controller,
+            target_action=load_joint_state_broadcaster,
             on_exit=[load_diff_drive_controller],
         )
     )
@@ -82,8 +76,7 @@ def generate_launch_description():
     nodes = [
         bridge,
         robot_state_pub_node,
-        load_joint_state_controller,
-        load_imu_broadcaster,
+        load_joint_state_broadcaster,
         delay_diff_drive_controller_after_joint_state_broadcaster,
     ]
 
