@@ -14,11 +14,12 @@ ARGUMENTS = [
 ]
 
 def generate_launch_description():
-  pkg_helmoro_joymanager = get_package_share_directory('helmoro_joymanager')
+  print("degbusdfkljhldsflkhjsa")
+  pkg_helmoro_joy_control = get_package_share_directory('helmoro_joy_control')
 
-
+  print(pkg_helmoro_joy_control)
   param_yaml_file = PathJoinSubstitution(
-        [pkg_helmoro_joymanager, 'param', 'parameters.yaml'])
+        [pkg_helmoro_joy_control, 'param', 'parameters.yaml'])
 
   # ROS 2 joy node
   joy_node = Node(
@@ -32,9 +33,9 @@ def generate_launch_description():
   )
 
   # HelMoRo joy manager Node
-  helmoro_joymanager_node = Node(
-      package='helmoro_joymanager',
-      name='helmoro_joymanager',
+  helmoro_joy_control_node = Node(
+      package='helmoro_joy_control',
+      name='helmoro_joy_control',
       executable='helmoro_joymanager',
       parameters=[param_yaml_file,
                   {'use_sim_time': True}],
@@ -48,6 +49,6 @@ def generate_launch_description():
   # Add the helmoro joy manager node to the launch description
   ld.add_action(PushRosNamespace('helmoro_joy_control'))
   ld.add_action(joy_node)
-  ld.add_action(helmoro_joymanager_node)
+  ld.add_action(helmoro_joy_control_node)
 
   return ld

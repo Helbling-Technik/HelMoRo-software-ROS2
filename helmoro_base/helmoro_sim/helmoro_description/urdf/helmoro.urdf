@@ -44,11 +44,11 @@
   </ros2_control>
 
   <gazebo>
-    <!-- Joint state publisher -->
+    <!-- Diff drive controller -->
     <plugin filename="ign_ros2_control-system" name="ign_ros2_control::IgnitionROS2ControlPlugin">
       <parameters>$(find helmoro_sim_control)/config/helmoro_controller.yaml</parameters>
       <ros>
-        <remapping>/helmoro_controller/cmd_vel_unstamped:=/cmd_vel</remapping>
+        <remapping>/diff_drive_controller/cmd_vel_unstamped:=/cmd_vel</remapping>
       </ros>
     </plugin>
   </gazebo>
@@ -112,8 +112,8 @@
 
   <gazebo reference="${link_8_name}">
     <gravity>true</gravity>
-    <ignition_frame_id>${link_8_name}</ignition_frame_id>
     <sensor name="imu_sensor" type="imu">
+      <ignition_frame_id>${link_8_name}</ignition_frame_id>
       <always_on>true</always_on>
       <update_rate>100</update_rate>
       <visualize>true</visualize>

@@ -5,20 +5,10 @@ controller_manager:
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-    helmoro_controller:
+    diff_drive_controller:
       type: diff_drive_controller/DiffDriveController
 
-    test_imu_sensor_broadcaster:
-      type: imu_sensor_broadcaster/IMUSensorBroadcaster
-
-
-test_imu_sensor_broadcaster:
-  ros__parameters:
-
-    sensor_name: "imu_sensor"
-    frame_id:  "imu_link"
-
-helmoro_controller:
+diff_drive_controller:
   ros__parameters:
     left_wheel_names: ["base_link_to_LEFT_FRONT_WHEEL", "base_link_to_LEFT_BACK_WHEEL"]
     right_wheel_names: ["base_link_to_RIGHT_FRONT_WHEEL", "base_link_to_RIGHT_BACK_WHEEL"]

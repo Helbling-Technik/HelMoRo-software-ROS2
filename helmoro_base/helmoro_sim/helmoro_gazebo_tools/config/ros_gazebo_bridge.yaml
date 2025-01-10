@@ -4,7 +4,7 @@
   ros_type_name: "rosgraph_msgs/msg/Clock"
   gz_type_name: "gz.msgs.Clock"
   direction: GZ_TO_ROS
-- ros_topic_name: "/sensors/lidar/scan"
+- ros_topic_name: "/scan"
   gz_topic_name: "/scan"
   ros_type_name: "sensor_msgs/msg/LaserScan"
   gz_type_name: "gz.msgs.LaserScan"

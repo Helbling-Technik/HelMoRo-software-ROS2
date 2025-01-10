@@ -31,7 +31,9 @@ def generate_launch_description():
                 name='ekf_filter_node',
                 output='screen',
                 parameters=[state_estimation_params, {'use_sim_time': use_sim_time}],
-                remappings=[('/helmoro_state_estimation/tf', 'tf'), ('/helmoro_state_estimation/tf_static', 'tf_static')],
+                remappings=[('/helmoro_state_estimation/tf', 'tf'), 
+                            ('/helmoro_state_estimation/tf_static', 'tf_static'),
+                            ('/odometry/filtered', 'odom')],
             ),
         ],
     )

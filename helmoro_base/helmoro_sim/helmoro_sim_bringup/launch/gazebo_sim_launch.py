@@ -26,11 +26,10 @@ def generate_launch_description():
     z_pos = LaunchConfiguration('z')
 
     # Directories
-    pkg_helmoro_sim_bringup = get_package_share_directory(
-        'helmoro_sim_bringup')
+    pkg_helmoro_sim_bringup = get_package_share_directory('helmoro_sim_bringup')
     pkg_helmoro_state_estimation = get_package_share_directory('helmoro_state_estimation')
-    pkg_helmoro_slam = get_package_share_directory(
-        'helmoro_slam')
+    pkg_helmoro_slam = get_package_share_directory('helmoro_slam')
+    pkg_helmoro_navigation = get_package_share_directory('helmoro_navigation')
 
     # Paths
     gazebo_launch = PathJoinSubstitution(
@@ -38,9 +37,11 @@ def generate_launch_description():
     robot_spawn_launch = PathJoinSubstitution(
         [pkg_helmoro_sim_bringup, 'launch', 'helmoro_spawn_launch.py'])
     slam_launch = PathJoinSubstitution(
-        [pkg_helmoro_slam, 'launch', 'helmoro_slam_launch.py'])
+        [pkg_helmoro_slam, 'launch', 'slam_launch.py'])
     state_estimation_launch = PathJoinSubstitution(
         [pkg_helmoro_state_estimation, 'launch', 'helmoro_state_estimation_launch.py'])
+    navigation_launch = PathJoinSubstitution(
+        [pkg_helmoro_navigation, 'launch', 'nav2_launch.py'])
 
     # Launch Descriptions
     gazebo = IncludeLaunchDescription(
@@ -72,10 +73,17 @@ def generate_launch_description():
             ('use_sim_time', 'true')]    
     )
 
+    navigation = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([navigation_launch]),
+        launch_arguments=[
+            ('use_sim_time', 'true')]   
+    )
+
     # Create launch description and add actions
     ld = LaunchDescription(ARGUMENTS)
     ld.add_action(gazebo)
     ld.add_action(robot_spawn)
     ld.add_action(slam)
     ld.add_action(state_estimation)
+    ld.add_action(navigation)
     return ld
