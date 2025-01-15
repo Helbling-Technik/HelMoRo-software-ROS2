@@ -3,7 +3,7 @@ from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, Exec
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, Command
 from launch_ros.substitutions import FindPackageShare
 from launch_ros.actions import Node 
-from launch.conditions import IfCondition
+from launch.conditions import IfCondition, UnlessCondition
 from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from ament_index_python.packages import get_package_share_directory
@@ -45,6 +45,19 @@ def generate_launch_description():
         launch_arguments=[
             ('use_sim_time', LaunchConfiguration('use_sim_time'))
         ]   
+    )
+
+    control_node = Node(
+        package="controller_manager",
+        executable="ros2_control_node",
+        parameters=[controller_params],
+        output="both",
+        remappings=[
+            ("~/robot_description", "/robot_description"),
+            ("~/cmd_vel_unstamped", "/cmd_vel"),
+            ("/diff_drive_controller/cmd_vel", "/cmd_vel")
+        ],
+        condition=UnlessCondition(LaunchConfiguration('use_sim_time'))
     )
 
     load_joint_state_broadcaster = ExecuteProcess(
@@ -95,6 +108,7 @@ def generate_launch_description():
     ld.add_action(rviz)
     ld.add_action(state_estimation)
     ld.add_action(slam)
+    ld.add_action(control_node)
     ld.add_action(load_joint_state_broadcaster)
     ld.add_action(delay_diff_drive_controller_after_joint_state_broadcaster)
     return ld

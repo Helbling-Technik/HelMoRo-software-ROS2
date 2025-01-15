@@ -19,7 +19,7 @@
   <!-- Control Plugin-->
   <ros2_control name="IgnitionSystem" type="system">
     <hardware>
-      <plugin>ign_ros2_control/IgnitionSystem</plugin>
+      <plugin>fake_components/GenericSystem</plugin>
     </hardware>
     <joint name="base_link_to_LEFT_FRONT_WHEEL">
       <command_interface name="velocity"/>

@@ -37,19 +37,10 @@ def generate_launch_description():
     pkg_helmoro_navigation = get_package_share_directory('helmoro_navigation')
 
     # Paths
-    robot_description_launch_file = PathJoinSubstitution(
-        [pkg_helmoro_description, 'launch', 'helmoro_description_launch.py'])
-    
     helmoro_common_launch = PathJoinSubstitution(
         [pkg_helmoro_common, 'launch', 'common_launch.py'])
     navigation_launch = PathJoinSubstitution(
         [pkg_helmoro_navigation, 'launch', 'nav2_launch.py'])
-
-    # Helmoro robot model and description
-    robot_description = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([robot_description_launch_file])  ,
-        launch_arguments=[('use_sim_time', 'true')]   
-    )
 
     # Spawn HelMoRo
     spawn_helmoro = Node(
@@ -79,7 +70,6 @@ def generate_launch_description():
 
     # Define LaunchDescription variable
     ld = LaunchDescription(ARGUMENTS)
-    #ld.add_action(robot_description)
     ld.add_action(spawn_helmoro)
     ld.add_action(helmoro_common)
     ld.add_action(navigation)

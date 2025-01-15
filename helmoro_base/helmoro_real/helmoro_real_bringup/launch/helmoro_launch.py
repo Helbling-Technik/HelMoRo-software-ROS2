@@ -45,12 +45,6 @@ def generate_launch_description():
         PythonLaunchDescriptionSource([motor_controller_launch]),
     )
 
-    helmoro_description = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([helmoro_description_launch]),
-        launch_arguments=[
-            ('use_sim_time', 'false')
-        ]
-    )
 
     helmoro_common = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([helmoro_common_launch]),
@@ -64,7 +58,6 @@ def generate_launch_description():
 
     # Create launch description and add actions
     ld = LaunchDescription()
-    ld.add_action(helmoro_description)
     ld.add_action(imu)
     ld.add_action(lidar)
     ld.add_action(motor_controllers)
