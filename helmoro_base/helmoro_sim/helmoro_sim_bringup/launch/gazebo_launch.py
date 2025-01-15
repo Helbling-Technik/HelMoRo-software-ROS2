@@ -35,14 +35,10 @@ def generate_launch_description():
                                                         pkg_helmoro_description).
                                                         parent.resolve())])
 
-    # Launch configurations
-    world_path = LaunchConfiguration('world_path')
-    use_gazebo_gui = LaunchConfiguration('use_gazebo_gui')
-
-
     # Gazebo
     ign_gazebo_launch = PathJoinSubstitution(
         [pkg_ros_gz_sim, 'launch', 'gz_sim.launch.py'])
+    
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([ign_gazebo_launch]),
         launch_arguments=[
@@ -52,10 +48,19 @@ def generate_launch_description():
         ]
     )
 
+    ros_bridge_launch = PathJoinSubstitution([pkg_helmoro_gazebo_tools, 'launch', 'helmoro_ros_bridge_launch.py'])
+
+    # Bridge
+    bridge = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([ros_bridge_launch]),
+    )
+
     # Define LaunchDescription variable
     ld = LaunchDescription(ARGUMENTS)
+
     # Gazebo processes
     ld.add_action(gz_resource_path)
     ld.add_action(gazebo)
-
+    ld.add_action(bridge)
+    print("testst3e")
     return ld

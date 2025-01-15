@@ -3,7 +3,7 @@
 
   <xacro:include filename="$(find helmoro_description)/urdf/helmoro_parameters.urdf" />
   <xacro:include filename="$(find helmoro_description)/urdf/helmoro_segments.urdf" />
-  <!--<xacro:include filename="$(find helmoro_sim_control)/urdf/helmoro_control.urdf" />-->
+  <!--<xacro:include filename="$(find helmoro_control)/urdf/helmoro_control.urdf" />-->
 
   <!-- Sensor Plugins-->
   <gazebo>
@@ -46,7 +46,7 @@
   <gazebo>
     <!-- Diff drive controller -->
     <plugin filename="ign_ros2_control-system" name="ign_ros2_control::IgnitionROS2ControlPlugin">
-      <parameters>$(find helmoro_sim_control)/config/helmoro_controller.yaml</parameters>
+      <parameters>$(find helmoro_control)/config/helmoro_controller.yaml</parameters>
       <ros>
         <remapping>/diff_drive_controller/cmd_vel_unstamped:=/cmd_vel</remapping>
       </ros>

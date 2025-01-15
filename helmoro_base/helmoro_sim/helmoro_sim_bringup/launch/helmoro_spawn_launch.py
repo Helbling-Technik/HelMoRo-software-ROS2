@@ -33,51 +33,54 @@ for pose_element in ['x', 'y', 'z', 'yaw']:
 def generate_launch_description():
     # Directories
     pkg_helmoro_description = get_package_share_directory('helmoro_description')
-    pkg_helmoro_common_bringup = get_package_share_directory('helmoro_common_bringup')
-    pkg_helmoro_sim_bringup = get_package_share_directory('helmoro_sim_bringup')
+    pkg_helmoro_common = get_package_share_directory('helmoro_common_bringup')
+    pkg_helmoro_navigation = get_package_share_directory('helmoro_navigation')
 
     # Paths
     robot_description_launch_file = PathJoinSubstitution(
         [pkg_helmoro_description, 'launch', 'helmoro_description_launch.py'])
-    rviz_launch_file = PathJoinSubstitution(
-        [pkg_helmoro_common_bringup, 'launch', 'rviz_launch.py'])
-    ros_gazebo_bridge_launch = PathJoinSubstitution(
-        [pkg_helmoro_sim_bringup, 'launch', 'helmoro_ros_bridge_launch.py'])
+    
+    helmoro_common_launch = PathJoinSubstitution(
+        [pkg_helmoro_common, 'launch', 'common_launch.py'])
+    navigation_launch = PathJoinSubstitution(
+        [pkg_helmoro_navigation, 'launch', 'nav2_launch.py'])
 
-    # Launch configurations
-    namespace = LaunchConfiguration('namespace')
-    x, y, z = LaunchConfiguration('x'), LaunchConfiguration('y'), LaunchConfiguration('z')
-    yaw = LaunchConfiguration('yaw')
-    use_rviz = LaunchConfiguration('use_rviz')
+    # Helmoro robot model and description
+    robot_description = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([robot_description_launch_file])  ,
+        launch_arguments=[('use_sim_time', 'true')]   
+    )
 
-    spawn_robot_group_action = GroupAction([
+    # Spawn HelMoRo
+    spawn_helmoro = Node(
+        package='ros_gz_sim',
+        executable='create',
+        arguments=['-name', 'helmoro',
+                    '-x', LaunchConfiguration('x'),
+                    '-y', LaunchConfiguration('y'),
+                    '-z', LaunchConfiguration('z'),
+                    '-Y', LaunchConfiguration('yaw'),
+                    '-topic', 'robot_description'],
+        output='screen',
+    )
 
-        # Helmoro robot model and description
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([robot_description_launch_file]),
-        ),
+    helmoro_common = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([helmoro_common_launch]),
+        launch_arguments=[
+            ('use_sim_time', 'true'),
+            ('use_rviz', LaunchConfiguration('use_rviz'))
+            ]   
+    )
 
-        # Spawn HelMoRo
-        Node(
-            package='ros_gz_sim',
-            executable='create',
-            arguments=['-name', 'helmoro',
-                       '-x', x,
-                       '-y', y,
-                       '-z', z,
-                       '-Y', yaw,
-                       '-topic', 'robot_description'],
-            output='screen',
-        ),
-
-        # RVIZ2
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([rviz_launch_file]),
-            condition=IfCondition(use_rviz),
-        ),
-    ])
+    navigation = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([navigation_launch]),
+        launch_arguments=[('use_sim_time', 'true')]   
+    )
 
     # Define LaunchDescription variable
     ld = LaunchDescription(ARGUMENTS)
-    ld.add_action(spawn_robot_group_action)
+    #ld.add_action(robot_description)
+    ld.add_action(spawn_helmoro)
+    ld.add_action(helmoro_common)
+    ld.add_action(navigation)
     return ld
