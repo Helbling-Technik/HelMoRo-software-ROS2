@@ -1,8 +1,9 @@
 from helmoro_motors.roboclaw import Roboclaw
 
 class RobotHandler:
-
-    def __init__(self, addr_left=0x81, addr_right=0x80, baud=115200, encoder_res=2797):
+    # TODO: Check what correct encoder_res is, current encoder_res was approximated by hand calculations
+    # Documentation says, encoder_res should be 700???
+    def __init__(self, addr_left=0x81, addr_right=0x80, baud=115200, encoder_res=3500):
         
         #Parameters
         self._addr_left = addr_left
@@ -35,20 +36,20 @@ class RobotHandler:
             print(repr(version_right[1]))
         
 
-    def get_wheel_positions(self):
+    def get_wheel_positions(self, wheel_circumference):
         wheel_pos = [0.0, 0.0, 0.0, 0.0]
-        wheel_pos[0] = self._right_motors.ReadEncM1(self._addr_right)[1]/self._encoder_res
-        wheel_pos[1] = self._left_motors.ReadEncM1(self._addr_left)[1]/self._encoder_res
-        wheel_pos[2] = self._right_motors.ReadEncM2(self._addr_right)[1]/self._encoder_res
-        wheel_pos[3] = self._left_motors.ReadEncM2(self._addr_left)[1]/self._encoder_res
+        wheel_pos[0] = self._right_motors.ReadEncM1(self._addr_right)[1]/self._encoder_res*wheel_circumference
+        wheel_pos[1] = self._left_motors.ReadEncM1(self._addr_left)[1]/self._encoder_res*wheel_circumference
+        wheel_pos[2] = self._right_motors.ReadEncM2(self._addr_right)[1]/self._encoder_res*wheel_circumference
+        wheel_pos[3] = self._left_motors.ReadEncM2(self._addr_left)[1]/self._encoder_res*wheel_circumference
         return wheel_pos
 
-    def get_wheel_velocities(self):
+    def get_wheel_velocities(self, wheel_circumference):
         wheel_vel = [0.0, 0.0, 0.0, 0.0]
-        wheel_vel[0] = self._right_motors.ReadSpeedM1(self._addr_right)[1]/self._encoder_res
-        wheel_vel[1] = self._left_motors.ReadSpeedM1(self._addr_left)[1]/self._encoder_res
-        wheel_vel[2] = self._right_motors.ReadSpeedM2(self._addr_right)[1]/self._encoder_res
-        wheel_vel[3] = self._left_motors.ReadSpeedM2(self._addr_left)[1]/self._encoder_res
+        wheel_vel[0] = self._right_motors.ReadSpeedM1(self._addr_right)[1]/self._encoder_res*wheel_circumference
+        wheel_vel[1] = self._left_motors.ReadSpeedM1(self._addr_left)[1]/self._encoder_res*wheel_circumference
+        wheel_vel[2] = self._right_motors.ReadSpeedM2(self._addr_right)[1]/self._encoder_res*wheel_circumference
+        wheel_vel[3] = self._left_motors.ReadSpeedM2(self._addr_left)[1]/self._encoder_res*wheel_circumference
         return wheel_vel
         
     def send_command(self, wheel_vel_cmd):

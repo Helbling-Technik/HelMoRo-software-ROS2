@@ -106,11 +106,11 @@ def generate_launch_description():
     ld = LaunchDescription(ARGUMENTS)
     ld.add_action(robot_description)
     ld.add_action(rviz)
-    ld.add_action(state_estimation)
     ld.add_action(slam)
     ld.add_action(control_node)
     ld.add_action(load_joint_state_broadcaster)
     ld.add_action(delay_diff_drive_controller_after_joint_state_broadcaster)
+    ld.add_action(state_estimation)
     return ld
 
     
