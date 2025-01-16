@@ -14,7 +14,6 @@ ARGUMENTS = [
 ]
 
 def generate_launch_description():
-  print("degbusdfkljhldsflkhjsa")
   pkg_helmoro_joy_control = get_package_share_directory('helmoro_joy_control')
 
   print(pkg_helmoro_joy_control)
