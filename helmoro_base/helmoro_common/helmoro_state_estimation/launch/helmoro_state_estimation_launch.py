@@ -25,7 +25,7 @@ def generate_launch_description():
 
     transform_msg = ExecuteProcess(
         cmd=['ros2', 'run', 'topic_tools', 'relay_field', '/diff_drive_controller/cmd_vel_out', '/ekf_filter_node/cmd_vel_in',
-             'geometry_msgs/msg/Twist', '{linear: m.twist.linear, angular: m.twist.angular}'],
+             'geometry_msgs/msg/Twist', '{linear: m.twist.linear, angular: m.twist.angular}', '--wait-for-start'],
         output='screen'
     )
 
