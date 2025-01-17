@@ -70,6 +70,7 @@ class RosHandler(Node):
 
         # Init robot handler class
         self.robot_handler = RobotHandler()
+        self.encoder_res = self.robot_handler._encoder_res
 
         # Perodically send Motor Commands
         self.update_timer = self.create_timer(0.1, self.update)
@@ -78,7 +79,7 @@ class RosHandler(Node):
         self.wheel_pos = self.robot_handler.get_wheel_positions(self.wheel_circumference)
         self.wheel_vel = self.robot_handler.get_wheel_velocities(self.wheel_circumference)
         self.wheel_vel_cmd = self.calculate_wheel_vel_cmd()
-        self.robot_handler.send_command([int(x * 2797) for x in self.wheel_vel_cmd])
+        self.robot_handler.send_command([int(x * self.encoder_res) for x in self.wheel_vel_cmd])
         self.publish_joint_state()
         self.update_and_publish_odom()
 
