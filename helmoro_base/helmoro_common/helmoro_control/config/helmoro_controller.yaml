@@ -44,11 +44,11 @@ diff_drive_controller:
     # Velocity and acceleration limits
     # Whenever a min_* is unspecified, default to -max_*
     linear.x.has_velocity_limits: true
-    linear.x.max_velocity: 1.1
+    linear.x.max_velocity: 1.3
     linear.x.has_acceleration_limits: true
-    linear.x.max_acceleration: 0.2
+    linear.x.max_acceleration: 2.0
 
     angular.z.has_velocity_limits: true
-    angular.z.max_velocity: 10.5
+    angular.z.max_velocity: 6.2
     angular.z.has_acceleration_limits: true
-    angular.z.max_acceleration: 3.0
+    angular.z.max_acceleration: 40.0
