@@ -27,7 +27,7 @@ class RosHandler(Node):
         self.max_lin_vel = 1.1 #m/s
         self.max_ang_vel = 10.5 #rad/s
         # Runtim
-        self.frequency = 10
+        self.frequency = 10.0
 
         # Variables
         self._v_i = 0.0 # Integration Error
@@ -51,10 +51,6 @@ class RosHandler(Node):
                                      0.0, 0.0, 0.0, 0.0, 0.1, 0.0,
                                      0.0, 0.0, 0.0, 0.0, 0.0, 0.1] 
 
-
-
-
-
         self.odom.twist.covariance = [0.1, 0.0, 0.0, 0.0, 0.0, 0.0,
                                      0.0, 0.1, 0.0, 0.0, 0.0, 0.0,
                                      0.0, 0.0, 0.1, 0.0, 0.0, 0.0,
@@ -63,23 +59,26 @@ class RosHandler(Node):
                                      0.0, 0.0, 0.0, 0.0, 0.0, 0.1] 
 
         # Subscribers and Publishers
-        self.cmd_vel_sub = self.create_subscription(TwistStamped, '/diff_drive_controller/cmd_vel_out', self.cmd_vel_callback, self.frequency)
-        self.imu_sub = self.create_subscription(Imu, 'sensors/imu/imu', self.imu_callback, self.frequency)  # prevent unused variable warning
-        self.odom_pub = self.create_publisher(Odometry, '/motors/odom', self.frequency)
-        self.joint_states_pub = self.create_publisher(JointState, '/motors/joint_states', self.frequency)
+        self.cmd_vel_sub = self.create_subscription(TwistStamped, '/diff_drive_controller/cmd_vel_out', self.cmd_vel_callback, 10)
+        self.imu_sub = self.create_subscription(Imu, 'sensors/imu/imu', self.imu_callback, 10)  # prevent unused variable warning
+        self.odom_pub = self.create_publisher(Odometry, '/motors/odom', 10)
+        self.joint_states_pub = self.create_publisher(JointState, '/motors/joint_states', 10)
 
         # Init robot handler class
         self.robot_handler = RobotHandler()
+        self.robot_handler.set_wheel_circumference(self.wheel_circumference)
         self.encoder_res = self.robot_handler._encoder_res
+        self.max_motor_speed = self.robot_handler._max_speed/self.encoder_res*self.wheel_circumference
 
         # Perodically send Motor Commands
-        self.update_timer = self.create_timer(0.1, self.update)
+        self.update_timer = self.create_timer(1/self.frequency, self.update)
 
     def update(self):
-        self.wheel_pos = self.robot_handler.get_wheel_positions(self.wheel_circumference)
-        self.wheel_vel = self.robot_handler.get_wheel_velocities(self.wheel_circumference)
+        self.wheel_pos = self.robot_handler.get_wheel_positions()
+        self.wheel_vel = self.robot_handler.get_wheel_velocities()
         self.wheel_vel_cmd = self.calculate_wheel_vel_cmd()
-        self.robot_handler.send_command([int(x * self.encoder_res) for x in self.wheel_vel_cmd])
+        self.robot_handler.send_command(self.wheel_vel_cmd)
+        self.get_logger().info(str(self.wheel_vel_cmd))
         self.publish_joint_state()
         self.update_and_publish_odom()
 
@@ -113,6 +112,14 @@ class RosHandler(Node):
         wheel_vel_cmd[2] = wheel_vel_cmd[0]
         wheel_vel_cmd[3] = wheel_vel_cmd[1]
 
+        if wheel_vel_cmd[1] > self.max_motor_speed:
+            self.get_logger().info('Requested left_motors vel of: ' + str(wheel_vel_cmd[1]) + ' meters per seconds')
+            self.get_logger().info('Max left_motor vel is: ' + self.max_motor_speed + ' meters per seconds')
+
+        if wheel_vel_cmd[0] > self.max_motor_speed:
+            self.get_logger().info('Requested right_motors vel of: ' + str(wheel_vel_cmd[0]) + ' meters per seconds')
+            self.get_logger().info('Max right_motors vel is: ' + self.max_motor_speed + ' meters per seconds')
+
         return wheel_vel_cmd
     
     def update_and_publish_odom(self):
@@ -133,14 +140,10 @@ class RosHandler(Node):
         quat_prev.y = self.odom.pose.pose.orientation.y
         quat_prev.z = self.odom.pose.pose.orientation.z
         quat_prev.w = self.odom.pose.pose.orientation.w
-        self.get_logger().info('quat_prev ' + str(quat_prev))
         quat_new = Quaternion()
-        self.get_logger().info('twist  ' + str(twist.angular))
         quat_new = self.quaternion_from_euler(twist.angular.x / self.frequency, twist.angular.y / self.frequency, twist.angular.z / self.frequency)
-        self.get_logger().info('quat_new ' + str(quat_new))
         pose = Pose()
         pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w  = self.multiply_quaternions(quat_new, quat_prev)
-        self.get_logger().info('quat_calc ' + str(pose.orientation))
         roll, pitch, yaw = self.euler_from_quaternion(pose.orientation)
         position = Point()
         position.x = self.odom.pose.pose.position.x + vel_average * math.cos(yaw) / self.frequency
