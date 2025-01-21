@@ -62,7 +62,7 @@ class RosHandler(Node):
         self.cmd_vel_sub = self.create_subscription(TwistStamped, '/diff_drive_controller/cmd_vel_out', self.cmd_vel_callback, 10)
         self.imu_sub = self.create_subscription(Imu, 'sensors/imu/imu', self.imu_callback, 10)  # prevent unused variable warning
         self.odom_pub = self.create_publisher(Odometry, '/motors/odom', 10)
-        self.joint_states_pub = self.create_publisher(JointState, '/motors/joint_states', 10)
+        self.joint_states_pub = self.create_publisher(JointState, '/joint_states', 10)
 
         # Init robot handler class
         self.robot_handler = RobotHandler()
