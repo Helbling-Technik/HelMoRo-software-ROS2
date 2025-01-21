@@ -2,7 +2,7 @@ from helmoro_motors.roboclaw import Roboclaw
 
 class RobotHandler:
     # TODO: When calibrating the PID with motion studio, always check if max_speed changed
-    def __init__(self, addr_left=0x81, addr_right=0x80, baud=115200, encoder_res=2800, max_speed=125000):
+    def __init__(self, addr_left=0x80, addr_right=0x80, baud=115200, encoder_res=2800, max_speed=125000):
         
         #Parameters
         self._addr_left = addr_left
