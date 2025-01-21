@@ -62,5 +62,4 @@ def generate_launch_description():
     ld.add_action(gz_resource_path)
     ld.add_action(gazebo)
     ld.add_action(bridge)
-    print("testst3e")
     return ld

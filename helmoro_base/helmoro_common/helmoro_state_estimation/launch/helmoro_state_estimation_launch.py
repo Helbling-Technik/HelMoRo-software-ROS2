@@ -10,7 +10,6 @@ def generate_launch_description():
 
     # Directories
     helmoro_state_estimation_pkg = get_package_share_directory('helmoro_state_estimation')
-    topic_tools_pkg = get_package_share_directory('topic_tools')
 
     # Files
     state_estimation_params = PathJoinSubstitution([helmoro_state_estimation_pkg, 'config', 'ekf_params.yaml'])

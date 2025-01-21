@@ -5,8 +5,7 @@
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
-from launch.actions import IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, ExecuteProcess, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 
@@ -53,10 +52,16 @@ def generate_launch_description():
             ]
         )
     
+    transform_msg = ExecuteProcess(
+        cmd=['ros2', 'run', 'topic_tools', 'relay', '/diff_drive_controller/odom', '/ekf_filter_node/wheel_odom', '--wait-for-start'],
+        output='screen'
+    )
+    
 
 
     # Create launch description and add actions
     ld = LaunchDescription(ARGUMENTS)
     ld.add_action(gazebo)
     ld.add_action(robot_spawn)
+    ld.add_action(transform_msg)
     return ld

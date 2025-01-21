@@ -7,7 +7,7 @@ import os
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
+from launch.actions import IncludeLaunchDescription, ExecuteProcess
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitution
 
@@ -56,6 +56,11 @@ def generate_launch_description():
             ('use_sim_time', 'true')]   
     )
 
+    transform_msg = ExecuteProcess(
+        cmd=['ros2', 'run', 'topic_tools', 'relay', '/motors/odom', '/ekf_filter_node/wheel_odom', '--wait-for-start'],
+        output='screen'
+    )
+
     # Create launch description and add actions
     ld = LaunchDescription()
     ld.add_action(imu)
@@ -63,5 +68,6 @@ def generate_launch_description():
     ld.add_action(motor_controllers)
     ld.add_action(helmoro_common)
     ld.add_action(navigation)
+    ld.add_action(transform_msg)
 
     return ld
