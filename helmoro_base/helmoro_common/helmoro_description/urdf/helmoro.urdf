@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
-<robot name="Helmoro" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
 
   <xacro:include filename="$(find helmoro_description)/urdf/helmoro_parameters.urdf" />
   <xacro:include filename="$(find helmoro_description)/urdf/helmoro_segments.urdf" />
-  <!--<xacro:include filename="$(find helmoro_sim_control)/urdf/helmoro_control.urdf" />-->
+  <!--<xacro:include filename="$(find helmoro_control)/urdf/helmoro_control.urdf" />-->
 
   <!-- Sensor Plugins-->
   <gazebo>
@@ -16,37 +16,10 @@
     </plugin>
   </gazebo>
 
-  <!-- Control Plugin-->
-  <ros2_control name="IgnitionSystem" type="system">
-    <hardware>
-      <plugin>ign_ros2_control/IgnitionSystem</plugin>
-    </hardware>
-    <joint name="base_link_to_LEFT_FRONT_WHEEL">
-      <command_interface name="velocity"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
-    <joint name="base_link_to_LEFT_BACK_WHEEL">
-      <command_interface name="velocity"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
-    <joint name="base_link_to_RIGHT_FRONT_WHEEL">
-      <command_interface name="velocity"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
-    <joint name="base_link_to_RIGHT_BACK_WHEEL">
-      <command_interface name="velocity"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
-  </ros2_control>
-
   <gazebo>
     <!-- Diff drive controller -->
     <plugin filename="ign_ros2_control-system" name="ign_ros2_control::IgnitionROS2ControlPlugin">
-      <parameters>$(find helmoro_sim_control)/config/helmoro_controller.yaml</parameters>
+      <parameters>$(find helmoro_control)/config/helmoro_controller.yaml</parameters>
       <ros>
         <remapping>/diff_drive_controller/cmd_vel_unstamped:=/cmd_vel</remapping>
       </ros>
