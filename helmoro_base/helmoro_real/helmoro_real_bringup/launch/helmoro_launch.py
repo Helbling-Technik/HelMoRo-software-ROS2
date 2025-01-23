@@ -24,6 +24,7 @@ def generate_launch_description():
     # Paths
     imu_launch = PathJoinSubstitution([pkg_helmoro_real_bringup, 'launch', 'imu_launch.py'])
     lidar_launch = PathJoinSubstitution([pkg_helmoro_real_bringup, 'launch', 'lidar_launch.py'])
+    camera_launch = PathJoinSubstitution([pkg_helmoro_real_bringup, 'launch', 'camera_launch.py'])
     motor_controller_launch = PathJoinSubstitution([pkg_helmoro_motors, 'launch', 'helmoro_motors.launch.py'])
     helmoro_description_launch = PathJoinSubstitution([pkg_helmoro_description, 'launch', 'helmoro_description_launch.py'])
     helmoro_common_launch = PathJoinSubstitution([pkg_helmoro_common, 'launch', 'common_launch.py'])
@@ -38,6 +39,10 @@ def generate_launch_description():
 
     lidar = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([lidar_launch]),
+    )
+
+    camera = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([camera_launch]),
     )
     
     # Motor Controllers and Motor Command
@@ -65,6 +70,7 @@ def generate_launch_description():
     ld = LaunchDescription()
     ld.add_action(imu)
     ld.add_action(lidar)
+    ld.add_action(camera)
     ld.add_action(motor_controllers)
     ld.add_action(helmoro_common)
     ld.add_action(navigation)
