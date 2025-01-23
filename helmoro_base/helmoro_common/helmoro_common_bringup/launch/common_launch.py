@@ -80,11 +80,13 @@ def generate_launch_description():
         )
     )
 
-    
     rviz = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([PathJoinSubstitution(
             [pkg_helmoro_common, 'launch', 'rviz_launch.py'])]),
-        condition=IfCondition(LaunchConfiguration('use_rviz'))
+        condition=IfCondition(LaunchConfiguration('use_rviz')),
+        launch_arguments=[
+            ('use_sim_time', LaunchConfiguration('use_sim_time'))
+        ],
     )
 
     slam = IncludeLaunchDescription(
@@ -100,9 +102,6 @@ def generate_launch_description():
             ('use_sim_time', LaunchConfiguration('use_sim_time'))
         ]
     )
-
-    
-
 
     # Create launch description and add actions
     ld = LaunchDescription(ARGUMENTS)
