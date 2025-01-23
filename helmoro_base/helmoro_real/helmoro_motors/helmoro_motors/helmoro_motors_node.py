@@ -78,7 +78,6 @@ class RosHandler(Node):
         self.wheel_vel = self.robot_handler.get_wheel_velocities()
         self.wheel_vel_cmd = self.calculate_wheel_vel_cmd()
         self.robot_handler.send_command(self.wheel_vel_cmd)
-        self.get_logger().info(str(self.wheel_vel_cmd))
         self.publish_joint_state()
         self.update_and_publish_odom()
 
