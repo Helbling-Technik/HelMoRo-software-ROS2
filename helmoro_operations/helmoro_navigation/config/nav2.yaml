@@ -88,7 +88,6 @@ controller_server:
       plugin: "nav2_controller::SimpleGoalChecker"
       xy_goal_tolerance: 0.35
       yaw_goal_tolerance: 0.5
-
     FollowPath:
       plugin: "nav2_mppi_controller::MPPIController"
       time_steps: 56
@@ -184,8 +183,8 @@ local_costmap:
       plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 1.0
-        inflation_radius: 2.0
+        cost_scaling_factor: 1.2
+        inflation_radius: 3.0
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: True
