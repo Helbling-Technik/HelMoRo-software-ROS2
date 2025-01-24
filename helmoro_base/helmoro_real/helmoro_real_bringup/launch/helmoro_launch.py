@@ -58,7 +58,7 @@ def generate_launch_description():
     navigation = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([navigation_launch]),
         launch_arguments=[
-            ('use_sim_time', 'true')]   
+            ('use_sim_time', 'false')]   
     )
 
     transform_msg = ExecuteProcess(

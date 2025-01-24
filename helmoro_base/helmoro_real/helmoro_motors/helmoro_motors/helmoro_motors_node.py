@@ -78,7 +78,6 @@ class RosHandler(Node):
         self.wheel_vel = self.robot_handler.get_wheel_velocities()
         self.wheel_vel_cmd = self.calculate_wheel_vel_cmd()
         self.robot_handler.send_command(self.wheel_vel_cmd)
-        self.get_logger().info(str(self.wheel_vel_cmd))
         self.publish_joint_state()
         self.update_and_publish_odom()
 
@@ -127,7 +126,7 @@ class RosHandler(Node):
         vel_average = sum(self.wheel_vel) / float(len(self.wheel_vel))
         vel_right = (self.wheel_vel[0] + self.wheel_vel[2]) / 2
         vel_left = (self.wheel_vel[1] + self.wheel_vel[3]) / 2
-        omega = ((vel_right - vel_left) / 2) / (self.dia_wheels / 2) # v_diff/2 / radius
+        omega = ((vel_right - vel_left) / 2) / (self.dy_wheels / 2) # v_diff/2 / radius
 
         # Calculate Twist
         twist = Twist()
