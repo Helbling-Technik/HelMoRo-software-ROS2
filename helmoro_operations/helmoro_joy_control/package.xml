@@ -4,7 +4,7 @@
   <name>helmoro_joy_control</name>
   <version>2.0.0</version>
   <description>The Helbling mobile robot joystick manager package</description>
-  <maintainer email="samuel.bamert@helbling.ch">Samuel Bamert</maintainer>
+  <maintainer email="marc.bloechlinger@helbling.ch">Marc Blöchlinger</maintainer>
   <license>BSD</license>
 
   <author>Helbling Technik AG</author>
