@@ -32,7 +32,6 @@ for pose_element in ['x', 'y', 'z', 'yaw']:
 
 def generate_launch_description():
     # Directories
-    pkg_helmoro_description = get_package_share_directory('helmoro_description')
     pkg_helmoro_common = get_package_share_directory('helmoro_common_bringup')
     pkg_helmoro_navigation = get_package_share_directory('helmoro_navigation')
 
