@@ -10,13 +10,13 @@
 // stl
 #include <string>
 
-namespace helmoro_joymanager
+namespace helmoro_joy_control
 {
-class HelmoroJoyManager : public rclcpp::Node
+class HelmoroJoyControl : public rclcpp::Node
 {
 public:
   /// \brief Constructor
-  explicit HelmoroJoyManager(const rclcpp::NodeOptions & options = rclcpp::NodeOptions());
+  explicit HelmoroJoyControl(const rclcpp::NodeOptions & options = rclcpp::NodeOptions());
 
 private:
   void joystickCallback(sensor_msgs::msg::Joy::ConstSharedPtr msg);
@@ -32,4 +32,4 @@ private:
   bool left_trigger_initalized_;
 };
 
-}  // namespace helmoro_joymanager
+}  // namespace helmoro_joy_control

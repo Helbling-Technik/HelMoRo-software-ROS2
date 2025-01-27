@@ -1,11 +1,11 @@
-#include "helmoro_joymanager/helmoro_joymanager.hpp"
+#include "helmoro_joy_control/helmoro_joy_control.hpp"
 
-namespace helmoro_joymanager
+namespace helmoro_joy_control
 {
 using namespace std::placeholders;
 
-HelmoroJoyManager::HelmoroJoyManager(const rclcpp::NodeOptions & options)
-  : rclcpp::Node("helmoro_joymanager", options)
+HelmoroJoyControl::HelmoroJoyControl(const rclcpp::NodeOptions & options)
+  : rclcpp::Node("helmoro_joy_control", options)
 {
   // initialize publishers and subscribers
   user_input_pub_ = this->create_publisher<geometry_msgs::msg::Twist>(
@@ -13,7 +13,7 @@ HelmoroJoyManager::HelmoroJoyManager(const rclcpp::NodeOptions & options)
 
   joystick_sub_ = this->create_subscription<sensor_msgs::msg::Joy>(
       "joy", rclcpp::SensorDataQoS(),
-      std::bind(&HelmoroJoyManager::joystickCallback, this, _1));
+      std::bind(&HelmoroJoyControl::joystickCallback, this, _1));
 
   // load scaling factors from parameter file
   linearVelocityScalingFactor_ = this->declare_parameter("linear_velocity", 1.0);
@@ -25,7 +25,7 @@ HelmoroJoyManager::HelmoroJoyManager(const rclcpp::NodeOptions & options)
   left_trigger_initalized_ = false;
 }
 
-void HelmoroJoyManager::joystickCallback(sensor_msgs::msg::Joy::ConstSharedPtr msg)
+void HelmoroJoyControl::joystickCallback(sensor_msgs::msg::Joy::ConstSharedPtr msg)
 {
   geometry_msgs::msg::Twist cmd_vel;
 
@@ -46,6 +46,6 @@ void HelmoroJoyManager::joystickCallback(sensor_msgs::msg::Joy::ConstSharedPtr m
   user_input_pub_->publish(cmd_vel);
 }
 
-}  // namespace helmoro_joymanager
+}  // namespace helmoro_joy_control
 
-RCLCPP_COMPONENTS_REGISTER_NODE(helmoro_joymanager::HelmoroJoyManager)
+RCLCPP_COMPONENTS_REGISTER_NODE(helmoro_joy_control::HelmoroJoyControl)

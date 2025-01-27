@@ -1,6 +1,6 @@
 ---
 /**:
-    helmoro_joymanager:
+    helmoro_joy_control:
         ros__parameters:
             # Scaling Factors
             linear_velocity: 0.25

@@ -29,24 +29,24 @@ set(dependencies
 )
 
 # Helmoro Motor Command
-add_library(helmoro_joymanager_lib SHARED)
+add_library(helmoro_joy_control_lib SHARED)
 target_sources(
-  helmoro_joymanager_lib
+  helmoro_joy_control_lib
   PRIVATE
-    src/helmoro_joymanager.cpp
+    src/helmoro_joy_control.cpp
 )
-target_include_directories(helmoro_joymanager_lib PUBLIC include)
-ament_target_dependencies(helmoro_joymanager_lib
+target_include_directories(helmoro_joy_control_lib PUBLIC include)
+ament_target_dependencies(helmoro_joy_control_lib
   ${dependencies}
 )
 
-rclcpp_components_register_node(helmoro_joymanager_lib
-  PLUGIN "helmoro_joymanager::HelmoroJoyManager"
-  EXECUTABLE helmoro_joymanager)
+rclcpp_components_register_node(helmoro_joy_control_lib
+  PLUGIN "helmoro_joy_control::HelmoroJoyControl"
+  EXECUTABLE helmoro_joy_control)
 
 # Library names
   set(libraries_names
-  helmoro_joymanager_lib
+  helmoro_joy_control_lib
 )
  
 ### Install

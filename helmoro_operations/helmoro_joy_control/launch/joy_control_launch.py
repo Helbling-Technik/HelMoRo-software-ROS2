@@ -35,7 +35,7 @@ def generate_launch_description():
   helmoro_joy_control_node = Node(
       package='helmoro_joy_control',
       name='helmoro_joy_control',
-      executable='helmoro_joymanager',
+      executable='helmoro_joy_control',
       parameters=[param_yaml_file,
                   {'use_sim_time': True}],
       output='screen',
