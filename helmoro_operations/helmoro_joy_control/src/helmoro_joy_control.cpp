@@ -43,7 +43,9 @@ void HelmoroJoyControl::joystickCallback(sensor_msgs::msg::Joy::ConstSharedPtr m
 
   cmd_vel.angular.z = msg->axes[0] * angularVelocityScalingFactor_ * maxAngVel_;
 
-  user_input_pub_->publish(cmd_vel);
+  if (cmd_vel.linear.x != 0 || cmd_vel.angular.z != 0) {
+    user_input_pub_->publish(cmd_vel);
+  }
 }
 
 }  // namespace helmoro_joy_control

@@ -3,8 +3,8 @@
     helmoro_joy_control:
         ros__parameters:
             # Scaling Factors
-            linear_velocity: 0.25
-            angular_velocity: 0.2
+            linear_velocity: 1.0
+            angular_velocity: 1.0
             # Velocity Constraints
             max_lin_vel: 1.1 #m/s
             max_ang_vel: 10.5 #rad/s
