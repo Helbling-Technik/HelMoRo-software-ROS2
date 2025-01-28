@@ -38,8 +38,7 @@ def generate_launch_description():
       executable='helmoro_joy_control',
       parameters=[param_yaml_file,
                   {'use_sim_time': True}],
-      output='screen',
-      remappings=[('/helmoro_joy_control/cmd_vel', '/cmd_vel')]
+      output='screen'
   )
 
   # Create the launch description and populate
