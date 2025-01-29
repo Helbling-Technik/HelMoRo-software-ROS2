@@ -4,7 +4,7 @@
   <name>helmoro_state_estimation</name>
   <version>2.0.0</version>
   <description>Provides launch and configuration scripts for amcl localization package.</description>
-  <maintainer email="samuel.bamert@helbling.ch">Samuel Bamert</maintainer>
+  <maintainer email="marc.bloechlinger@helbling.ch">Marc Blöchlinger</maintainer>
   <license>BSD</license>
 
   <author>Helbling Technik AG</author>
@@ -12,6 +12,7 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <exec_depend>robot_localization</exec_depend>
+  <exec_depend>topic_tools</exec_depend>
   
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_cmake_cppcheck</test_depend>

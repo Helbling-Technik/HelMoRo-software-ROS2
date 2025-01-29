@@ -18,7 +18,7 @@ setup(
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='bamertsa',
-    maintainer_email='samuel.bamert@helbling.ch',
+    maintainer_email='marc.bloechlinger@helbling.ch',
     description='TODO: Package description',
     license='BSD',
     tests_require=['pytest'],

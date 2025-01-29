@@ -47,6 +47,7 @@ def launch_setup(context, *args, **kwargs):
         PushRosNamespace(namespace),
         SetRemap(namespace_str + '/global_costmap/scan', namespace_str + '/sensors/lidar/scan'),
         SetRemap(namespace_str + '/local_costmap/scan', namespace_str + '/sensors/lidar/scan'),
+        SetRemap('/cmd_vel', namespace_str + 'nav2/cmd_vel'),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(launch_nav2),

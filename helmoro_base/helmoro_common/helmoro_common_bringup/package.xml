@@ -4,7 +4,7 @@
   <name>helmoro_common_bringup</name>
   <version>2.0.0</version>
   <description>Provides common launch and configuration scripts for HelMoRo.</description>
-  <maintainer email="samuel.bamert@helbling.ch">Samuel Bamert</maintainer>
+  <maintainer email="marc.bloechlinger@helbling.ch">Marc Blöchlinger</maintainer>
   <license>BSD</license>
 
   <author>Helbling Technik AG</author>
@@ -20,6 +20,7 @@
   <exec_depend>rviz2</exec_depend>
   <exec_depend>urdf</exec_depend>
   <exec_depend>xacro</exec_depend>
+  <exec_depend>twist_mux</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_cmake_cppcheck</test_depend>
