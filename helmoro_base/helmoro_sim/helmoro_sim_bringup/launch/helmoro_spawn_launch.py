@@ -16,55 +16,78 @@ from launch_ros.actions import Node, PushRosNamespace
 
 
 ARGUMENTS = [
-    DeclareLaunchArgument('use_rviz', default_value='true',
-                          choices=['true', 'false'],
-                          description='Start rviz.'),
+    DeclareLaunchArgument(
+        "use_rviz",
+        default_value="true",
+        choices=["true", "false"],
+        description="Start rviz.",
+    ),
 ]
 
-for pose_element in ['x', 'y', 'z', 'yaw']:
-    if pose_element != 'z':
-        ARGUMENTS.append(DeclareLaunchArgument(pose_element, default_value='0.0',
-                        description=f'{pose_element} component of the robot pose.'))
+for pose_element in ["x", "y", "z", "yaw"]:
+    if pose_element != "z":
+        ARGUMENTS.append(
+            DeclareLaunchArgument(
+                pose_element,
+                default_value="0.0",
+                description=f"{pose_element} component of the robot pose.",
+            )
+        )
     else:
-        ARGUMENTS.append(DeclareLaunchArgument(pose_element, default_value='0.1',
-                        description=f'{pose_element} component of the robot pose.'))
+        ARGUMENTS.append(
+            DeclareLaunchArgument(
+                pose_element,
+                default_value="0.1",
+                description=f"{pose_element} component of the robot pose.",
+            )
+        )
 
 
 def generate_launch_description():
     # Directories
-    pkg_helmoro_common = get_package_share_directory('helmoro_common_bringup')
-    pkg_helmoro_navigation = get_package_share_directory('helmoro_navigation')
+    pkg_helmoro_common = get_package_share_directory("helmoro_common_bringup")
+    pkg_helmoro_navigation = get_package_share_directory("helmoro_navigation")
 
     # Paths
     helmoro_common_launch = PathJoinSubstitution(
-        [pkg_helmoro_common, 'launch', 'common_launch.py'])
+        [pkg_helmoro_common, "launch", "common_launch.py"]
+    )
     navigation_launch = PathJoinSubstitution(
-        [pkg_helmoro_navigation, 'launch', 'nav2_launch.py'])
+        [pkg_helmoro_navigation, "launch", "nav2_launch.py"]
+    )
 
     # Spawn HelMoRo
     spawn_helmoro = Node(
-        package='ros_gz_sim',
-        executable='create',
-        arguments=['-name', 'helmoro',
-                    '-x', LaunchConfiguration('x'),
-                    '-y', LaunchConfiguration('y'),
-                    '-z', LaunchConfiguration('z'),
-                    '-Y', LaunchConfiguration('yaw'),
-                    '-topic', 'robot_description'],
-        output='screen',
+        package="ros_gz_sim",
+        executable="create",
+        arguments=[
+            "-name",
+            "helmoro",
+            "-x",
+            LaunchConfiguration("x"),
+            "-y",
+            LaunchConfiguration("y"),
+            "-z",
+            LaunchConfiguration("z"),
+            "-Y",
+            LaunchConfiguration("yaw"),
+            "-topic",
+            "robot_description",
+        ],
+        output="screen",
     )
 
     helmoro_common = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([helmoro_common_launch]),
         launch_arguments=[
-            ('use_sim_time', 'true'),
-            ('use_rviz', LaunchConfiguration('use_rviz'))
-            ]   
+            ("use_sim_time", "true"),
+            ("use_rviz", LaunchConfiguration("use_rviz")),
+        ],
     )
 
     navigation = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([navigation_launch]),
-        launch_arguments=[('use_sim_time', 'true')]   
+        launch_arguments=[("use_sim_time", "true")],
     )
 
     # Define LaunchDescription variable

@@ -11,69 +11,78 @@ from nav2_common.launch import RewrittenYaml
 
 
 ARGUMENTS = [
-    DeclareLaunchArgument('use_sim_time', default_value='false',
-                          choices=['true', 'false'],
-                          description='Use sim time'),
-    DeclareLaunchArgument('sync', default_value='true',
-                          choices=['true', 'false'],
-                          description='Use synchronous SLAM'),
-    DeclareLaunchArgument('namespace', default_value='',
-                          description='Robot namespace')
+    DeclareLaunchArgument(
+        "use_sim_time",
+        default_value="false",
+        choices=["true", "false"],
+        description="Use sim time",
+    ),
+    DeclareLaunchArgument(
+        "sync",
+        default_value="true",
+        choices=["true", "false"],
+        description="Use synchronous SLAM",
+    ),
+    DeclareLaunchArgument("namespace", default_value="", description="Robot namespace"),
 ]
 
 
 def generate_launch_description():
-    pkg_helmoro_slam = get_package_share_directory('helmoro_slam')
+    pkg_helmoro_slam = get_package_share_directory("helmoro_slam")
 
-    namespace = LaunchConfiguration('namespace')
-    sync = LaunchConfiguration('sync')
+    namespace = LaunchConfiguration("namespace")
+    sync = LaunchConfiguration("sync")
 
     slam_params_arg = DeclareLaunchArgument(
-        'params',
-        default_value=PathJoinSubstitution(
-            [pkg_helmoro_slam, 'config', 'slam.yaml']),
-        description='Robot namespace')
+        "params",
+        default_value=PathJoinSubstitution([pkg_helmoro_slam, "config", "slam.yaml"]),
+        description="Robot namespace",
+    )
 
     slam_params = RewrittenYaml(
-        source_file=LaunchConfiguration('params'),
+        source_file=LaunchConfiguration("params"),
         root_key=namespace,
         param_rewrites={},
-        convert_types=True
+        convert_types=True,
     )
 
     remappings = [
-        ('/tf', 'tf'),
-        ('/tf_static', 'tf_static'),
-        ('/scan', '/sensors/lidar/scan'),
-        ('/map', 'map'),
-        ('/map_metadata', 'map_metadata'),
+        ("/tf", "tf"),
+        ("/tf_static", "tf_static"),
+        ("/scan", "/sensors/lidar/scan"),
+        ("/map", "map"),
+        ("/map_metadata", "map_metadata"),
     ]
 
-    slam = GroupAction([
-        PushRosNamespace(namespace),
-
-        Node(package='slam_toolbox',
-             executable='sync_slam_toolbox_node',
-             name='slam_toolbox',
-             output='screen',
-             parameters=[
-               slam_params,
-               {'use_sim_time': LaunchConfiguration('use_sim_time')}
-             ],
-             remappings=remappings,
-             condition=IfCondition(sync)),
-
-        Node(package='slam_toolbox',
-             executable='async_slam_toolbox_node',
-             name='slam_toolbox',
-             output='screen',
-             parameters=[
-               slam_params,
-               {'use_sim_time': LaunchConfiguration('use_sim_time')}
-             ],
-             remappings=remappings,
-             condition=UnlessCondition(sync))
-    ])
+    slam = GroupAction(
+        [
+            PushRosNamespace(namespace),
+            Node(
+                package="slam_toolbox",
+                executable="sync_slam_toolbox_node",
+                name="slam_toolbox",
+                output="screen",
+                parameters=[
+                    slam_params,
+                    {"use_sim_time": LaunchConfiguration("use_sim_time")},
+                ],
+                remappings=remappings,
+                condition=IfCondition(sync),
+            ),
+            Node(
+                package="slam_toolbox",
+                executable="async_slam_toolbox_node",
+                name="slam_toolbox",
+                output="screen",
+                parameters=[
+                    slam_params,
+                    {"use_sim_time": LaunchConfiguration("use_sim_time")},
+                ],
+                remappings=remappings,
+                condition=UnlessCondition(sync),
+            ),
+        ]
+    )
 
     ld = LaunchDescription(ARGUMENTS)
     ld.add_action(slam_params_arg)

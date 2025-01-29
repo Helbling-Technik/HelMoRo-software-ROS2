@@ -5,7 +5,7 @@ from launch.actions import (
     DeclareLaunchArgument,
     GroupAction,
     IncludeLaunchDescription,
-    OpaqueFunction
+    OpaqueFunction,
 )
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
@@ -14,51 +14,61 @@ from launch_ros.actions import PushRosNamespace, SetRemap
 
 
 ARGUMENTS = [
-    DeclareLaunchArgument('use_sim_time', default_value='false',
-                          choices=['true', 'false'],
-                          description='Use sim time'),
-    DeclareLaunchArgument('params_file',
-                          default_value=PathJoinSubstitution([
-                              get_package_share_directory('helmoro_navigation'),
-                              'config',
-                              'nav2.yaml'
-                              ]),
-                          description='Nav2 parameters'),
-    DeclareLaunchArgument('namespace', default_value='',
-                          description='Robot namespace')
+    DeclareLaunchArgument(
+        "use_sim_time",
+        default_value="false",
+        choices=["true", "false"],
+        description="Use sim time",
+    ),
+    DeclareLaunchArgument(
+        "params_file",
+        default_value=PathJoinSubstitution(
+            [get_package_share_directory("helmoro_navigation"), "config", "nav2.yaml"]
+        ),
+        description="Nav2 parameters",
+    ),
+    DeclareLaunchArgument("namespace", default_value="", description="Robot namespace"),
 ]
 
 
 def launch_setup(context, *args, **kwargs):
-    pkg_nav2_bringup = get_package_share_directory('nav2_bringup')
+    pkg_nav2_bringup = get_package_share_directory("nav2_bringup")
 
-    nav2_params = LaunchConfiguration('params_file')
-    namespace = LaunchConfiguration('namespace')
-    use_sim_time = LaunchConfiguration('use_sim_time')
+    nav2_params = LaunchConfiguration("params_file")
+    namespace = LaunchConfiguration("namespace")
+    use_sim_time = LaunchConfiguration("use_sim_time")
 
     namespace_str = namespace.perform(context)
-    if (namespace_str and not namespace_str.startswith('/')):
-        namespace_str = '/' + namespace_str
+    if namespace_str and not namespace_str.startswith("/"):
+        namespace_str = "/" + namespace_str
 
     launch_nav2 = PathJoinSubstitution(
-        [pkg_nav2_bringup, 'launch', 'navigation_launch.py'])
+        [pkg_nav2_bringup, "launch", "navigation_launch.py"]
+    )
 
-    nav2 = GroupAction([
-        PushRosNamespace(namespace),
-        SetRemap(namespace_str + '/global_costmap/scan', namespace_str + '/sensors/lidar/scan'),
-        SetRemap(namespace_str + '/local_costmap/scan', namespace_str + '/sensors/lidar/scan'),
-        SetRemap('/cmd_vel', namespace_str + 'nav2/cmd_vel'),
-
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(launch_nav2),
-            launch_arguments=[
-                  ('use_sim_time', use_sim_time),
-                  ('params_file', nav2_params.perform(context)),
-                  ('use_composition', 'False'),
-                  ('namespace', namespace_str)
-                ]
-        ),
-    ])
+    nav2 = GroupAction(
+        [
+            PushRosNamespace(namespace),
+            SetRemap(
+                namespace_str + "/global_costmap/scan",
+                namespace_str + "/sensors/lidar/scan",
+            ),
+            SetRemap(
+                namespace_str + "/local_costmap/scan",
+                namespace_str + "/sensors/lidar/scan",
+            ),
+            SetRemap("/cmd_vel", namespace_str + "nav2/cmd_vel"),
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(launch_nav2),
+                launch_arguments=[
+                    ("use_sim_time", use_sim_time),
+                    ("params_file", nav2_params.perform(context)),
+                    ("use_composition", "False"),
+                    ("namespace", namespace_str),
+                ],
+            ),
+        ]
+    )
 
     return [nav2]
 

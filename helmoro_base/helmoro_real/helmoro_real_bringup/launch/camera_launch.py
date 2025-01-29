@@ -9,12 +9,15 @@ from launch.substitutions import PathJoinSubstitution
 
 from launch_ros.actions import PushRosNamespace, SetRemap
 
+
 def generate_launch_description():
     # Directories
-    pkg_orbbec_camera = get_package_share_directory('orbbec_camera')
+    pkg_orbbec_camera = get_package_share_directory("orbbec_camera")
 
     # Paths
-    camera_launch = PathJoinSubstitution([pkg_orbbec_camera, 'launch', 'astra.launch.py'])
+    camera_launch = PathJoinSubstitution(
+        [pkg_orbbec_camera, "launch", "astra.launch.py"]
+    )
 
     # ROS2 RPLidar A2M8 Node
     camera_node = IncludeLaunchDescription(
@@ -22,12 +25,11 @@ def generate_launch_description():
     )
 
     camera_node_with_namespace = GroupAction(
-     actions=[
-        PushRosNamespace('sensors'),
-        camera_node,
-      ]
-
-   )
+        actions=[
+            PushRosNamespace("sensors"),
+            camera_node,
+        ]
+    )
 
     # Create launch description and add actions
     ld = LaunchDescription()

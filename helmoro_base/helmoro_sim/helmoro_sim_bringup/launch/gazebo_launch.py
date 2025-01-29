@@ -16,39 +16,49 @@ from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
 
 ARGUMENTS = [
-    DeclareLaunchArgument('world', default_value='depot',
-                          description='Gazebo Fortress World'),
+    DeclareLaunchArgument(
+        "world", default_value="depot", description="Gazebo Fortress World"
+    ),
 ]
+
 
 def generate_launch_description():
     # Directories
-    pkg_helmoro_gazebo_tools = get_package_share_directory('helmoro_gazebo_tools')
-    pkg_helmoro_description = get_package_share_directory('helmoro_description')
-    pkg_ros_gz_sim = get_package_share_directory('ros_gz_sim')
+    pkg_helmoro_gazebo_tools = get_package_share_directory("helmoro_gazebo_tools")
+    pkg_helmoro_description = get_package_share_directory("helmoro_description")
+    pkg_ros_gz_sim = get_package_share_directory("ros_gz_sim")
 
     # Set gazebo resource path
-    gz_resource_path = SetEnvironmentVariable(name='IGN_GAZEBO_RESOURCE_PATH',
-                                            value=[os.path.join(
-                                                    pkg_helmoro_gazebo_tools,
-                                                    'worlds'), ':' +
-                                                    str(Path(
-                                                        pkg_helmoro_description).
-                                                        parent.resolve())])
+    gz_resource_path = SetEnvironmentVariable(
+        name="IGN_GAZEBO_RESOURCE_PATH",
+        value=[
+            os.path.join(pkg_helmoro_gazebo_tools, "worlds"),
+            ":" + str(Path(pkg_helmoro_description).parent.resolve()),
+        ],
+    )
 
     # Gazebo
     ign_gazebo_launch = PathJoinSubstitution(
-        [pkg_ros_gz_sim, 'launch', 'gz_sim.launch.py'])
-    
+        [pkg_ros_gz_sim, "launch", "gz_sim.launch.py"]
+    )
+
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([ign_gazebo_launch]),
         launch_arguments=[
-            ('gz_args', [LaunchConfiguration('world'),
-                          '.sdf',
-                          ' -v 4',])
-        ]
+            (
+                "gz_args",
+                [
+                    LaunchConfiguration("world"),
+                    ".sdf",
+                    " -v 4",
+                ],
+            )
+        ],
     )
 
-    ros_bridge_launch = PathJoinSubstitution([pkg_helmoro_gazebo_tools, 'launch', 'helmoro_ros_bridge_launch.py'])
+    ros_bridge_launch = PathJoinSubstitution(
+        [pkg_helmoro_gazebo_tools, "launch", "helmoro_ros_bridge_launch.py"]
+    )
 
     # Bridge
     bridge = IncludeLaunchDescription(

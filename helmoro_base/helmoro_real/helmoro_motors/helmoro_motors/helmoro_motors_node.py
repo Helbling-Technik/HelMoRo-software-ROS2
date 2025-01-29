@@ -15,7 +15,7 @@ import numpy as np
 
 class RosHandler(Node):
     def __init__(self):
-        super().__init__('helmoro_motor_commands_node')
+        super().__init__("helmoro_motor_commands_node")
 
         # Parameters
         # Wheel Geometry
@@ -24,54 +24,127 @@ class RosHandler(Node):
         self.dia_wheels = 0.09
         self.wheel_circumference = self.dia_wheels * math.pi
         # Velocity constraints
-        self.max_lin_vel = 1.1 #m/s
-        self.max_ang_vel = 10.5 #rad/s
+        self.max_lin_vel = 1.1  # m/s
+        self.max_ang_vel = 10.5  # rad/s
         # Runtim
         self.frequency = 10.0
 
         # Variables
-        self._v_i = 0.0 # Integration Error
-        self._ki = 0.4 # Integration facto
+        self._v_i = 0.0  # Integration Error
+        self._ki = 0.4  # Integration facto
         self.vx_cmd = 0.0
         self.yaw_cmd = 0.0
-        self.omega_imu = 0.0 # Derivative of yaw
-        self.wheel_pos = [0.0, 0.0, 0.0, 0.0] # in meters
-        self.wheel_vel = [0.0, 0.0, 0.0, 0.0] # in meters per second
+        self.omega_imu = 0.0  # Derivative of yaw
+        self.wheel_pos = [0.0, 0.0, 0.0, 0.0]  # in meters
+        self.wheel_vel = [0.0, 0.0, 0.0, 0.0]  # in meters per second
         self.last_update_time = time.time()
 
-        # Odometry 
+        # Odometry
         self.odom = Odometry()
-        self.odom.header.frame_id = 'odom'
-        self.odom.child_frame_id = 'base_link'
+        self.odom.header.frame_id = "odom"
+        self.odom.child_frame_id = "base_link"
         self.odom.header.stamp = self.get_clock().now().to_msg()
-        self.odom.pose.covariance = [0.1, 0.0, 0.0, 0.0, 0.0, 0.0,
-                                     0.0, 0.1, 0.0, 0.0, 0.0, 0.0,
-                                     0.0, 0.0, 0.1, 0.0, 0.0, 0.0,
-                                     0.0, 0.0, 0.0, 0.1, 0.0, 0.0,
-                                     0.0, 0.0, 0.0, 0.0, 0.1, 0.0,
-                                     0.0, 0.0, 0.0, 0.0, 0.0, 0.1] 
+        self.odom.pose.covariance = [
+            0.1,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.1,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.1,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.1,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.1,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.1,
+        ]
 
-        self.odom.twist.covariance = [0.1, 0.0, 0.0, 0.0, 0.0, 0.0,
-                                     0.0, 0.1, 0.0, 0.0, 0.0, 0.0,
-                                     0.0, 0.0, 0.1, 0.0, 0.0, 0.0,
-                                     0.0, 0.0, 0.0, 0.1, 0.0, 0.0,
-                                     0.0, 0.0, 0.0, 0.0, 0.1, 0.0,
-                                     0.0, 0.0, 0.0, 0.0, 0.0, 0.1] 
+        self.odom.twist.covariance = [
+            0.1,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.1,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.1,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.1,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.1,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.1,
+        ]
 
         # Subscribers and Publishers
-        self.cmd_vel_sub = self.create_subscription(TwistStamped, '/diff_drive_controller/cmd_vel_out', self.cmd_vel_callback, 10)
-        self.imu_sub = self.create_subscription(Imu, 'sensors/imu/imu', self.imu_callback, 10)  # prevent unused variable warning
-        self.odom_pub = self.create_publisher(Odometry, '/motors/odom', 10)
-        self.joint_states_pub = self.create_publisher(JointState, '/joint_states', 10)
+        self.cmd_vel_sub = self.create_subscription(
+            TwistStamped,
+            "/diff_drive_controller/cmd_vel_out",
+            self.cmd_vel_callback,
+            10,
+        )
+        self.imu_sub = self.create_subscription(
+            Imu, "sensors/imu/imu", self.imu_callback, 10
+        )  # prevent unused variable warning
+        self.odom_pub = self.create_publisher(Odometry, "/motors/odom", 10)
+        self.joint_states_pub = self.create_publisher(JointState, "/joint_states", 10)
 
         # Init robot handler class
         self.robot_handler = RobotHandler()
         self.robot_handler.set_wheel_circumference(self.wheel_circumference)
         self.encoder_res = self.robot_handler._encoder_res
-        self.max_motor_speed = self.robot_handler._max_speed/self.encoder_res*self.wheel_circumference
+        self.max_motor_speed = (
+            self.robot_handler._max_speed / self.encoder_res * self.wheel_circumference
+        )
 
         # Perodically send Motor Commands
-        self.update_timer = self.create_timer(1/self.frequency, self.update)
+        self.update_timer = self.create_timer(1 / self.frequency, self.update)
 
     def update(self):
         self.wheel_pos = self.robot_handler.get_wheel_positions()
@@ -93,17 +166,17 @@ class RosHandler(Node):
 
         # Fill in the header
         joint_state_msg.header.stamp = self.get_clock().now().to_msg()
-        joint_state_msg.header.frame_id = ''  # Reference frame (if applicable)
+        joint_state_msg.header.frame_id = ""  # Reference frame (if applicable)
 
         # Fill in the joint state data
         joint_state_msg.name = ["Left_1", "Right_1", "Left_2", "Right_2"]
-        joint_state_msg.position = self.wheel_pos 
+        joint_state_msg.position = self.wheel_pos
         joint_state_msg.velocity = self.wheel_vel
         joint_state_msg.effort = []
 
         # Publish the message
         self.joint_states_pub.publish(joint_state_msg)
-        
+
     def calculate_wheel_vel_cmd(self):
         wheel_vel_cmd = [0.0, 0.0, 0.0, 0.0]
         wheel_vel_cmd[0] = self.vx_cmd + self.yaw_cmd * self.dy_wheels / 2
@@ -112,21 +185,35 @@ class RosHandler(Node):
         wheel_vel_cmd[3] = wheel_vel_cmd[1]
 
         if wheel_vel_cmd[1] > self.max_motor_speed:
-            self.get_logger().info('Requested left_motors vel of: ' + str(wheel_vel_cmd[1]) + ' meters per seconds')
-            self.get_logger().info('Max left_motor vel is: ' + self.max_motor_speed + ' meters per seconds')
+            self.get_logger().info(
+                "Requested left_motors vel of: "
+                + str(wheel_vel_cmd[1])
+                + " meters per seconds"
+            )
+            self.get_logger().info(
+                "Max left_motor vel is: " + self.max_motor_speed + " meters per seconds"
+            )
 
         if wheel_vel_cmd[0] > self.max_motor_speed:
-            self.get_logger().info('Requested right_motors vel of: ' + str(wheel_vel_cmd[0]) + ' meters per seconds')
-            self.get_logger().info('Max right_motors vel is: ' + self.max_motor_speed + ' meters per seconds')
+            self.get_logger().info(
+                "Requested right_motors vel of: "
+                + str(wheel_vel_cmd[0])
+                + " meters per seconds"
+            )
+            self.get_logger().info(
+                "Max right_motors vel is: "
+                + self.max_motor_speed
+                + " meters per seconds"
+            )
 
         return wheel_vel_cmd
-    
+
     def update_and_publish_odom(self):
         # Calculate velocity
         vel_average = sum(self.wheel_vel) / float(len(self.wheel_vel))
         vel_right = (self.wheel_vel[0] + self.wheel_vel[2]) / 2
         vel_left = (self.wheel_vel[1] + self.wheel_vel[3]) / 2
-        omega = ((vel_right - vel_left) / 2) / (self.dy_wheels / 2) # v_diff/2 / radius
+        omega = ((vel_right - vel_left) / 2) / (self.dy_wheels / 2)  # v_diff/2 / radius
 
         # Calculate Twist
         twist = Twist()
@@ -140,13 +227,28 @@ class RosHandler(Node):
         quat_prev.z = self.odom.pose.pose.orientation.z
         quat_prev.w = self.odom.pose.pose.orientation.w
         quat_new = Quaternion()
-        quat_new = self.quaternion_from_euler(twist.angular.x / self.frequency, twist.angular.y / self.frequency, twist.angular.z / self.frequency)
+        quat_new = self.quaternion_from_euler(
+            twist.angular.x / self.frequency,
+            twist.angular.y / self.frequency,
+            twist.angular.z / self.frequency,
+        )
         pose = Pose()
-        pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w  = self.multiply_quaternions(quat_new, quat_prev)
+        (
+            pose.orientation.x,
+            pose.orientation.y,
+            pose.orientation.z,
+            pose.orientation.w,
+        ) = self.multiply_quaternions(quat_new, quat_prev)
         roll, pitch, yaw = self.euler_from_quaternion(pose.orientation)
         position = Point()
-        position.x = self.odom.pose.pose.position.x + vel_average * math.cos(yaw) / self.frequency
-        position.y = self.odom.pose.pose.position.y + vel_average * math.sin(yaw) / self.frequency
+        position.x = (
+            self.odom.pose.pose.position.x
+            + vel_average * math.cos(yaw) / self.frequency
+        )
+        position.y = (
+            self.odom.pose.pose.position.y
+            + vel_average * math.sin(yaw) / self.frequency
+        )
 
         pose.position = position
 
@@ -179,7 +281,6 @@ class RosHandler(Node):
         yaw = np.arctan2(siny_cosp, cosy_cosp)
 
         return roll, pitch, yaw
-    
 
     def quaternion_from_euler(self, roll, pitch, yaw):
         """
@@ -222,7 +323,6 @@ class RosHandler(Node):
         return [x, y, z, w]
 
 
-    
 def main(args=None):
     rclpy.init(args=args)
 
@@ -237,5 +337,5 @@ def main(args=None):
     rclpy.shutdown()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

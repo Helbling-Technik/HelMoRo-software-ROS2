@@ -13,24 +13,37 @@ from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitut
 
 from launch_ros.actions import Node
 
+
 def generate_launch_description():
     # Directories
-    pkg_helmoro_real_bringup = get_package_share_directory('helmoro_real_bringup')
-    pkg_helmoro_motors = get_package_share_directory('helmoro_motors')
-    pkg_helmoro_description = get_package_share_directory('helmoro_description')
-    pkg_helmoro_common = get_package_share_directory('helmoro_common_bringup')
-    pkg_helmoro_navigation = get_package_share_directory('helmoro_navigation')
+    pkg_helmoro_real_bringup = get_package_share_directory("helmoro_real_bringup")
+    pkg_helmoro_motors = get_package_share_directory("helmoro_motors")
+    pkg_helmoro_description = get_package_share_directory("helmoro_description")
+    pkg_helmoro_common = get_package_share_directory("helmoro_common_bringup")
+    pkg_helmoro_navigation = get_package_share_directory("helmoro_navigation")
 
     # Paths
-    imu_launch = PathJoinSubstitution([pkg_helmoro_real_bringup, 'launch', 'imu_launch.py'])
-    lidar_launch = PathJoinSubstitution([pkg_helmoro_real_bringup, 'launch', 'lidar_launch.py'])
-    camera_launch = PathJoinSubstitution([pkg_helmoro_real_bringup, 'launch', 'camera_launch.py'])
-    motor_controller_launch = PathJoinSubstitution([pkg_helmoro_motors, 'launch', 'helmoro_motors.launch.py'])
-    helmoro_description_launch = PathJoinSubstitution([pkg_helmoro_description, 'launch', 'helmoro_description_launch.py'])
-    helmoro_common_launch = PathJoinSubstitution([pkg_helmoro_common, 'launch', 'common_launch.py'])
+    imu_launch = PathJoinSubstitution(
+        [pkg_helmoro_real_bringup, "launch", "imu_launch.py"]
+    )
+    lidar_launch = PathJoinSubstitution(
+        [pkg_helmoro_real_bringup, "launch", "lidar_launch.py"]
+    )
+    camera_launch = PathJoinSubstitution(
+        [pkg_helmoro_real_bringup, "launch", "camera_launch.py"]
+    )
+    motor_controller_launch = PathJoinSubstitution(
+        [pkg_helmoro_motors, "launch", "helmoro_motors.launch.py"]
+    )
+    helmoro_description_launch = PathJoinSubstitution(
+        [pkg_helmoro_description, "launch", "helmoro_description_launch.py"]
+    )
+    helmoro_common_launch = PathJoinSubstitution(
+        [pkg_helmoro_common, "launch", "common_launch.py"]
+    )
     navigation_launch = PathJoinSubstitution(
-        [pkg_helmoro_navigation, 'launch', 'nav2_launch.py'])
-
+        [pkg_helmoro_navigation, "launch", "nav2_launch.py"]
+    )
 
     # Launch Sensors
     imu = IncludeLaunchDescription(
@@ -44,12 +57,11 @@ def generate_launch_description():
     camera = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([camera_launch]),
     )
-    
+
     # Motor Controllers and Motor Command
     motor_controllers = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([motor_controller_launch]),
     )
-
 
     helmoro_common = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([helmoro_common_launch]),
@@ -57,13 +69,20 @@ def generate_launch_description():
 
     navigation = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([navigation_launch]),
-        launch_arguments=[
-            ('use_sim_time', 'false')]   
+        launch_arguments=[("use_sim_time", "false")],
     )
 
     transform_msg = ExecuteProcess(
-        cmd=['ros2', 'run', 'topic_tools', 'relay', '/motors/odom', '/ekf_filter_node/wheel_odom', '--wait-for-start'],
-        output='screen'
+        cmd=[
+            "ros2",
+            "run",
+            "topic_tools",
+            "relay",
+            "/motors/odom",
+            "/ekf_filter_node/wheel_odom",
+            "--wait-for-start",
+        ],
+        output="screen",
     )
 
     # Create launch description and add actions

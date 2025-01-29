@@ -12,19 +12,24 @@ from launch.substitutions import LaunchConfiguration
 
 from launch_ros.actions import Node
 
+
 def generate_launch_description():
     # Directories
-    pkg_helmoro_gazebo_tools = get_package_share_directory('helmoro_gazebo_tools')
+    pkg_helmoro_gazebo_tools = get_package_share_directory("helmoro_gazebo_tools")
 
     # ROS Gazebo Bridge Node
     bridge = Node(
-        package='ros_gz_bridge',
-        executable='parameter_bridge',
-        parameters=[{
-            'config_file': os.path.join(pkg_helmoro_gazebo_tools, 'config', 'ros_gazebo_bridge.yaml'),
-            'qos_overrides./tf_static.publisher.durability': 'transient_local',
-        }],
-        output='screen'
+        package="ros_gz_bridge",
+        executable="parameter_bridge",
+        parameters=[
+            {
+                "config_file": os.path.join(
+                    pkg_helmoro_gazebo_tools, "config", "ros_gazebo_bridge.yaml"
+                ),
+                "qos_overrides./tf_static.publisher.durability": "transient_local",
+            }
+        ],
+        output="screen",
     )
 
     # Create launch description and add actions
