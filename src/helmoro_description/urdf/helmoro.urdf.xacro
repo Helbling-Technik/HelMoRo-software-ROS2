@@ -1,0 +1,62 @@
+<?xml version="1.0" ?>
+<robot name="321" xmlns:xacro="http://ros.org/wiki/xacro">
+    <xacro:arg name="namespace" default="123" />
+
+    <xacro:include filename="$(find helmoro_description)/urdf/utils.urdf.xacro"/>
+    <xacro:include filename="$(find helmoro_description)/urdf/parts/chassis.urdf.xacro"/>
+    <xacro:include filename="$(find helmoro_description)/urdf/parts/wheel.urdf.xacro"/>
+    <xacro:include filename="$(find helmoro_description)/urdf/sensors/orbec_astra.urdf.xacro"/>
+    <xacro:include filename="$(find helmoro_description)/urdf/sensors/rplidar.urdf.xacro"/>
+    <xacro:include filename="$(find helmoro_description)/urdf/sensors/imu.urdf.xacro"/>
+
+    <!-- Base Link -->
+    <link name="base_link"></link>
+
+    <!-- Cover -->
+    <xacro:chassis name="chassis" gazebo="$(arg gazebo)" parent_link="base_link">
+        <origin xyz="0 0 0.08" rpy="0 0 0"/>
+    </xacro:chassis>
+
+    <!-- Wheels -->
+    <xacro:wheel name="right_front" gazebo="$(arg gazebo)" parent_link="chassis">
+        <origin xyz="0.0575 0.0925 -0.035" rpy="${-pi/2} 0 0"/>
+    </xacro:wheel>
+
+    <xacro:wheel name="left_front" gazebo="$(arg gazebo)" parent_link="chassis">
+        <origin xyz="0.0575 -0.0925 -0.035" rpy="${-pi/2} 0 0"/>
+    </xacro:wheel>
+
+    <xacro:wheel name="right_back" gazebo="$(arg gazebo)" parent_link="chassis">
+        <origin xyz="-0.0575 0.0925 -0.035" rpy="${-pi/2} 0 0"/>
+    </xacro:wheel>
+
+    <xacro:wheel name="left_back" gazebo="$(arg gazebo)" parent_link="chassis">
+        <origin xyz="-0.0575 -0.0925 -0.035" rpy="${-pi/2} 0 0"/>
+    </xacro:wheel>
+
+    <!-- Sensors -->
+    <xacro:orbec_astra name="camera" gazebo="$(arg gazebo)" parent_link="chassis">
+        <origin xyz="0.114 0 0.028" rpy="0 0 0"/>
+    </xacro:orbec_astra>
+
+    <xacro:rplidar name="lidar" gazebo="$(arg gazebo)" parent_link="chassis">
+        <origin xyz="0.01 0 0.0658" rpy="0 0 ${-pi/2}"/>
+    </xacro:rplidar>
+
+    <xacro:imu name="imu" gazebo="$(arg gazebo)" parent_link="chassis">
+        <origin xyz="0 0 0.001" rpy="0 0 0"/>
+    </xacro:imu>
+
+    <!-- TODO: Control -->
+    <!-- <xacro:if value="${'$(arg gazebo)' == 'true'}">
+        <gazebo>
+            <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+                <parameters>$(find helmoro_control)/config/helmoro_controller.yaml</parameters>
+                <ros>
+                <namespace>$(arg namespace)</namespace>
+                </ros>
+            </plugin>
+        </gazebo>
+    </xacro:if> -->
+
+</robot>

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+<xacro:macro name="imu" params="name gazebo parent_link *origin">
+    <xacro:include filename="$(find helmoro_description)/urdf/utils.urdf.xacro"/>
+
+    <xacro:property name="joint_name" value="${name}_joint"/>
+    <xacro:property name="link_name" value="${name}"/>
+
+    <joint name="${joint_name}" type="fixed">
+        <parent link="${parent_link}"/>
+        <child link="${link_name}"/>
+        <xacro:insert_block name="origin"/>
+    </joint>
+
+    <link name="${link_name}"></link>
+
+    <gazebo reference="${link_name}">
+        <gravity>true</gravity>
+        <sensor name="imu_sensor" type="imu">
+            <ignition_frame_id>${link_name}</ignition_frame_id>
+            <always_on>true</always_on>
+            <update_rate>100</update_rate>
+            <visualize>true</visualize>
+            <topic>imu</topic>
+            <pose>0 0 0 0 0 0</pose>
+        </sensor>
+    </gazebo>
+
+</xacro:macro>
+</robot>
