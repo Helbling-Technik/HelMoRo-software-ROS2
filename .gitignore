@@ -5,3 +5,7 @@ COLCON_IGNORE
 
 setting.json
 c_cpp_properties.json
+
+build
+install
+log
