@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-<xacro:macro name="rplidar" params="name gazebo parent_link *origin">
+<xacro:macro name="rplidar" params="name parent_link *origin">
     <xacro:include filename="$(find helmoro_description)/urdf/utils.urdf.xacro"/>
 
     <xacro:property name="joint_name" value="${name}_joint"/>
@@ -31,7 +31,6 @@
         <topic>scan</topic>
         <update_rate>60</update_rate>
         <visualize>false</visualize>
-        <ignition_frame_id>${name}</ignition_frame_id>
         <ray>
             <scan>
             <horizontal>
@@ -58,6 +57,11 @@
         </ray>
         </sensor>
     </gazebo>
+    <plugin
+        filename="gz-sim-sensors-system"
+        name="gz::sim::systems::Sensors">
+        <render_engine>ogre2</render_engine>
+    </plugin>
 
 </xacro:macro>
 </robot>

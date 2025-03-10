@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>helmoro_simulator</name>
+  <name>helmoro_bringup</name>
   <version>0.0.0</version>
-  <description>Manages Simulation Environment</description>
+  <description>Manages a Helmoro Instance</description>
   <maintainer email="marc.bloechlinger@helbling.ch">htkz</maintainer>
   <license>Apache-2.0</license>
 
@@ -12,12 +12,11 @@
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
 
-  <!-- ROS Gazebo -->
-  <depend>ros_gz</depend>
-
   <!-- Helmoro -->
   <depend>helmoro_description</depend>
-  
+  <depend>helmoro_simulator</depend>
+  <depend>helmoro_visualization</depend>
+
   <export>
     <build_type>ament_cmake</build_type>
   </export>

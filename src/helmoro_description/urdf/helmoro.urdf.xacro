@@ -13,37 +13,37 @@
     <link name="base_link"></link>
 
     <!-- Cover -->
-    <xacro:chassis name="chassis" gazebo="$(arg gazebo)" parent_link="base_link">
+    <xacro:chassis name="chassis" parent_link="base_link">
         <origin xyz="0 0 0.08" rpy="0 0 0"/>
     </xacro:chassis>
 
     <!-- Wheels -->
-    <xacro:wheel name="right_front" gazebo="$(arg gazebo)" parent_link="chassis">
+    <xacro:wheel name="right_front" run_in_simulation="$(arg run_in_simulation)" parent_link="chassis">
         <origin xyz="0.0575 0.0925 -0.035" rpy="${-pi/2} 0 0"/>
     </xacro:wheel>
 
-    <xacro:wheel name="left_front" gazebo="$(arg gazebo)" parent_link="chassis">
+    <xacro:wheel name="left_front" run_in_simulation="$(arg run_in_simulation)" parent_link="chassis">
         <origin xyz="0.0575 -0.0925 -0.035" rpy="${-pi/2} 0 0"/>
     </xacro:wheel>
 
-    <xacro:wheel name="right_back" gazebo="$(arg gazebo)" parent_link="chassis">
+    <xacro:wheel name="right_back" run_in_simulation="$(arg run_in_simulation)" parent_link="chassis">
         <origin xyz="-0.0575 0.0925 -0.035" rpy="${-pi/2} 0 0"/>
     </xacro:wheel>
 
-    <xacro:wheel name="left_back" gazebo="$(arg gazebo)" parent_link="chassis">
+    <xacro:wheel name="left_back" run_in_simulation="$(arg run_in_simulation)" parent_link="chassis">
         <origin xyz="-0.0575 -0.0925 -0.035" rpy="${-pi/2} 0 0"/>
     </xacro:wheel>
 
     <!-- Sensors -->
-    <xacro:orbec_astra name="camera" gazebo="$(arg gazebo)" parent_link="chassis">
+    <xacro:orbec_astra name="camera" parent_link="chassis">
         <origin xyz="0.114 0 0.028" rpy="0 0 0"/>
     </xacro:orbec_astra>
 
-    <xacro:rplidar name="lidar" gazebo="$(arg gazebo)" parent_link="chassis">
+    <xacro:rplidar name="lidar" parent_link="chassis">
         <origin xyz="0.01 0 0.0658" rpy="0 0 ${-pi/2}"/>
     </xacro:rplidar>
 
-    <xacro:imu name="imu" gazebo="$(arg gazebo)" parent_link="chassis">
+    <xacro:imu name="imu" parent_link="chassis">
         <origin xyz="0 0 0.001" rpy="0 0 0"/>
     </xacro:imu>
 

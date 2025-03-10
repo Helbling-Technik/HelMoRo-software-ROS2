@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-<xacro:macro name="imu" params="name gazebo parent_link *origin">
+<xacro:macro name="imu" params="name parent_link *origin">
     <xacro:include filename="$(find helmoro_description)/urdf/utils.urdf.xacro"/>
 
     <xacro:property name="joint_name" value="${name}_joint"/>
@@ -18,7 +18,7 @@
     <gazebo reference="${link_name}">
         <gravity>true</gravity>
         <sensor name="imu_sensor" type="imu">
-            <ignition_frame_id>${link_name}</ignition_frame_id>
+            <pose relative_to='${link_name}'>0 0 0 0 0 0</pose>
             <always_on>true</always_on>
             <update_rate>100</update_rate>
             <visualize>true</visualize>
@@ -26,6 +26,9 @@
             <pose>0 0 0 0 0 0</pose>
         </sensor>
     </gazebo>
+    <plugin filename="gz-sim-imu-system"
+        name="gz::sim::systems::Imu">
+    </plugin>
 
 </xacro:macro>
 </robot>

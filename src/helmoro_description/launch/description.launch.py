@@ -10,9 +10,9 @@ from launch_ros.parameter_descriptions import ParameterValue
 
 
 ARGUMENTS = [
-    DeclareLaunchArgument('use_sim_time', default_value='false',
+    DeclareLaunchArgument('run_in_simulation', default_value='false',
                           choices=['true', 'false'],
-                          description='use_sim_time'),
+                          description='run_in_simulation'),
     DeclareLaunchArgument('robot_name', default_value='id_23',
                           description='Robot name'),
     DeclareLaunchArgument('namespace', default_value=LaunchConfiguration('robot_name'),
@@ -25,21 +25,20 @@ def generate_launch_description():
     xacro_file = PathJoinSubstitution([pkg_helmoro_description,
                                        'urdf',
                                        'helmoro.urdf.xacro'])
-    namespace = LaunchConfiguration('namespace')
-    use_sim_time = LaunchConfiguration('use_sim_time')
 
     robot_state_publisher = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
         name='robot_state_publisher',
+        namespace=LaunchConfiguration('namespace'),
         output='screen',
         parameters=[
-            {'use_sim_time': use_sim_time},
+            {'run_in_simulation': LaunchConfiguration('run_in_simulation')},
             {'robot_description': ParameterValue(
                 Command([
                     'xacro', ' ', xacro_file, ' ',
-                    'gazebo:=', use_sim_time, ' ',
-                    'namespace:=', namespace
+                    'run_in_simulation:=', LaunchConfiguration('run_in_simulation'), ' ',
+                    'namespace:=', LaunchConfiguration('namespace')
                 ]), value_type=str)},
         ],
         remappings=[
@@ -52,8 +51,9 @@ def generate_launch_description():
         package='joint_state_publisher',
         executable='joint_state_publisher',
         name='joint_state_publisher',
+        namespace=LaunchConfiguration('namespace'),
         output='screen',
-        parameters=[{'use_sim_time': use_sim_time}],
+        parameters=[{'run_in_simulation': LaunchConfiguration('run_in_simulation')}],
         remappings=[
             ('/tf', 'tf'),
             ('/tf_static', 'tf_static')

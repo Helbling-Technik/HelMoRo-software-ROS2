@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-<xacro:macro name="wheel" params="name gazebo parent_link *origin">
+<xacro:macro name="wheel" params="name run_in_simulation parent_link *origin">
     <xacro:include filename="$(find helmoro_description)/urdf/utils.urdf.xacro"/>
 
     
@@ -44,11 +44,9 @@
         <kd>100.0</kd>
         <minDepth>0.0001</minDepth>
         <fdir1>1 0 0</fdir1>
-        <slip1>0.5</slip1>
-        <slip2>0</slip2>
     </gazebo>
 
-    <xacro:if value="${gazebo == 'false'}">
+    <xacro:if value="${run_in_simulation == 'false'}">
         <ros2_control name="${link_name}_controller" type="system">
         <hardware>
             <plugin>fake_components/GenericSystem</plugin> 
@@ -61,10 +59,10 @@
         </ros2_control>
     </xacro:if>
 
-    <xacro:if value="${gazebo == 'true'}">
+    <xacro:if value="${run_in_simulation == 'true'}">
         <ros2_control name="${link_name}_controller" type="system">
         <hardware>
-            <plugin>ign_ros2_control/IgnitionSystem</plugin>
+            <plugin>gazebo_ros2_control/GazeboSystem</plugin>
         </hardware>
         <joint name="${joint_name}">
             <state_interface name="velocity" />

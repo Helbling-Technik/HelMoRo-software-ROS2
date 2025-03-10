@@ -12,7 +12,7 @@ from launch_ros.actions import Node, PushRosNamespace
 ARGUMENTS = [
     DeclareLaunchArgument(
         'namespace',
-        default_value='',
+        default_value='default_namespace',
         description='Robot namespace'
     ),
 ]
@@ -22,8 +22,8 @@ def generate_launch_description():
     pkg_helmoro_visualization = get_package_share_directory('helmoro_visualization')
     pkg_helmoro_description = get_package_share_directory('helmoro_description')
 
-    rviz2_config = PathJoinSubstitution(
-        [pkg_helmoro_visualization, 'rviz', 'model.rviz'])
+    visualization_launch = PathJoinSubstitution(
+        [pkg_helmoro_visualization, 'launch', 'visualization.launch.py'])
     description_launch = PathJoinSubstitution(
         [pkg_helmoro_description, 'launch', 'description.launch.py']
     )
@@ -33,15 +33,10 @@ def generate_launch_description():
     rviz = GroupAction([
         PushRosNamespace(namespace),
 
-        Node(package='rviz2',
-             executable='rviz2',
-             name='rviz2',
-             arguments=['-d', rviz2_config],
-             remappings=[
-                ('/tf', 'tf'),
-                ('/tf_static', 'tf_static')
-             ],
-             output='screen'),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([visualization_launch]),
+            launch_arguments=[('namespace', LaunchConfiguration('namespace'))]
+        ),
 
         # Delay launch of robot description to allow Rviz2 to load first.
         # Prevents visual bugs in the model.

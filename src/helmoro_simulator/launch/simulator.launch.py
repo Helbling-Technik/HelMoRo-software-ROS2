@@ -13,7 +13,7 @@ from pathlib import Path
 
 
 ARGUMENTS = [
-    DeclareLaunchArgument('world', default_value='lake_house',
+    DeclareLaunchArgument('world', default_value='empty',
                           choices=['depot', 'empty', 'lake_house'],
                           description='Simulation World')
 ]

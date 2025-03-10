@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-<xacro:macro name="chassis" params="name gazebo parent_link *origin">
+<xacro:macro name="chassis" params="name parent_link *origin">
     <xacro:include filename="$(find helmoro_description)/urdf/utils.urdf.xacro"/>
 
     <xacro:property name="link_name"  value="${name}"/>
