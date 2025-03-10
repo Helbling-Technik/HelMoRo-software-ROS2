@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <world name="helmoro_world">
+
+    <scene>
+      <grid>false</grid>
+    </scene>
+
+    <physics name="2ms" type="Bullet">
+      <max_step_size>0.002</max_step_size>
+      <real_time_factor>2.0</real_time_factor>
+      <real_time_update_rate>500</real_time_update_rate>
+    </physics>
+
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics"></plugin>
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"></plugin>
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"></plugin>
+    <plugin filename="gz-sim-contact-system" name="gz::sim::systems::Contact"></plugin>
+
+    <include>
+      <uri>
+        https://fuel.gazebosim.org/1.0/OpenRobotics/models/Lake House
+      </uri>
+    </include>
+
+  </world>
+</sdf>
