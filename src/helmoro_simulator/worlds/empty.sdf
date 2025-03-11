@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<sdf version="1.6">
-  <world name="helmoro_world">
+<sdf version="1.11">
+  <world name="empty">
 
     <physics name="2ms" type="Bullet">
       <max_step_size>0.002</max_step_size>
@@ -13,6 +13,12 @@
     <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"></plugin>
     <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"></plugin>
     <plugin filename="gz-sim-contact-system" name="gz::sim::systems::Contact"></plugin>
+
+    <!-- Sensor Plugins-->
+    <plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu"></plugin>
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
 
     <light type="directional" name="sun">
       <cast_shadows>true</cast_shadows>
