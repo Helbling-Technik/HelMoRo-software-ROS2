@@ -1,11 +1,11 @@
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, GroupAction
 from launch.substitutions import Command, PathJoinSubstitution
 from launch.substitutions.launch_configuration import LaunchConfiguration
 
-from launch_ros.actions import Node
+from launch_ros.actions import Node, PushRosNamespace
 from launch_ros.parameter_descriptions import ParameterValue
 
 
@@ -46,6 +46,34 @@ def generate_launch_description():
             ('/tf_static', 'tf_static')
         ]
     )
+    
+    # Workaround until Gazebo Ionic upgrades to sdformat 1.12 and allows <frame_id> tags
+    static_transforms_publisher = GroupAction([
+        PushRosNamespace(LaunchConfiguration('namespace')),
+        
+        Node(
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            name='static_transform_broadcaster_lidar',
+            output='screen',
+            arguments=['0', '0', '0', '0', '0', '0', '1',  'imu', 'default_namespace/base_link/imu_sensor'],
+            remappings=[
+                ('/tf_static', 'tf_static')
+            ]
+        ),
+        
+        Node(
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            name='static_transform_broadcaster_lidar',
+            output='screen',
+            arguments=['0', '0', '0', '0', '0', '0', '1',  'lidar', 'default_namespace/base_link/rplidar'],
+            remappings=[
+                ('/tf_static', 'tf_static')
+            ]
+        )
+    ])
+
 
     joint_state_publisher = Node(
         package='joint_state_publisher',
@@ -62,7 +90,9 @@ def generate_launch_description():
 
     # Define LaunchDescription variable
     ld = LaunchDescription(ARGUMENTS)
+    
     # Add nodes to LaunchDescription
     ld.add_action(robot_state_publisher)
+    ld.add_action(static_transforms_publisher)
     ld.add_action(joint_state_publisher)
     return ld

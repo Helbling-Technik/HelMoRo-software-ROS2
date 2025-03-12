@@ -35,13 +35,6 @@
     </joint>
     <link name="camera_rgb"></link>
 
-    <joint name="camera_rgb_optical_joint" type="fixed">
-        <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}" />
-        <parent link="camera_rgb" />
-        <child link="camera_rgb_optical" />
-    </joint>
-    <link name="camera_rgb_optical"></link>
-
     <!--joints for depth_camera-->
     <joint name="camera_depth_joint" type="fixed">
         <origin xyz="0 0.02 0" rpy="0 0 0" />
@@ -50,13 +43,6 @@
     </joint>
     <link name="camera_depth"></link>
 
-    <joint name="camera_rgb_depth_joint" type="fixed">
-        <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}" />
-        <parent link="camera_depth" />
-        <child link="camera_depth_optical" />
-    </joint>
-    <link name="camera_depth_optical"></link>
-
     <!--Depth Camera Astra Pro-->
     <gazebo reference="camera_depth">
         <sensor name="depth_camera" type="depth_camera">
@@ -64,7 +50,7 @@
             <always_on>0</always_on>
             <update_rate>30</update_rate>
             <camera>
-                <optical_frame_id>camera_depth_optical</optical_frame_id>
+                <optical_frame_id>camera_depth</optical_frame_id>
                 <horizontal_fov>1.019272</horizontal_fov> <!-- 58.4° -->
                 <image>
                     <width>640</width>
