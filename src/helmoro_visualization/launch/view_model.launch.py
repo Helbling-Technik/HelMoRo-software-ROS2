@@ -10,11 +10,8 @@ from launch_ros.actions import Node, PushRosNamespace
 
 
 ARGUMENTS = [
-    DeclareLaunchArgument(
-        'namespace',
-        default_value='default_namespace',
-        description='Robot namespace'
-    ),
+    DeclareLaunchArgument('namespace', default_value='robot1',
+                          description='Robot namespace')
 ]
 
 def generate_launch_description():
@@ -28,14 +25,12 @@ def generate_launch_description():
         [pkg_helmoro_description, 'launch', 'description.launch.py']
     )
 
-    namespace = LaunchConfiguration('namespace')
-
     rviz = GroupAction([
-        PushRosNamespace(namespace),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([visualization_launch]),
-            launch_arguments=[('namespace', LaunchConfiguration('namespace'))]
+            launch_arguments=[('namespace', LaunchConfiguration('namespace')),
+                              ('rviz_config', 'model.rviz')]
         ),
 
         # Delay launch of robot description to allow Rviz2 to load first.
@@ -44,8 +39,12 @@ def generate_launch_description():
             period=1.0,
             actions=[
                 IncludeLaunchDescription(
-                    PythonLaunchDescriptionSource([description_launch])
-                )])
+                    PythonLaunchDescriptionSource([description_launch]),
+                    launch_arguments=[
+                        ('namespace', LaunchConfiguration('namespace'))
+                    ] 
+                )
+            ])
     ])
 
     ld = LaunchDescription(ARGUMENTS)
