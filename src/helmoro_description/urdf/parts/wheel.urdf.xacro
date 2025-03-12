@@ -10,7 +10,7 @@
     <xacro:property name="width"  value="0.01" />
 
     <xacro:property name="link_name"  value="wheel_${name}"/>
-    <xacro:property name="joint_name" value="wheel_${link_name}_joint"/>
+    <xacro:property name="joint_name" value="${link_name}_joint"/>
 
     <joint name="${joint_name}" type="continuous">
         <parent link="${parent_link}"/>

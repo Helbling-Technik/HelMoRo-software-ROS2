@@ -54,7 +54,7 @@ def generate_launch_description():
         Node(
             package='tf2_ros',
             executable='static_transform_publisher',
-            name='static_transform_broadcaster_lidar',
+            name='static_transform_broadcaster_imu',
             output='screen',
             arguments=['0', '0', '0', '0', '0', '0', '1',  'imu', 'default_namespace/base_link/imu_sensor'],
             remappings=[
