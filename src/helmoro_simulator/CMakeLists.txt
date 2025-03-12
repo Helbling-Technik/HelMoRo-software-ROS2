@@ -10,7 +10,6 @@ find_package(ament_cmake REQUIRED)
 
 install(
   DIRECTORY 
-    gui
     launch
     worlds
   DESTINATION share/${PROJECT_NAME}

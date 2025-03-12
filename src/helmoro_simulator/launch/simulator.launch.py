@@ -14,7 +14,7 @@ from pathlib import Path
 
 ARGUMENTS = [
     DeclareLaunchArgument('world', default_value='empty',
-                          choices=['depot', 'empty', 'lake_house'],
+                          choices=['depot', 'empty', 'lake_house', 'ionic'],
                           description='Simulation World')
 ]
 
@@ -49,24 +49,23 @@ def generate_launch_description():
                 LaunchConfiguration('world'),
                 '.sdf',
                 ' -r',
-                ' -v 2',
-                ' --gui-config ',
-                PathJoinSubstitution([
-                    pkg_helmoro_simulator,
-                    'gui',
-                    'gui.config'
-                ])
+                ' -v 2'
             ])
         ]
     )
     
     # Clock bridge
-    clock_bridge = Node(package='ros_gz_bridge', executable='parameter_bridge',
+    clock_bridge = Node(package='ros_gz_bridge', 
+                        executable='parameter_bridge',
                         name='clock_bridge',
                         output='screen',
                         arguments=[
                             '/clock' + '@rosgraph_msgs/msg/Clock' + '[gz.msgs.Clock'
-                        ])
+                        ],
+                        remappings=[
+                            ('/clock', [LaunchConfiguration('namespace'), '/clock'])
+                        ]
+                        )
     
     # Create launch description and add actions
     ld = LaunchDescription(ARGUMENTS)
