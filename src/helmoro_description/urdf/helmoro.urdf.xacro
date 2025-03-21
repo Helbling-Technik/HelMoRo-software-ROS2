@@ -1,8 +1,10 @@
 <?xml version="1.0" ?>
-<robot name="321" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="example_robot_name" xmlns:xacro="http://ros.org/wiki/xacro">
     <xacro:arg name="namespace" default="123" />
     <xacro:arg name="run_in_simulation" default="false" />
 
+
+    <xacro:include filename="$(find helmoro_description)/urdf/plugins.urdf.xacro"/>
     <xacro:include filename="$(find helmoro_description)/urdf/utils.urdf.xacro"/>
     <xacro:include filename="$(find helmoro_description)/urdf/parts/chassis.urdf.xacro"/>
     <xacro:include filename="$(find helmoro_description)/urdf/parts/wheel.urdf.xacro"/>
@@ -19,19 +21,19 @@
     </xacro:chassis>
 
     <!-- Wheels -->
-    <xacro:wheel name="right_front" namespace="$(arg namespace)" run_in_simulation="$(arg run_in_simulation)" parent_link="chassis">
+    <xacro:wheel name="left_front" namespace="$(arg namespace)" run_in_simulation="$(arg run_in_simulation)" parent_link="chassis">
         <origin xyz="0.0575 0.0925 -0.035" rpy="${-pi/2} 0 0"/>
     </xacro:wheel>
 
-    <xacro:wheel name="left_front" namespace="$(arg namespace)" run_in_simulation="$(arg run_in_simulation)" parent_link="chassis">
+    <xacro:wheel name="right_front" namespace="$(arg namespace)" run_in_simulation="$(arg run_in_simulation)" parent_link="chassis">
         <origin xyz="0.0575 -0.0925 -0.035" rpy="${-pi/2} 0 0"/>
     </xacro:wheel>
 
-    <xacro:wheel name="right_back" namespace="$(arg namespace)" run_in_simulation="$(arg run_in_simulation)" parent_link="chassis">
+    <xacro:wheel name="left_back" namespace="$(arg namespace)" run_in_simulation="$(arg run_in_simulation)" parent_link="chassis">
         <origin xyz="-0.0575 0.0925 -0.035" rpy="${-pi/2} 0 0"/>
     </xacro:wheel>
 
-    <xacro:wheel name="left_back" namespace="$(arg namespace)" run_in_simulation="$(arg run_in_simulation)" parent_link="chassis">
+    <xacro:wheel name="right_back" namespace="$(arg namespace)" run_in_simulation="$(arg run_in_simulation)" parent_link="chassis">
         <origin xyz="-0.0575 -0.0925 -0.035" rpy="${-pi/2} 0 0"/>
     </xacro:wheel>
 
@@ -48,16 +50,7 @@
         <origin xyz="0 0 0.001" rpy="0 0 0"/>
     </xacro:imu>
 
-    <!-- TODO: Control -->
-    <!-- <xacro:if value="${'$(arg gazebo)' == 'true'}">
-        <gazebo>
-            <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
-                <parameters>$(find helmoro_control)/config/helmoro_controller.yaml</parameters>
-                <ros>
-                <namespace>$(arg namespace)</namespace>
-                </ros>
-            </plugin>
-        </gazebo>
-    </xacro:if> -->
+    <!-- Plugins -->
+    <xacro:control namespace="$(arg namespace)" run_in_simulation="$(arg run_in_simulation)"></xacro:control>
 
 </robot>

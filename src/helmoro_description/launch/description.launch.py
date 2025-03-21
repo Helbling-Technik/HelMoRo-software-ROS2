@@ -33,17 +33,13 @@ def generate_launch_description():
         namespace=LaunchConfiguration('namespace'),
         output='screen',
         parameters=[
-            {'run_in_simulation': LaunchConfiguration('run_in_simulation')},
+            {'use_sim_time': LaunchConfiguration('run_in_simulation')},
             {'robot_description': ParameterValue(
                 Command([
                     'xacro', ' ', xacro_file, ' ',
                     'run_in_simulation:=', LaunchConfiguration('run_in_simulation'), ' ',
                     'namespace:=', LaunchConfiguration('namespace')
                 ]), value_type=str)},
-        ],
-        remappings=[
-            ('/tf', 'tf'),
-            ('/tf_static', 'tf_static')
         ]
     )
     
@@ -56,10 +52,7 @@ def generate_launch_description():
             executable='static_transform_publisher',
             name='static_transform_broadcaster_imu',
             output='screen',
-            arguments=['0', '0', '0', '0', '0', '0', '1',  'imu', PathJoinSubstitution([LaunchConfiguration('namespace'), 'base_link/imu_sensor'])],
-            remappings=[
-                ('/tf_static', 'tf_static')
-            ]
+            arguments=['0', '0', '0', '0', '0', '0', '1',  'imu', PathJoinSubstitution([LaunchConfiguration('namespace'), 'base_link/imu_sensor'])]
         ),
         
         Node(
@@ -67,10 +60,7 @@ def generate_launch_description():
             executable='static_transform_publisher',
             name='static_transform_broadcaster_lidar',
             output='screen',
-            arguments=['0', '0', '0', '0', '0', '0', '1',  'lidar', PathJoinSubstitution([LaunchConfiguration('namespace'), 'base_link/rplidar'])],
-            remappings=[
-                ('/tf_static', 'tf_static')
-            ]
+            arguments=['0', '0', '0', '0', '0', '0', '1',  'lidar', PathJoinSubstitution([LaunchConfiguration('namespace'), 'base_link/rplidar'])]
         )
     ])
 
@@ -81,11 +71,7 @@ def generate_launch_description():
         name='joint_state_publisher',
         namespace=LaunchConfiguration('namespace'),
         output='screen',
-        parameters=[{'run_in_simulation': LaunchConfiguration('run_in_simulation')}],
-        remappings=[
-            ('/tf', 'tf'),
-            ('/tf_static', 'tf_static')
-        ]
+        parameters=[{'use_sim_time': LaunchConfiguration('run_in_simulation')}]
     )
 
     # Define LaunchDescription variable
