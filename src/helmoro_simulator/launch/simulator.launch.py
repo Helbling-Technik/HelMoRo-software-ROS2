@@ -15,7 +15,9 @@ from pathlib import Path
 ARGUMENTS = [
     DeclareLaunchArgument('world', default_value='empty',
                           choices=['depot', 'empty', 'lake_house', 'ionic'],
-                          description='Simulation World')
+                          description='Simulation World'),
+    DeclareLaunchArgument('namespace', default_value='undefined_namespace',
+                          description='Robot namespace'),
 ]
 
 def generate_launch_description():
