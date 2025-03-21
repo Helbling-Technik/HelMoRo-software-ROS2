@@ -12,6 +12,8 @@ from launch_ros.actions import Node, PushRosNamespace
 ARGUMENTS = [
     DeclareLaunchArgument('namespace', default_value='robot1',
                           description='Robot namespace'),
+    DeclareLaunchArgument('use_sim_time', default_value='true',
+                          choices=['true', 'false'], description='Use sim time.'),
     DeclareLaunchArgument('rviz_config', default_value='debug.rviz',
                           description='Config preset')
 ]
@@ -28,10 +30,7 @@ def generate_launch_description():
              name='rviz2',
              namespace=LaunchConfiguration('namespace'),
              arguments=['-d', rviz2_config],
-             remappings=[
-                ('/tf', 'tf'),
-                ('/tf_static', 'tf_static')
-             ],
+             parameters=[{'use_sim_time': LaunchConfiguration('use_sim_time')}],
              output='screen')
 
     ld = LaunchDescription(ARGUMENTS)
