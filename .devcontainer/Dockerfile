@@ -31,7 +31,9 @@ RUN grep -F "source /opt/ros/jazzy/setup.bash" /root/.bashrc || echo "source /op
 RUN apt-get update && apt-get install -y \
     ros-jazzy-demo-nodes-cpp \
     ros-jazzy-demo-nodes-py \
-    ros-jazzy-rqt-graph 
+    ros-jazzy-rqt-graph \
+    ros-jazzy-rqt-common-plugins \
+    ros-jazzy-rqt-robot-steering
 
 # Install ROS 2 packages
 RUN apt-get update && apt-get install -y \
