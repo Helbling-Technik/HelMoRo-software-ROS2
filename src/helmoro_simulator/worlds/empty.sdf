@@ -20,6 +20,9 @@
       <render_engine>ogre2</render_engine>
     </plugin>
 
+    <!-- Actuator Plugin -->
+    <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin"></plugin>
+
     <light type="directional" name="sun">
       <cast_shadows>true</cast_shadows>
       <pose>0 0 10 0 0 0</pose>

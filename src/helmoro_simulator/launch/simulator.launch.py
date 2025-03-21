@@ -63,9 +63,6 @@ def generate_launch_description():
                         output='screen',
                         arguments=[
                             '/clock' + '@rosgraph_msgs/msg/Clock' + '[gz.msgs.Clock'
-                        ],
-                        remappings=[
-                            ('/clock', [LaunchConfiguration('namespace'), '/clock'])
                         ]
                         )
     

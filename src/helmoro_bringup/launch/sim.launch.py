@@ -105,8 +105,7 @@ def generate_launch_description():
                 
                 (['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
                 '/link/base_link/sensor/depth_camera/depth_image/points'],
-                ['sensor/camera/depth/points']),
-                ('/clock', 'clock')
+                ['sensor/camera/depth/points'])
             ]
         ),
         
@@ -131,8 +130,7 @@ def generate_launch_description():
                 ['sensor/camera/color/camera_info']),
                 (['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
                 '/link/base_link/sensor/rgb_camera/image'],
-                ['sensor/camera/color/image_raw']),
-                ('/clock', 'clock')
+                ['sensor/camera/color/image_raw'])
             ]
         ),
         
@@ -160,7 +158,6 @@ def generate_launch_description():
                 (['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
                 '/link/base_link/sensor/rplidar/scan/points'],
                 ['sensor/lidar/scan/points']),
-                ('/clock', 'clock')
             ]
         ),
         
@@ -179,8 +176,7 @@ def generate_launch_description():
             remappings=[
                 (['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
                 '/link/base_link/sensor/imu_sensor/imu'],
-                ['sensor/imu/imu']),
-                ('/clock', 'clock')
+                ['sensor/imu/imu'])
             ]
         )
     ])
