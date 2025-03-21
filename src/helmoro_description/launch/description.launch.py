@@ -56,7 +56,7 @@ def generate_launch_description():
             executable='static_transform_publisher',
             name='static_transform_broadcaster_imu',
             output='screen',
-            arguments=['0', '0', '0', '0', '0', '0', '1',  'imu', 'default_namespace/base_link/imu_sensor'],
+            arguments=['0', '0', '0', '0', '0', '0', '1',  'imu', PathJoinSubstitution([LaunchConfiguration('namespace'), 'base_link/imu_sensor'])],
             remappings=[
                 ('/tf_static', 'tf_static')
             ]
@@ -67,7 +67,7 @@ def generate_launch_description():
             executable='static_transform_publisher',
             name='static_transform_broadcaster_lidar',
             output='screen',
-            arguments=['0', '0', '0', '0', '0', '0', '1',  'lidar', 'default_namespace/base_link/rplidar'],
+            arguments=['0', '0', '0', '0', '0', '0', '1',  'lidar', PathJoinSubstitution([LaunchConfiguration('namespace'), 'base_link/rplidar'])],
             remappings=[
                 ('/tf_static', 'tf_static')
             ]

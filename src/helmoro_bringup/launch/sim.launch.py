@@ -11,7 +11,7 @@ from launch.events import Shutdown
 from launch_ros.actions import Node, PushRosNamespace
 
 ARGUMENTS = [
-    DeclareLaunchArgument('namespace', default_value='default_namespace',
+    DeclareLaunchArgument('namespace', default_value='example_robot_name',
                           description='Robot namespace'),
     DeclareLaunchArgument('run_in_simulation', default_value='true',
                           choices=['true', 'false'], description='Use sim time.'),
@@ -97,15 +97,15 @@ def generate_launch_description():
             remappings=[
                 (['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
                 '/link/base_link/sensor/depth_camera/camera_info'],
-                [LaunchConfiguration('namespace'), '/sensor/camera/depth/camera_info']),
+                ['sensor/camera/depth/camera_info']),
                 
                 (['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
                 '/link/base_link/sensor/depth_camera/depth_image'],
-                [LaunchConfiguration('namespace'), '/sensor/camera/depth/image_raw']),
+                ['sensor/camera/depth/image_raw']),
                 
                 (['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
                 '/link/base_link/sensor/depth_camera/depth_image/points'],
-                [LaunchConfiguration('namespace'), '/sensor/camera/depth/points']),
+                ['sensor/camera/depth/points']),
                 ('/clock', 'clock')
             ]
         ),
@@ -128,10 +128,10 @@ def generate_launch_description():
             remappings=[
                 (['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
                 '/link/base_link/sensor/rgb_camera/camera_info'],
-                [LaunchConfiguration('namespace'), '/sensor/camera/color/camera_info']),
+                ['sensor/camera/color/camera_info']),
                 (['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
                 '/link/base_link/sensor/rgb_camera/image'],
-                [LaunchConfiguration('namespace'), '/sensor/camera/color/image_raw']),
+                ['sensor/camera/color/image_raw']),
                 ('/clock', 'clock')
             ]
         ),
@@ -155,11 +155,11 @@ def generate_launch_description():
             remappings=[
                 (['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
                 '/link/base_link/sensor/rplidar/scan'],
-                [LaunchConfiguration('namespace'), '/sensor/lidar/scan']),
+                ['sensor/lidar/scan']),
                 
                 (['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
                 '/link/base_link/sensor/rplidar/scan/points'],
-                [LaunchConfiguration('namespace'), '/sensor/lidar/scan/points']),
+                ['sensor/lidar/scan/points']),
                 ('/clock', 'clock')
             ]
         ),
@@ -179,7 +179,7 @@ def generate_launch_description():
             remappings=[
                 (['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
                 '/link/base_link/sensor/imu_sensor/imu'],
-                [LaunchConfiguration('namespace'), '/sensor/imu/imu']),
+                ['sensor/imu/imu']),
                 ('/clock', 'clock')
             ]
         )

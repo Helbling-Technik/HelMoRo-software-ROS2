@@ -154,7 +154,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /default_namespace/default_namespace/sensor/camera/color/image_raw
+        Value: sensor/camera/color/image_raw
       Value: true
     - Class: rviz_default_plugins/Image
       Enabled: true
@@ -168,7 +168,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /default_namespace/default_namespace/sensor/camera/depth/image_raw
+        Value: sensor/camera/depth/image_raw
       Value: true
     - Alpha: 1
       Autocompute Intensity Bounds: true
@@ -199,7 +199,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /default_namespace/default_namespace/sensor/camera/depth/points
+        Value: sensor/camera/depth/points
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
@@ -233,7 +233,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /default_namespace/default_namespace/sensor/lidar/scan
+        Value: sensor/lidar/scan
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
