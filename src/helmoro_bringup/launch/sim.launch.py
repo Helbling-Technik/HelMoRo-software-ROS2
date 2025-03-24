@@ -1,11 +1,10 @@
-import os, yaml
-
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, GroupAction, RegisterEventHandler, EmitEvent
+from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, PythonExpression, EqualsSubstitution
 from launch.event_handlers import OnShutdown
 from launch.events import Shutdown
 from launch_ros.actions import Node, PushRosNamespace
@@ -18,7 +17,10 @@ ARGUMENTS = [
     DeclareLaunchArgument('rviz', default_value='true',
                           choices=['true', 'false'], description='Start rviz.'),
     DeclareLaunchArgument('world', default_value='empty',
-                          description='Simulation World')
+                          description='Simulation World'),
+    DeclareLaunchArgument('teleop_mode', default_value='joystick',
+                          choices=['joystick', 'keyboard', ''], 
+                          description='Mode of teleoperation')
 ]
 
 for pose_element in ['x', 'y', 'z', 'yaw']:
@@ -32,6 +34,8 @@ def generate_launch_description():
         'helmoro_bringup')
     pkg_helmoro_simulator = get_package_share_directory(
         'helmoro_simulator')
+    pkg_helmoro_teleop = get_package_share_directory(
+        'helmoro_teleop')
     pkg_helmoro_visualization = get_package_share_directory(
         'helmoro_visualization')
     
@@ -40,6 +44,10 @@ def generate_launch_description():
         [pkg_helmoro_bringup, 'launch', 'common.launch.py'])
     gazebo_launch = PathJoinSubstitution(
         [pkg_helmoro_simulator, 'launch', 'simulator.launch.py'])
+    teleop_keyboard_launch = PathJoinSubstitution(
+        [pkg_helmoro_teleop, 'launch', 'keyboard.launch.py'])
+    teleop_joystick_launch = PathJoinSubstitution(
+        [pkg_helmoro_teleop, 'launch', 'joystick.launch.py'])
     visualization_launch = PathJoinSubstitution(
         [pkg_helmoro_visualization, 'launch', 'visualization.launch.py'])
 
@@ -181,6 +189,33 @@ def generate_launch_description():
         )
     ])
     
+    # Teleoperation
+    teleop = GroupAction([
+        # teleop_mode == keyboard
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([teleop_keyboard_launch]),
+            launch_arguments=[
+                ('use_sim_time', 'true'),
+                ('namespace', LaunchConfiguration('namespace'))
+            ],
+            condition=IfCondition(
+                EqualsSubstitution(LaunchConfiguration('teleop_mode'), 'keyboard')
+            )
+        ),
+
+        # teleop_mode = joystick
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([teleop_joystick_launch]),
+            launch_arguments=[
+                ('use_sim_time', 'true'),
+                ('namespace', LaunchConfiguration('namespace'))
+            ],
+            condition=IfCondition(
+                EqualsSubstitution(LaunchConfiguration('teleop_mode'), 'joystick')
+            )
+        )
+
+    ])
     
     
     visualization = IncludeLaunchDescription(
@@ -193,5 +228,6 @@ def generate_launch_description():
     ld.add_action(common)
     ld.add_action(spawn_robot)
     ld.add_action(ros_gz_bridge)
+    ld.add_action(teleop)
     ld.add_action(visualization)
     return ld

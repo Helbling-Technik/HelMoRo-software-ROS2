@@ -1,0 +1,22 @@
+# Logitec F710 Joystick Configuration
+# This configuration assumes the controller is mapped as a standard Xbox-style controller
+# Axis and Button mapping for the Logitech F710
+
+# To send a command you need to keep pressing the deadman switch.
+# For this controller the deadman switch is located at the RB shoulder buton
+/**:
+  ros__parameters:
+    axis_linear:         
+      x: 1
+    scale_linear:
+      x: 1.1 # m/s
+
+    axis_angular:         
+      yaw: 0
+    scale_angular:
+      yaw: 10.5 # rad/s
+
+    # Scale factor to adjust the sensitivity of the joystick input
+    scale_linear: 1.0     # Scale for linear movement
+    scale_angular: 1.0    # Scale for angular movement
+

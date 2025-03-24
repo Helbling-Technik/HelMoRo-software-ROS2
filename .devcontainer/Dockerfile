@@ -27,6 +27,11 @@ RUN rosdep update
 RUN grep -F "source /opt/ros/jazzy/setup.bash" /root/.bashrc || echo "source /opt/ros/jazzy/setup.bash" >> /root/.bashrc && \
     grep -F "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" /root/.bashrc || echo "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> /root/.bashrc
 
+# Install Linux packages
+# xterm: to use teleop_twist_keyboard
+RUN apt-get update && apt-get install -y \
+    xterm
+
 # Install ROS debug packages
 RUN apt-get update && apt-get install -y \
     ros-jazzy-demo-nodes-cpp \
@@ -49,8 +54,9 @@ RUN apt-get update && apt-get install -y \
     ros-jazzy-slam-toolbox \
     ros-jazzy-robot-localization \
     ros-jazzy-navigation2 \
-    ros-jazzy-nav2-bringup 
-
+    ros-jazzy-nav2-bringup \
+    ros-jazzy-teleop-twist-keyboard \
+    ros-jazzy-teleop-twist-joy
 
 # ********************************************************
 # * Set up the user *
