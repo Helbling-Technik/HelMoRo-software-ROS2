@@ -26,13 +26,16 @@
     "containerEnv": {
         "DISPLAY": "unix:0",
         "ROS_AUTOMATIC_DISCOVERY_RANGE": "LOCALHOST",
-        "ROS_DOMAIN_ID": "42"
+        "ROS_DOMAIN_ID": "42",
+        "NVIDIA_DRIVER_CAPABILITIES": "all"
     },
     "runArgs": [
         "--net=host",
         "--pid=host",
         "--ipc=host",
-        "-e", "DISPLAY=${env:DISPLAY}"
+        "-e", "DISPLAY=${env:DISPLAY}",
+        "--gpus=all",
+        "--runtime=nvidia"
     ],
     "mounts": [
        "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
