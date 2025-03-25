@@ -91,28 +91,28 @@ def generate_launch_description():
             parameters=[{'use_sim_time': True}],
             arguments=[
                 ['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
-                '/link/base_link/sensor/depth_camera/camera_info' +
+                '/link/', LaunchConfiguration('namespace'), '/base_link/sensor/depth_camera/camera_info' +
                 '@sensor_msgs/msg/CameraInfo' + '[gz.msgs.CameraInfo'],
                 
                 ['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
-                '/link/base_link/sensor/depth_camera/depth_image' +
+                '/link/', LaunchConfiguration('namespace'), '/base_link/sensor/depth_camera/depth_image' +
                 '@sensor_msgs/msg/Image' + '[gz.msgs.Image'],
                 
                 ['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
-                '/link/base_link/sensor/depth_camera/depth_image/points' +
+                '/link/', LaunchConfiguration('namespace'), '/base_link/sensor/depth_camera/depth_image/points' +
                 '@sensor_msgs/msg/PointCloud2' + '[gz.msgs.PointCloudPacked']
             ],
             remappings=[
                 (['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
-                '/link/base_link/sensor/depth_camera/camera_info'],
+                '/link/', LaunchConfiguration('namespace'), '/base_link/sensor/depth_camera/camera_info'],
                 ['sensor/camera/depth/camera_info']),
                 
                 (['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
-                '/link/base_link/sensor/depth_camera/depth_image'],
+                '/link/', LaunchConfiguration('namespace'), '/base_link/sensor/depth_camera/depth_image'],
                 ['sensor/camera/depth/image_raw']),
                 
                 (['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
-                '/link/base_link/sensor/depth_camera/depth_image/points'],
+                '/link/', LaunchConfiguration('namespace'), '/base_link/sensor/depth_camera/depth_image/points'],
                 ['sensor/camera/depth/points'])
             ]
         ),
@@ -126,18 +126,18 @@ def generate_launch_description():
             parameters=[{'use_sim_time': True}],
             arguments=[
                 ['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
-                '/link/base_link/sensor/rgb_camera/camera_info' +
+                '/link/', LaunchConfiguration('namespace'), '/base_link/sensor/rgb_camera/camera_info' +
                 '@sensor_msgs/msg/CameraInfo' + '[gz.msgs.CameraInfo'],
                 ['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
-                '/link/base_link/sensor/rgb_camera/image' +
+                '/link/', LaunchConfiguration('namespace'), '/base_link/sensor/rgb_camera/image' +
                 '@sensor_msgs/msg/Image' + '[gz.msgs.Image']
             ],
             remappings=[
                 (['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
-                '/link/base_link/sensor/rgb_camera/camera_info'],
+                '/link/', LaunchConfiguration('namespace'), '/base_link/sensor/rgb_camera/camera_info'],
                 ['sensor/camera/color/camera_info']),
                 (['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
-                '/link/base_link/sensor/rgb_camera/image'],
+                '/link/', LaunchConfiguration('namespace'), '/base_link/sensor/rgb_camera/image'],
                 ['sensor/camera/color/image_raw'])
             ]
         ),
@@ -151,20 +151,20 @@ def generate_launch_description():
             parameters=[{'use_sim_time': True}],
             arguments=[
                 ['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
-                '/link/base_link/sensor/rplidar/scan' +
+                '/link/', LaunchConfiguration('namespace'), '/base_link/sensor/rplidar/scan' +
                 '@sensor_msgs/msg/LaserScan' + '[gz.msgs.LaserScan'],
                 
                 ['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
-                '/link/base_link/sensor/rplidar/scan/points' +
+                '/link/', LaunchConfiguration('namespace'), '/base_link/sensor/rplidar/scan/points' +
                 '@sensor_msgs/msg/PointCloud2' + '[gz.msgs.PointCloudPacked']
             ],
             remappings=[
                 (['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
-                '/link/base_link/sensor/rplidar/scan'],
+                '/link/', LaunchConfiguration('namespace'), '/base_link/sensor/rplidar/scan'],
                 ['sensor/lidar/scan']),
                 
                 (['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
-                '/link/base_link/sensor/rplidar/scan/points'],
+                '/link/', LaunchConfiguration('namespace'), '/base_link/sensor/rplidar/scan/points'],
                 ['sensor/lidar/scan/points']),
             ]
         ),
@@ -178,12 +178,12 @@ def generate_launch_description():
             parameters=[{'use_sim_time': True}],
             arguments=[
                 ['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
-                '/link/base_link/sensor/imu_sensor/imu' +
+                '/link/', LaunchConfiguration('namespace'), '/base_link/sensor/imu_sensor/imu' +
                 '@sensor_msgs/msg/Imu' + '[gz.msgs.IMU']
             ],
             remappings=[
                 (['/world/', LaunchConfiguration('world'), '/model/', LaunchConfiguration('namespace'),
-                '/link/base_link/sensor/imu_sensor/imu'],
+                '/link/', LaunchConfiguration('namespace'), '/base_link/sensor/imu_sensor/imu'],
                 ['sensor/imu/imu'])
             ]
         )

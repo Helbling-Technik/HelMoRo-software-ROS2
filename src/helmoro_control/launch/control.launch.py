@@ -1,6 +1,6 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, ExecuteProcess, RegisterEventHandler, GroupAction
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, Command
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, Command, PythonExpression, TextSubstitution
 from launch_ros.substitutions import FindPackageShare
 from launch_ros.actions import Node, SetRemap, PushRosNamespace
 from launch.conditions import IfCondition, UnlessCondition
@@ -16,28 +16,7 @@ ARGUMENTS = [
 ]
 
 def generate_launch_description():
-    # Paths
-    controller_params = PathJoinSubstitution(
-        [
-            FindPackageShare('helmoro_control'),
-            "config",
-            "helmoro_controller.yaml",
-        ]
-    )
-
     # Launch Description   
-    control_node = Node(
-        package="controller_manager",
-        executable="ros2_control_node",
-        namespace=LaunchConfiguration('namespace'),
-        parameters=[controller_params],
-        output="both",
-        remappings=[
-            ("~/robot_description", "robot_description"),
-            ("/diagnostics", "diagnostics")
-        ]
-    )
-
     joint_state_broadcaster = Node(
         package='controller_manager',
         executable='spawner',

@@ -4,11 +4,11 @@
 <xacro:macro name="imu" params="name namespace parent_link *origin">
     <xacro:include filename="$(find helmoro_description)/urdf/utils.urdf.xacro"/>
 
-    <xacro:property name="joint_name" value="${name}_joint"/>
-    <xacro:property name="link_name" value="${name}"/>
+    <xacro:property name="link_name" value="${namespace}/${name}"/>
+    <xacro:property name="joint_name" value="${link_name}_joint"/>
 
     <joint name="${joint_name}" type="fixed">
-        <parent link="${parent_link}"/>
+        <parent link="${namespace}/${parent_link}"/>
         <child link="${link_name}"/>
         <xacro:insert_block name="origin"/>
     </joint>

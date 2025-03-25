@@ -13,7 +13,7 @@
     <xacro:include filename="$(find helmoro_description)/urdf/sensors/imu.urdf.xacro"/>
 
     <!-- Base Link -->
-    <link name="base_link"></link>
+    <link name="$(arg namespace)/base_link"></link>
 
     <!-- Cover -->
     <xacro:chassis name="chassis" namespace="$(arg namespace)" parent_link="base_link">

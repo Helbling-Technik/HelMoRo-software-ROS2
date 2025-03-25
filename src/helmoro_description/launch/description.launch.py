@@ -52,7 +52,9 @@ def generate_launch_description():
             executable='static_transform_publisher',
             name='static_transform_broadcaster_imu',
             output='screen',
-            arguments=['0', '0', '0', '0', '0', '0', '1',  'imu', PathJoinSubstitution([LaunchConfiguration('namespace'), 'base_link/imu_sensor'])]
+            arguments=['0', '0', '0', '0', '0', '0', '1',  
+                       PathJoinSubstitution([LaunchConfiguration('namespace'), 'imu']), 
+                       PathJoinSubstitution([LaunchConfiguration('namespace'), LaunchConfiguration('namespace'), 'base_link/imu_sensor'])]
         ),
         
         Node(
@@ -60,7 +62,9 @@ def generate_launch_description():
             executable='static_transform_publisher',
             name='static_transform_broadcaster_lidar',
             output='screen',
-            arguments=['0', '0', '0', '0', '0', '0', '1',  'lidar', PathJoinSubstitution([LaunchConfiguration('namespace'), 'base_link/rplidar'])]
+            arguments=['0', '0', '0', '0', '0', '0', '1', 
+                       PathJoinSubstitution([LaunchConfiguration('namespace'), 'lidar']), 
+                       PathJoinSubstitution([LaunchConfiguration('namespace'), LaunchConfiguration('namespace'), 'base_link/rplidar'])]
         )
     ])
 
