@@ -52,11 +52,11 @@ RUN apt-get update && apt-get install -y \
     ros-jazzy-xacro \
     ros-jazzy-twist-mux \
     ros-jazzy-slam-toolbox \
-    ros-jazzy-robot-localization \
     ros-jazzy-navigation2 \
     ros-jazzy-nav2-bringup \
     ros-jazzy-teleop-twist-keyboard \
-    ros-jazzy-teleop-twist-joy
+    ros-jazzy-teleop-twist-joy \
+    ros-jazzy-fuse
 
 # ********************************************************
 # * Set up the user *

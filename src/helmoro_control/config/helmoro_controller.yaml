@@ -23,16 +23,16 @@
     right_wheel_radius_multiplier: 1.0
 
     publish_rate: 60.0
-    odom_frame_id: odom
+    odom_frame_id: wheel_odom
     base_frame_id: base_link
     pose_covariance_diagonal : [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
     twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
 
-    open_loop: false
+    open_loop: true
     position_feedback: false
 
     # Publishes transform between odom_frame_id and base_frame_id
-    enable_odom_tf: true 
+    enable_odom_tf: false 
 
     cmd_vel_timeout: 0.5
     publish_limited_velocity: true
