@@ -15,7 +15,7 @@
 
     <link name="${link_name}"></link>
 
-    <gazebo reference="${link_name}">
+    <!-- <gazebo reference="${link_name}">
         <gravity>true</gravity>
         <sensor name="imu_sensor" type="imu">
             <pose relative_to='${link_name}'>0 0 0 0 0 0</pose>
@@ -24,8 +24,67 @@
             <visualize>true</visualize>
             <pose>0 0 0 0 0 0</pose>
         </sensor>
-    </gazebo>
+    </gazebo> -->
     
+    <gazebo reference="${link_name}">
+        <gravity>true</gravity>
+        <sensor type="imu" name="imu_sensor">
+        <always_on>true</always_on>
+        <update_rate>100</update_rate>
+        <imu>
+            <angular_velocity>
+            <x>
+                <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>0.01</stddev>
+                </noise>
+            </x>
+            <y>
+                <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>0.01</stddev>
+                </noise>
+            </y>
+            <z>
+                <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>0.01</stddev>
+                </noise>
+            </z>
+            </angular_velocity>
+            <linear_acceleration>
+            <x>
+                <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>0.001</stddev>
+                </noise>
+            </x>
+            <y>
+                <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>0.001</stddev>
+                </noise>
+            </y>
+            <z>
+                <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>0.001</stddev>
+                </noise>
+            </z>
+            </linear_acceleration>
+        </imu>
+        <!-- <xacro:if value="${gazebo == 'classic'}">
+            <plugin name="${name}_plugin" filename="libgazebo_ros_create_imu.so">
+            <ros>
+                <namespace>${namespace}</namespace>
+                <remapping>~/out:=imu</remapping>
+            </ros>
+            </plugin>
+        </xacro:if> -->
+        </sensor> 
+    </gazebo>
+
+
 
 </xacro:macro>
 </robot>
