@@ -8,6 +8,7 @@ Panels:
         - /Status1
         - /TF1/Frames1
         - /Depth Image1
+        - /Map1
       Splitter Ratio: 0.3549160659313202
     Tree Height: 509
   - Class: rviz_common/Selection
@@ -67,53 +68,53 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
-        base_link:
+        example_robot_name/base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        camera_depth:
+        example_robot_name/camera_depth:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        camera_mesh:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        camera_rgb:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        chassis:
+        example_robot_name/camera_mesh:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        imu:
+        example_robot_name/camera_rgb:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        lidar:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        wheel_left_back:
+        example_robot_name/chassis:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        wheel_left_front:
+        example_robot_name/imu:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        example_robot_name/lidar:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        wheel_right_back:
+        example_robot_name/wheel_left_back:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        wheel_right_front:
+        example_robot_name/wheel_left_front:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        example_robot_name/wheel_right_back:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        example_robot_name/wheel_right_front:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -237,10 +238,33 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
+    - Alpha: 0.699999988079071
+      Binary representation: false
+      Binary threshold: 100
+      Class: rviz_default_plugins/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: true
+      Name: Map
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /example_robot_name/map
+      Update Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /example_robot_name/map_updates
+      Use Timestamp: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: base_link
+    Fixed Frame: example_robot_name/map
     Frame Rate: 30
   Name: root
   Tools:

@@ -23,6 +23,7 @@ def generate_launch_description():
     pkg_helmoro_description = get_package_share_directory('helmoro_description')
     pkg_helmoro_state_estimation = get_package_share_directory('helmoro_state_estimation')
     pkg_helmoro_control = get_package_share_directory('helmoro_control')
+    pkg_helmoro_slam = get_package_share_directory('helmoro_slam')
     
     # Paths
     description_launch = PathJoinSubstitution(
@@ -33,6 +34,9 @@ def generate_launch_description():
     )
     control_launch = PathJoinSubstitution(
         [pkg_helmoro_control, 'launch', 'control.launch.py']
+    )
+    slam_launch = PathJoinSubstitution(
+        [pkg_helmoro_slam, 'launch', 'slam.launch.py']
     )
 
     # Launch Description    
@@ -60,9 +64,18 @@ def generate_launch_description():
         ]   
     )
     
+    slam = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([slam_launch]),
+        launch_arguments=[
+            ('use_sim_time', LaunchConfiguration('run_in_simulation')),
+            ('namespace', LaunchConfiguration('namespace'))
+        ]   
+    )
+    
     # Create launch description and add actions
     ld = LaunchDescription(ARGUMENTS)
     ld.add_action(description)
     ld.add_action(state_estimation)
     ld.add_action(control)
+    ld.add_action(slam)
     return ld
