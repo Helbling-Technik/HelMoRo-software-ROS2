@@ -4,7 +4,7 @@
   <name>helmoro_state_estimation</name>
   <version>0.0.0</version>
   <description>Provide sensor fusion for robot odometry calculation</description>
-  <maintainer email="marc.bloechlinger@helbling.ch">htkz</maintainer>
+  <maintainer email="marc.bloechlinger@helbling.ch">Marc Blöchlinger</maintainer>
   <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
