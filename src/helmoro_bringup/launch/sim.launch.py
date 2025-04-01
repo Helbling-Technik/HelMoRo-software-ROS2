@@ -1,12 +1,10 @@
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, GroupAction, RegisterEventHandler, EmitEvent
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, GroupAction, TimerAction
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, PythonExpression, EqualsSubstitution
-from launch.event_handlers import OnShutdown
-from launch.events import Shutdown
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, EqualsSubstitution
 from launch_ros.actions import Node, PushRosNamespace
 
 ARGUMENTS = [
@@ -48,6 +46,8 @@ def generate_launch_description():
         [pkg_helmoro_teleop, 'launch', 'keyboard.launch.py'])
     teleop_joystick_launch = PathJoinSubstitution(
         [pkg_helmoro_teleop, 'launch', 'joystick.launch.py'])
+    rqt_gui_launch = PathJoinSubstitution(
+        [pkg_helmoro_visualization, 'launch', 'rqt.launch.py'])
     visualization_launch = PathJoinSubstitution(
         [pkg_helmoro_visualization, 'launch', 'visualization.launch.py'])
 
@@ -222,12 +222,26 @@ def generate_launch_description():
         PythonLaunchDescriptionSource([visualization_launch])
     )
     
+    rqt_gui = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([rqt_gui_launch])
+    )
+    
+     # Delay launching everything else
+    start_everything_else_afterwards = TimerAction(
+        period=2.0,  # Wait 2 seconds before launching other nodes
+        actions=[
+            gazebo, 
+            common, 
+            spawn_robot, 
+            ros_gz_bridge, 
+            teleop, 
+            visualization
+        ]
+    )
+    
+    
     # Create launch description and add actions
     ld = LaunchDescription(ARGUMENTS)
-    ld.add_action(gazebo)
-    ld.add_action(common)
-    ld.add_action(spawn_robot)
-    ld.add_action(ros_gz_bridge)
-    ld.add_action(teleop)
-    ld.add_action(visualization)
+    ld.add_action(rqt_gui)
+    ld.add_action(start_everything_else_afterwards)
     return ld
