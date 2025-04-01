@@ -42,7 +42,6 @@ def generate_launch_description():
 
     # Create launch description and add actions
     ld = LaunchDescription(ARGUMENTS)
-    #ld.add_action(control_node)
     ld.add_action(joint_state_broadcaster)
     ld.add_action(start_diff_drive_controller_after_joint_state_broadcaster)
     return ld
