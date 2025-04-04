@@ -3,13 +3,14 @@ import unittest
 import pytest
 import rclpy
 import std_msgs.msg
+import sensor_msgs.msg
 
 import launch_testing.markers
 
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription
+from launch.actions import IncludeLaunchDescription, TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import PathJoinSubstitution
 
@@ -39,7 +40,7 @@ def generate_test_description():
     )
     
     # Action to confirm when the test is ready
-    ready_to_test = ReadyToTest()
+    ready_to_test = TimerAction(period=0.5, actions=[ReadyToTest()])
     
      # Create and return the complete launch description
     ld = LaunchDescription()
@@ -127,4 +128,49 @@ class TestRobotStatePublisher(unittest.TestCase):
             # Ensure that the subscription is destroyed after the test
             self.node.destroy_subscription(sub)
 
-            
+class TestJointStatePublisher(unittest.TestCase):
+    """Test suite for checking the joint_state_publisher functionality."""
+
+    def setUp(self):
+        """Initialize the ROS node before each test."""
+        rclpy.init()
+        self.node = rclpy.create_node('test_node')
+
+    def tearDown(self):
+        """Shut down the ROS node after each test."""
+        self.node.destroy_node()
+        rclpy.shutdown()
+
+    def test_node_start(self, proc_output: ActiveIoHandler):
+        """Test if the joint_state_publisher node has started."""
+        found = False
+        print('Waiting for node...')
+        start = time.time()
+        
+        # Wait for the node to start up and become available
+        while time.time() - start < 10.0 and not found:
+            found = 'joint_state_publisher' in self.node.get_node_names()
+            time.sleep(0.1)
+
+        # Assert that the node was found
+        assert found, 'Node not found!'
+        
+    def test_advertise_topic(self, proc_output: ActiveIoHandler):
+        """Test if the joint_state topic is advertised by the node."""
+        received = False
+        print("Listening for topics...")
+        start = time.time()
+        
+        # Wait for the topic to be advertised by the robot_state_publisher node
+        while time.time() - start < 10.0 and not received:
+            # Check if the node is publishing messages
+            topic_names = self.node.get_topic_names_and_types()
+            for topic_name, types in topic_names:
+                if topic_name == '/' + NAMESPACE + '/joint_states':
+                    received = True
+                    break
+            time.sleep(0.1)
+        
+        # Assert that the topic was advertised 
+        assert received, 'Topic not advertised!'
+         
