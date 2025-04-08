@@ -27,7 +27,7 @@ def generate_launch_description():
     fuse_optimizer = Node(
           package='fuse_optimizers',
           executable='fixed_lag_smoother_node',
-          name='state_estimator',
+          name='state_estimation',
           namespace=LaunchConfiguration('namespace'),
           parameters=[
             filter_config,
@@ -39,7 +39,8 @@ def generate_launch_description():
             'filtered_publisher.odom_frame_id': PathJoinSubstitution([LaunchConfiguration('namespace'), 'odom']),
             'filtered_publisher.world_frame_id': PathJoinSubstitution([LaunchConfiguration('namespace'), 'odom']),
             }
-        ]
+        ],
+        remappings = [('/tf', 'tf'), ('/tf_static', 'tf_static')]
       )
     
     ld = LaunchDescription(ARGUMENTS)

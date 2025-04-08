@@ -25,13 +25,19 @@ def generate_launch_description():
     rviz2_config = PathJoinSubstitution(
         [pkg_helmoro_visualization, 'rviz', LaunchConfiguration('rviz_config')])
 
-    rviz = Node(package='rviz2',
-             executable='rviz2',
-             name='rviz2',
-             namespace=LaunchConfiguration('namespace'),
-             arguments=['-d', rviz2_config],
-             parameters=[{'use_sim_time': LaunchConfiguration('use_sim_time')}],
-             output='screen')
+    rviz = Node(
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        namespace=LaunchConfiguration('namespace'),
+        arguments=['-d', rviz2_config],
+        parameters=[{'use_sim_time': LaunchConfiguration('use_sim_time')}],
+        output='screen',
+        remappings = [
+        ('/tf', 'tf'), 
+        ('/tf_static', 'tf_static')
+    ]
+    )
 
     ld = LaunchDescription(ARGUMENTS)
     ld.add_action(rviz)

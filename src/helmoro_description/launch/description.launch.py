@@ -40,7 +40,8 @@ def generate_launch_description():
                     'run_in_simulation:=', LaunchConfiguration('run_in_simulation'), ' ',
                     'namespace:=', LaunchConfiguration('namespace')
                 ]), value_type=str)},
-        ]
+        ],
+        remappings = [('/tf', 'tf'), ('/tf_static', 'tf_static')]
     )
     
     # Workaround until Gazebo Ionic upgrades to sdformat 1.12 and allows <frame_id> tags
@@ -54,7 +55,11 @@ def generate_launch_description():
             output='screen',
             arguments=['0', '0', '0', '0', '0', '0', '1',  
                        PathJoinSubstitution([LaunchConfiguration('namespace'), 'imu']), 
-                       PathJoinSubstitution([LaunchConfiguration('namespace'), LaunchConfiguration('namespace'), 'base_link/imu_sensor'])]
+                       PathJoinSubstitution([LaunchConfiguration('namespace'), LaunchConfiguration('namespace'), 'base_link/imu_sensor'])],
+            remappings = [
+                ('/tf', 'tf'), 
+                ('/tf_static', 'tf_static')
+            ]
         ),
         
         Node(
@@ -64,7 +69,11 @@ def generate_launch_description():
             output='screen',
             arguments=['0', '0', '0', '0', '0', '0', '1', 
                        PathJoinSubstitution([LaunchConfiguration('namespace'), 'lidar']), 
-                       PathJoinSubstitution([LaunchConfiguration('namespace'), LaunchConfiguration('namespace'), 'base_link/rplidar'])]
+                       PathJoinSubstitution([LaunchConfiguration('namespace'), LaunchConfiguration('namespace'), 'base_link/rplidar'])],
+            remappings = [
+                ('/tf', 'tf'), 
+                ('/tf_static', 'tf_static')
+            ],
         )
     ])
 

@@ -5,11 +5,14 @@
 
     <xacro:if value="${run_in_simulation}">
         <gazebo>
-            <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+            <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
                 <parameters>$(find helmoro_control)/config/helmoro_controller.yaml</parameters>
                 <ros>
                     <namespace>${namespace}</namespace>
                     <remapping>/robot_description:=robot_description</remapping>
+                    <remapping>/tf:=tf</remapping>
+                    <remapping>/tf_static:=tf_static</remapping>
+                    <remapping>/diagnostics:=diagnostics</remapping>
                 </ros>
             </plugin>
         </gazebo>
