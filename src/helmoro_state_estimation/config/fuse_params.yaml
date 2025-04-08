@@ -46,7 +46,7 @@
         type: fuse_models::Odometry2DPublisher
 
     filtered_publisher:
-      topic: "odom_filtered"
+      topic: "odom"
       map_frame_id: "map"
       publish_tf: true
       publish_frequency: 50.0
