@@ -1,12 +1,8 @@
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, ExecuteProcess, RegisterEventHandler, GroupAction
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, Command, PythonExpression, TextSubstitution
-from launch_ros.substitutions import FindPackageShare
-from launch_ros.actions import Node, SetRemap, PushRosNamespace
-from launch.conditions import IfCondition, UnlessCondition
+from launch.actions import DeclareLaunchArgument, RegisterEventHandler
+from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node
 from launch.event_handlers import OnProcessExit
-from launch.launch_description_sources import PythonLaunchDescriptionSource
-from ament_index_python.packages import get_package_share_directory
 
 ARGUMENTS = [
     DeclareLaunchArgument('use_sim_time', default_value='true',
@@ -21,14 +17,18 @@ def generate_launch_description():
         package='controller_manager',
         executable='spawner',
         namespace=LaunchConfiguration('namespace'),
-        arguments=['joint_state_broadcaster'],
+        arguments=['joint_state_broadcaster',
+                   '-c', 'controller_manager',
+                   '--switch-timeout', '30.0']
     )
     
     diff_drive_base_controller = Node(
         package='controller_manager',
         executable='spawner',
         namespace=LaunchConfiguration('namespace'),
-        arguments=['diff_drive_controller']
+        arguments=['diff_drive_controller',
+                   '-c', 'controller_manager',
+                   '--switch-timeout', '30.0']
     )
 
     # Delay start of robot_controller after `joint_state_broadcaster`
