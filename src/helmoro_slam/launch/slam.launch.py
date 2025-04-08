@@ -4,7 +4,7 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, GroupAction
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, TextSubstitution
 
-from launch_ros.actions import SetRemap
+from launch_ros.actions import SetRemap, PushRosNamespace
 
 from nav2_common.launch import RewrittenYaml, ReplaceString
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -20,10 +20,11 @@ ARGUMENTS = [
 def generate_launch_description():
     # Directories
     pkg_helmoro_slam = get_package_share_directory('helmoro_slam')
+    pkg_slam_toolbox = get_package_share_directory('slam_toolbox')
     
     # Paths
     slam_toolbox_launch = PathJoinSubstitution(
-        [pkg_helmoro_slam, 'launch', 'online_async_launch.py']
+        [pkg_slam_toolbox, 'launch', 'online_sync_launch.py']
     )
     
     # Add root_key to the SLAM Toolbox configuration file and replace the robot namespace
@@ -33,27 +34,23 @@ def generate_launch_description():
         param_rewrites={},
         convert_types=True
     )
-
-    namespaced_params = ReplaceString(
-        source_file=params,
-        replacements={'<robot_namespace>': (LaunchConfiguration('namespace'))},
-    )
     
     # Descriptions        
     slam = GroupAction(
         actions=[
+            PushRosNamespace(LaunchConfiguration('namespace')),
+            
             # Remapping required to have a slam session subscribe & publish in optional namespaces
             SetRemap(src='/tf', dst='tf'),
             SetRemap(src='/tf_static', dst='tf_static'),
             SetRemap(src='/map', dst='map'),
             SetRemap(src='/map_metadata', dst='map_metadata'),
-            
 
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([slam_toolbox_launch]),
                 launch_arguments=[
                     ('use_sim_time', LaunchConfiguration('use_sim_time')),
-                    ('slam_params_file', namespaced_params),
+                    ('slam_params_file', params),
                     ('namespace', LaunchConfiguration('namespace'))
                 ]
             )
