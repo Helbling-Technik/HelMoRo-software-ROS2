@@ -6,7 +6,7 @@ from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, Text
 
 from launch_ros.actions import SetRemap
 
-from nav2_common.launch import RewrittenYaml
+from nav2_common.launch import RewrittenYaml, ReplaceString
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 ARGUMENTS = [
@@ -26,26 +26,23 @@ def generate_launch_description():
         [pkg_helmoro_slam, 'launch', 'online_async_launch.py']
     )
     
-    # Rewrite the SLAM Toolbox configuration file    
+    # Add root_key to the SLAM Toolbox configuration file and replace the robot namespace
     params = RewrittenYaml(
         source_file=PathJoinSubstitution([pkg_helmoro_slam, 'config', 'slam_toolbox.yaml']),
         root_key=LaunchConfiguration('namespace'),
-        param_rewrites={
-                'odom_frame': PathJoinSubstitution([LaunchConfiguration('namespace'), 'odom']),
-                'map_frame': PathJoinSubstitution([LaunchConfiguration('namespace'), 'map']),
-                'base_frame': PathJoinSubstitution([LaunchConfiguration('namespace'), 'base_link']),
-                'scan_topic': 'sensor/lidar/scan'
-            },
+        param_rewrites={},
         convert_types=True
+    )
+
+    namespaced_params = ReplaceString(
+        source_file=params,
+        replacements={'<robot_namespace>': (LaunchConfiguration('namespace'))},
     )
     
     # Descriptions        
     slam = GroupAction(
         actions=[
             # Remapping required to have a slam session subscribe & publish in optional namespaces
-            # TODO: Implement a solution to not require Remaps here, but use instead parameters from the params file
-            # I.e. currently the param scan_topic doesn't do anything 
-            #SetRemap(src='/scan', dst='scan'),
             SetRemap(src='/tf', dst='tf'),
             SetRemap(src='/tf_static', dst='tf_static'),
             SetRemap(src='/map', dst='map'),
@@ -56,7 +53,7 @@ def generate_launch_description():
                 PythonLaunchDescriptionSource([slam_toolbox_launch]),
                 launch_arguments=[
                     ('use_sim_time', LaunchConfiguration('use_sim_time')),
-                    ('slam_params_file', params),
+                    ('slam_params_file', namespaced_params),
                     ('namespace', LaunchConfiguration('namespace'))
                 ]
             )

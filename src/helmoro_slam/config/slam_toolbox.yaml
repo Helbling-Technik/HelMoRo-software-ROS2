@@ -10,10 +10,10 @@ slam_toolbox:
     ceres_loss_function: None
 
     # ROS Parameters
-    odom_frame: odom
-    map_frame: map
-    base_frame: base_footprint
-    scan_topic: /scan
+    odom_frame: <robot_namespace>/odom
+    map_frame: <robot_namespace>/map
+    base_frame: <robot_namespace>/base_link
+    scan_topic: sensor/lidar/scan
     use_map_saver: true
     mode: mapping #localization
 
