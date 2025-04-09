@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-<xacro:macro name="orbec_astra" params="name namespace parent_link *origin">
+<xacro:macro name="orbec_astra" params="name parent_link *origin">
     <xacro:include filename="$(find helmoro_description)/urdf/utils.urdf.xacro"/>
 
 
-    <xacro:property name="link_name" value="${namespace}/${name}_mesh"/>
-    <xacro:property name="camera_joint_name" value="${namespace}/${name}_joint"/>
+    <xacro:property name="link_name" value="${name}_mesh"/>
+    <xacro:property name="camera_joint_name" value="${name}_joint"/>
 
     <!-- joint for camera mesh -->
     <joint name="${camera_joint_name}" type="fixed">
-        <parent link="${namespace}/${parent_link}"/>
+        <parent link="${parent_link}"/>
         <child link="${link_name}"/>
         <xacro:insert_block name="origin"/>
     </joint>
@@ -32,26 +32,26 @@
     <joint name="camera_rgb_joint" type="fixed">
         <origin xyz="0 0.045 0" rpy="0 0 0" />
         <parent link="${link_name}" />
-        <child link="${namespace}/camera_rgb" />
+        <child link="camera_rgb" />
     </joint>
-    <link name="${namespace}/camera_rgb"></link>
+    <link name="camera_rgb"></link>
 
     <!--joints for depth_camera-->
     <joint name="camera_depth_joint" type="fixed">
         <origin xyz="0 0.02 0" rpy="0 0 0" />
         <parent link="${link_name}" />
-        <child link="${namespace}/camera_depth" />
+        <child link="camera_depth" />
     </joint>
-    <link name="${namespace}/camera_depth"></link>
+    <link name="camera_depth"></link>
 
     <!--Depth Camera Astra Pro-->
-    <gazebo reference="${namespace}/camera_depth">
+    <gazebo reference="camera_depth">
         <sensor name="depth_camera" type="depth_camera">
-            <pose relative_to='${namespace}/camera_depth'>0 0 0 0 0 0</pose>
+            <pose relative_to='camera_depth'>0 0 0 0 0 0</pose>
             <always_on>0</always_on>
             <update_rate>30</update_rate>
             <camera>
-                <optical_frame_id>${namespace}/camera_depth</optical_frame_id>
+                <optical_frame_id>camera_depth</optical_frame_id>
                 <horizontal_fov>1.019272</horizontal_fov> <!-- 58.4° -->
                 <image>
                     <width>640</width>
@@ -67,13 +67,13 @@
     </gazebo>
 
     <!--RGB Camera Astra Pro-->
-    <gazebo reference="${namespace}/camera_rgb">
+    <gazebo reference="camera_rgb">
         <sensor name="rgb_camera" type="camera">
-            <pose relative_to='${namespace}/camera_rgb'>0 0 0 0 0 0</pose>
+            <pose relative_to='camera_rgb'>0 0 0 0 0 0</pose>
             <always_on>0</always_on>
             <update_rate>30</update_rate>
             <camera>
-                <optical_frame_id>${namespace}/camera_rgb</optical_frame_id>
+                <optical_frame_id>camera_rgb</optical_frame_id>
                 <horizontal_fov>1.101303</horizontal_fov> <!-- 63.1° -->
                 <image>
                     <width>640</width>

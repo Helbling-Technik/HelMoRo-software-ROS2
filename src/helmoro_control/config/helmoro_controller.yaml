@@ -56,7 +56,7 @@
         min_jerk: .NAN
     
     angular:
-      x:
+      z:
         max_velocity: 6.2
         min_velocity: .NAN
         max_acceleration: 40.0

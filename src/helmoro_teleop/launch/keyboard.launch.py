@@ -21,8 +21,8 @@ def generate_launch_description():
         parameters=[{'use_sim_time': LaunchConfiguration('use_sim_time'),
                      'stamped': True}],
         remappings=[
-            ('cmd_vel', 'diff_drive_controller/cmd_vel')
-        ] 
+            ('cmd_vel', 'cmd_vel_stamped')
+        ]
     )
     
     ld = LaunchDescription(ARGUMENTS)

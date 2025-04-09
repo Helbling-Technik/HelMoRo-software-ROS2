@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-<xacro:macro name="wheel" params="name namespace run_in_simulation parent_link *origin">
+<xacro:macro name="wheel" params="name run_in_simulation parent_link *origin">
     <xacro:include filename="$(find helmoro_description)/urdf/utils.urdf.xacro"/>
 
     
@@ -9,11 +9,11 @@
     <xacro:property name="radius" value="0.045" />
     <xacro:property name="width"  value="0.01" />
 
-    <xacro:property name="link_name"  value="${namespace}/wheel_${name}"/>
+    <xacro:property name="link_name"  value="wheel_${name}"/>
     <xacro:property name="joint_name" value="wheel_${name}_joint"/>
 
     <joint name="${joint_name}" type="continuous">
-        <parent link="${namespace}/${parent_link}"/>
+        <parent link="${parent_link}"/>
         <child link="${link_name}"/>
         <xacro:insert_block name="origin"/>
         <axis xyz="0 0 1"/>

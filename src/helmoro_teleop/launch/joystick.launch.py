@@ -42,8 +42,10 @@ def generate_launch_description():
             joystick_config, 
             {'publish_stamped_twist': True}
         ],
-        remappings={('cmd_vel', 'diff_drive_controller/cmd_vel')},
-        )
+        remappings=[
+            ('cmd_vel', 'cmd_vel_stamped')
+        ]
+    )
         
     ld = LaunchDescription(ARGUMENTS)
     ld.add_action(joy_node)

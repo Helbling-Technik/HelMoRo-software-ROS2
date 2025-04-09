@@ -9,13 +9,13 @@ endif()
 find_package(ament_cmake REQUIRED)
 
 install(
-  DIRECTORY config launch
+  DIRECTORY config launch test
   DESTINATION share/${PROJECT_NAME}
 )
 
 if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
-  ament_lint_auto_find_test_dependencies()
+  find_package(launch_testing_ament_cmake)
+  add_launch_test(test/launch_control.test.py)
 endif()
 
 ament_package()

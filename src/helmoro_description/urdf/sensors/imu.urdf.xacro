@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-<xacro:macro name="imu" params="name namespace parent_link *origin">
+<xacro:macro name="imu" params="name parent_link *origin">
     <xacro:include filename="$(find helmoro_description)/urdf/utils.urdf.xacro"/>
 
-    <xacro:property name="link_name" value="${namespace}/${name}"/>
+    <xacro:property name="link_name" value="${name}"/>
     <xacro:property name="joint_name" value="${link_name}_joint"/>
 
     <joint name="${joint_name}" type="fixed">
-        <parent link="${namespace}/${parent_link}"/>
+        <parent link="${parent_link}"/>
         <child link="${link_name}"/>
         <xacro:insert_block name="origin"/>
     </joint>
@@ -73,14 +73,6 @@
             </z>
             </linear_acceleration>
         </imu>
-        <!-- <xacro:if value="${gazebo == 'classic'}">
-            <plugin name="${name}_plugin" filename="libgazebo_ros_create_imu.so">
-            <ros>
-                <namespace>${namespace}</namespace>
-                <remapping>~/out:=imu</remapping>
-            </ros>
-            </plugin>
-        </xacro:if> -->
         </sensor> 
     </gazebo>
 
