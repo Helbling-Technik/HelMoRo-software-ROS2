@@ -31,14 +31,7 @@ def generate_launch_description():
           namespace=LaunchConfiguration('namespace'),
           parameters=[
             filter_config,
-            {'use_sim_time': LaunchConfiguration('use_sim_time'),
-            'odometry_sensor.twist_target_frame':  PathJoinSubstitution([LaunchConfiguration('namespace'), 'base_link']),
-            'imu_sensor.twist_target_frame':  PathJoinSubstitution([LaunchConfiguration('namespace'), 'base_link']),
-            'filtered_publisher.base_link_frame_id':  PathJoinSubstitution([LaunchConfiguration('namespace'), 'base_link']),
-            'filtered_publisher.base_link_output_frame_id':  PathJoinSubstitution([LaunchConfiguration('namespace'), 'base_link']),
-            'filtered_publisher.odom_frame_id': PathJoinSubstitution([LaunchConfiguration('namespace'), 'odom']),
-            'filtered_publisher.world_frame_id': PathJoinSubstitution([LaunchConfiguration('namespace'), 'odom']),
-            }
+            {'use_sim_time': LaunchConfiguration('use_sim_time')}
         ],
         remappings = [('/tf', 'tf'), ('/tf_static', 'tf_static')]
       )
