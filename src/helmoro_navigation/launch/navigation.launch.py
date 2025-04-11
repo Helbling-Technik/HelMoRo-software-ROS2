@@ -53,6 +53,7 @@ def generate_launch_description():
                     'use_composition': 'False',
                     'use_respawn': 'False',
                     'container_name': 'nav2_container',
+                    'log_level': 'info',
                 }.items(),
             ),
         ]

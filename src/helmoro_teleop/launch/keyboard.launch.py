@@ -19,10 +19,7 @@ def generate_launch_description():
         output='screen',
         prefix='xterm -e',  # This opens the node in a new terminal window
         parameters=[{'use_sim_time': LaunchConfiguration('use_sim_time'),
-                     'stamped': True}],
-        remappings=[
-            ('cmd_vel', 'cmd_vel_stamped')
-        ]
+                     'stamped': True}]
     )
     
     ld = LaunchDescription(ARGUMENTS)

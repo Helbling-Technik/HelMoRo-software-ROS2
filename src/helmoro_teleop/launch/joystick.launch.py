@@ -41,9 +41,6 @@ def generate_launch_description():
         parameters=[
             joystick_config, 
             {'publish_stamped_twist': True}
-        ],
-        remappings=[
-            ('cmd_vel', 'cmd_vel_stamped')
         ]
     )
         
