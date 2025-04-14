@@ -38,6 +38,7 @@ def generate_launch_description():
         name='GZ_SIM_RESOURCE_PATH',
         value=':'.join([
             os.path.join(pkg_helmoro_simulator, 'worlds'),
+            os.path.join(pkg_helmoro_simulator, 'models'),
             str(Path(pkg_helmoro_description).parent.resolve())
         ])
     )
