@@ -1,0 +1,3 @@
+- nav2 panel in RVIZ
+- new enable_stamped_cmd_vel for commands is by default "false"
+- rotation shim controller can take back control after reaching XY goal: rotate_to_goal_heading

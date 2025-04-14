@@ -23,8 +23,8 @@ def generate_launch_description():
     pkg_helmoro_navigation = get_package_share_directory('helmoro_navigation')
     
     # Paths
-    navigation_launch = PathJoinSubstitution(
-        [pkg_nav2_bringup, 'launch', 'navigation_launch.py']
+    bringup_launch = PathJoinSubstitution(
+        [pkg_nav2_bringup, 'launch', 'bringup_launch.py']
     )
     
     # '<robot_namespace>' keyword shall be replaced by 'namespace' launch argument
@@ -44,16 +44,17 @@ def generate_launch_description():
             SetRemap(src='/map', dst='map'),      
 
             IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(navigation_launch),
+                PythonLaunchDescriptionSource(bringup_launch),
                 launch_arguments={
                     'namespace': LaunchConfiguration('namespace'),
+                    'slam': 'False',                    
                     'use_sim_time': LaunchConfiguration('use_sim_time'),
-                    'autostart': 'true',
                     'params_file': params_file,
-                    'use_composition': 'False',
+                    'autostart': 'true',
+                    'use_composition': 'True',
                     'use_respawn': 'False',
-                    'container_name': 'nav2_container',
                     'log_level': 'info',
+                    'use_localization': 'False',
                 }.items(),
             ),
         ]
