@@ -40,7 +40,7 @@ def generate_launch_description() -> LaunchDescription:
     # Getting directories and launch-files
     bringup_dir = get_package_share_directory('helmoro_slam')
     slam_toolbox_dir = get_package_share_directory('slam_toolbox')
-    slam_launch_file = os.path.join(slam_toolbox_dir, 'launch', 'online_sync_launch.py')
+    slam_launch_file = os.path.join(slam_toolbox_dir, 'launch', 'online_async_launch.py')
 
     # Create our own temporary YAML files that include substitutions
     namespaced_params = RewrittenYaml(
@@ -102,7 +102,7 @@ def generate_launch_description() -> LaunchDescription:
             Node(
                 package='nav2_lifecycle_manager',
                 executable='lifecycle_manager',
-                name='lifecycle_manager_slam',
+                name='lifecycle_manager_localization',
                 output='screen',
                 arguments=['--ros-args', '--log-level', log_level],
                 parameters=[{'autostart': autostart}, {'node_names': lifecycle_nodes}],
