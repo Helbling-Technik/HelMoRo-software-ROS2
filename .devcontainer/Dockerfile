@@ -60,7 +60,6 @@ RUN apt-get update && apt-get install -y \
 
 RUN apt-get update && apt-get install -y \
     ros-jazzy-rmw-cyclonedds-cpp
-ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 
 # ********************************************************
 # * Set up the user *
