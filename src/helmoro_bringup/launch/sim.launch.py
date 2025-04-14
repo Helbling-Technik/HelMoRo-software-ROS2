@@ -14,7 +14,7 @@ ARGUMENTS = [
                           choices=['true', 'false'], description='Use sim time.'),
     DeclareLaunchArgument('rviz', default_value='true',
                           choices=['true', 'false'], description='Start rviz.'),
-    DeclareLaunchArgument('world', default_value='empty',
+    DeclareLaunchArgument('world', default_value='depot',
                           description='Simulation World'),
     DeclareLaunchArgument('teleop_mode', default_value='joystick',
                           choices=['joystick', 'keyboard', ''], 
@@ -230,7 +230,7 @@ def generate_launch_description():
     start_everything_else_afterwards = TimerAction(
         period=2.0,  # Wait 2 seconds before launching other nodes
         actions=[
-            gazebo, 
+            #gazebo, 
             common, 
             spawn_robot, 
             ros_gz_bridge, 

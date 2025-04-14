@@ -34,7 +34,7 @@
     # Publishes transform between odom_frame_id and base_frame_id
     enable_odom_tf: false 
 
-    cmd_vel_timeout: 0.5
+    cmd_vel_timeout: 1.0
     publish_limited_velocity: true
     use_stamped_vel: true
     velocity_rolling_window_size: 10
