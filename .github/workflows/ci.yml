@@ -1,0 +1,44 @@
+name: Build image and run colcon test
+
+on:
+  push:
+    branches:
+      - microservices  # Or any branch you want to trigger the workflow on
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Choose your preferred runner environment
+
+    steps:
+    # Checkout the code
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    # Set up Docker (assuming you're building the image inside a Docker container)
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    # Build the Docker image using your custom script
+    - name: Build Docker image
+      run: |
+        chmod +x ./.devcontainer/build-image.sh  # Ensure your script is executable
+        ./.devcontainer/build_image.sh  # Run your image build script
+
+    # Set up the ROS environment (if applicable)
+    - name: Set up ROS workspace
+      run: |
+        mkdir -p /ws/src
+        cp -r . /ws/src/  # Add the repository to /ws/src
+
+    # Run colcon build
+    - name: Build packages using colcon
+      run: |
+        cd /ws
+        colcon build --symlink-install  # Build the packages
+
+    # Run tests
+    - name: Run tests
+      run: |
+        cd /ws
+        colcon test
+        colcon test-result --verbose
