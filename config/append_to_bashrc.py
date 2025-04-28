@@ -1,4 +1,5 @@
 import os
+import sys
 
 def append_unique_lines_to_bashrc(source_file):
     bashrc_path = os.path.expanduser("~/.bashrc")
@@ -25,4 +26,9 @@ def append_unique_lines_to_bashrc(source_file):
         print("ℹ️ No new lines were added. All lines already exist.")
 
 if __name__ == "__main__":
-    append_unique_lines_to_bashrc(os.path.expanduser("/home/ws/config/append_to_bashrc.txt"))
+    append_unique_lines_to_bashrc(os.path.expanduser("/ws/config/append_to_bashrc.txt"))
+
+
+    # If there are arguments passed to this container (i.e., CMD), run them
+    if len(sys.argv) > 1:
+        os.execvp(sys.argv[1], sys.argv[1:])

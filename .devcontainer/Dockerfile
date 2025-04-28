@@ -1,4 +1,4 @@
-FROM ros:jazzy
+FROM ros:jazzy AS dev
 
 # ********************************************************
 # * Install Dependencies *
@@ -22,8 +22,6 @@ RUN apt-get update -q && \
 
 # Set up the ROS 2 environment
 # This ensures that ROS 2 commands are available in the shell
-# rosdep is a tool for installing system dependencies for ROS packages
-RUN rosdep update
 RUN grep -F "source /opt/ros/jazzy/setup.bash" /root/.bashrc || echo "source /opt/ros/jazzy/setup.bash" >> /root/.bashrc && \
     grep -F "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" /root/.bashrc || echo "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> /root/.bashrc
 
@@ -87,3 +85,19 @@ ENV SHELL=/bin/bash
 # [Optional] Set the default user. Omit if you want to keep the default as root.
 USER $USERNAME
 CMD ["/bin/bash"]
+
+# ********************************************************
+# * Production *
+# ********************************************************
+FROM dev AS prod
+
+# Copy our packages into the image and build them
+USER root
+RUN mkdir -p /ws/src
+WORKDIR /ws
+COPY config config
+COPY src src
+RUN source /opt/ros/jazzy/setup.bash \
+    && colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
+
+ENTRYPOINT ["python3", "/ws/config/append_to_bashrc.py"]
