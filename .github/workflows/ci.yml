@@ -31,6 +31,7 @@ jobs:
           context: .
           file: .devcontainer/Dockerfile
           tags: ghcr.io/helbling-technik/github_actions:latest
+          push: true
           cache-from: |
             type=gha
             type=registry,ref=ghcr.io/helbling-technik/github_actions:buildcache
