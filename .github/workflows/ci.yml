@@ -3,10 +3,14 @@ name: docker build & colcon-test
 on:
   push:
     branches:
-      - microservices
+      - '**'
+      - '!humble'
+      - '!jazzy'
   pull_request:
     branches:
-      - microservices
+        - '**'
+        - '!humble'
+        - '!jazzy'
 
 jobs:
   docker-build:
@@ -42,12 +46,9 @@ jobs:
     container: 
       image: ghcr.io/helbling-technik/github_actions:latest
     steps:
-      - uses: ros-tooling/action-ros-ci@v0.4
-        id: action_ros_ci_step    
-        with:
-          package-name: helmoro_description
-          target-ros2-distro: jazzy
-          coverage-result: false
+      - name: colcon-test
+        run: |
+          colcon-test
 
       - uses: actions/upload-artifact@v4
         with:
