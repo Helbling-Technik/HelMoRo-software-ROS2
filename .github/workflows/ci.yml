@@ -6,11 +6,6 @@ on:
       - '**'
       - '!humble'
       - '!jazzy'
-  pull_request:
-    branches:
-        - '**'
-        - '!humble'
-        - '!jazzy'
 
 jobs:
   docker-build:
@@ -46,9 +41,9 @@ jobs:
     container: 
       image: ghcr.io/helbling-technik/github_actions:latest
     steps:
-      - name: colcon-test
+      - name: colcon test
         run: |
-          colcon-test
+          colcon test
 
       - uses: actions/upload-artifact@v4
         with:
