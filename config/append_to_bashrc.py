@@ -28,7 +28,6 @@ def append_unique_lines_to_bashrc(source_file):
 if __name__ == "__main__":
     append_unique_lines_to_bashrc(os.path.abspath("/home/ws/config/append_to_bashrc.txt"))
 
-
     # If there are arguments passed to this container (i.e., CMD), run them
     if len(sys.argv) > 1:
         os.execvp(sys.argv[1], sys.argv[1:])

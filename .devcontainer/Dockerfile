@@ -20,11 +20,6 @@ RUN apt-get update -q && \
     apt-get install -y gnupg2 iputils-ping usbutils \
     python3-argcomplete python3-colcon-common-extensions python3-networkx python3-pip python3-rosdep python3-vcstool
 
-# Set up the ROS 2 environment
-# This ensures that ROS 2 commands are available in the shell
-RUN grep -F "source /opt/ros/jazzy/setup.bash" /root/.bashrc || echo "source /opt/ros/jazzy/setup.bash" >> /root/.bashrc && \
-    grep -F "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" /root/.bashrc || echo "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> /root/.bashrc
-
 # Install Linux packages
 # xterm: to use teleop_twist_keyboard
 RUN apt-get update && apt-get install -y \
@@ -58,9 +53,9 @@ RUN apt-get update && apt-get install -y \
 
 # Install cyclonedds rmw and set up the configuration
 RUN apt-get update && apt-get install -y \
-    ros-jazzy-rmw-cyclonedds-cpp && \
-    grep -F "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp" /root/.bashrc || echo "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp" >> /root/.bashrc && \
-    grep -F "export RMW_CYCLONEDDS_URI=file:///home/ws/config/cyclonedds.xml" /root/.bashrc || echo "export RMW_CYCLONEDDS_URI=file:///home/ws/config/cyclonedds.xml" >> /root/.bashrc
+    ros-jazzy-rmw-cyclonedds-cpp
+ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+ENV RMW_CYCLONEDDS_URI=file:///home/ws/config/cyclonedds.xml
 
 # ********************************************************
 # * Set up the user *
@@ -85,9 +80,15 @@ RUN apt-get update && apt-get upgrade -y
 RUN apt-get install -y python3-pip
 ENV SHELL=/bin/bash
 
+# Define entrypoint
+RUN mkdir -p /home/ws
+COPY .devcontainer/entrypoint.sh /home/ws
+RUN chmod +x /home/ws/entrypoint.sh
+ENTRYPOINT [ "/home/ws/entrypoint.sh" ]
+CMD ["/bin/bash"]
+
 # [Optional] Set the default user. Omit if you want to keep the default as root.
 USER $USERNAME
-CMD ["/bin/bash"]
 
 # ********************************************************
 # * Production *
@@ -96,12 +97,8 @@ FROM dev AS prod
 
 # Copy our packages into the image and build them
 USER root
-RUN mkdir -p /home/ws/src
 WORKDIR /home/ws
 COPY config config
 COPY src src
 RUN source /opt/ros/jazzy/setup.bash \
     && colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
-
-# Add install source to shell
-RUN grep -F "source /home/ws/install/setup.bash" /root/.bashrc || echo "source /home/ws/install/setup.bash" >> /root/.bashrc

@@ -49,6 +49,7 @@ jobs:
       - name: colcon test
         run: |
           cd /home/ws
+          source entrypoint.sh
           colcon test
 
       - uses: actions/upload-artifact@v4

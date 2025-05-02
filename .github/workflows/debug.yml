@@ -1,0 +1,40 @@
+name: colcon-test-only
+
+on:
+  push:
+    branches:
+      - '**'
+      - '!humble'
+      - '!jazzy'
+
+jobs:
+  colcon-test:
+    runs-on: ubuntu-latest
+    container: 
+      image: ghcr.io/helbling-technik/helmoro-software-ros2:${{ github.ref_name }}-latest
+    steps:
+      - name: check username
+        run: | 
+          echo "==================="
+          whoami
+          pwd
+          ls -la
+          printenv
+      - name: check username
+        run: | 
+          echo "==================="
+          source entrypoint.sh
+          printenv
+          echo "==================="
+      - name: colcon test
+        run: |
+          cd /home/ws
+          source entrypoint.sh
+          colcon test
+
+      - uses: actions/upload-artifact@v4
+        with:
+            name: colcon-logs
+            path: /home/ws/log
+            if-no-files-found: error
+        if: always() # upload the logs even when the build fails

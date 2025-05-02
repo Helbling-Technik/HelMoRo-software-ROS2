@@ -4,6 +4,7 @@
   "remoteUser": "htkz",
   "build": {
       "dockerfile": "Dockerfile",
+      "context": "..",
       "target": "dev",
       "args": {
           "USERNAME": "htkz"
@@ -44,5 +45,5 @@
      "source=/dev/dri,target=/dev/dri,type=bind,consistency=cached",
      "source=/dev/input,target=/dev/input,type=bind,consistency=delegated"
   ],
-  "postCreateCommand": "sudo chown -R $(whoami) /home/ws/ && sudo cp /root/.bashrc /home/$(whoami)/.bashrc && python3 /home/ws/config/append_to_bashrc.py"
+  "postCreateCommand": "sudo chown -R $(whoami) /home/ws/ && python3 /home/ws/config/append_to_bashrc.py"
 }
