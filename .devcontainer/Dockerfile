@@ -93,11 +93,11 @@ FROM dev AS prod
 
 # Copy our packages into the image and build them
 USER root
-RUN mkdir -p /ws/src
-WORKDIR /ws
+RUN mkdir -p /home/ws/src
+WORKDIR /home/ws
 COPY config config
 COPY src src
 RUN source /opt/ros/jazzy/setup.bash \
     && colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
 
-ENTRYPOINT ["python3", "/ws/config/append_to_bashrc.py"]
+ENTRYPOINT ["python3", "/home/ws/config/append_to_bashrc.py"]
