@@ -1,10 +1,5 @@
 # Custom Alias
 alias src='source /opt/ros/jazzy/setub.bash && source /home/ws/install/setup.bash'
 
-# Environment Setup
-source /opt/ros/jazzy/setup.bash 
-source /home/ws/install/setup.bash
-export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
-export CYCLONEDDS_URI=file:///home/ws/config/cyclonedds.xml
-
-
+# Integrate entrypoint.sh
+source /home/ws/.devcontainer/entrypoint.sh
