@@ -15,17 +15,12 @@ jobs:
         working-directory: /home/ws
     container: 
       image: ghcr.io/helbling-technik/helmoro-software-ros2:${{ github.ref_name }}-latest
+      
     steps:
-      - name: Source packages
+      - name: Run tests
         shell: bash
         run: |
-          ls
-          pwd
           source entrypoint.sh
-
-      - name: Run tests
-        run: |
-          ls
           colcon test
 
       - name: Upload logs
