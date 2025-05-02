@@ -56,8 +56,11 @@ RUN apt-get update && apt-get install -y \
     ros-jazzy-teleop-twist-joy \
     ros-jazzy-fuse
 
+# Install cyclonedds rmw and set up the configuration
 RUN apt-get update && apt-get install -y \
-    ros-jazzy-rmw-cyclonedds-cpp
+    ros-jazzy-rmw-cyclonedds-cpp && \
+    grep -F "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp" /root/.bashrc || echo "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp" >> /root/.bashrc && \
+    grep -F "export RMW_CYCLONEDDS_URI=file:///home/ws/config/cyclonedds.xml" /root/.bashrc || echo "export RMW_CYCLONEDDS_URI=file:///home/ws/config/cyclonedds.xml" >> /root/.bashrc
 
 # ********************************************************
 # * Set up the user *
@@ -100,4 +103,5 @@ COPY src src
 RUN source /opt/ros/jazzy/setup.bash \
     && colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
 
-ENTRYPOINT ["python3", "/home/ws/config/append_to_bashrc.py"]
+# Add install source to shell
+RUN grep -F "source /home/ws/install/setup.bash" /root/.bashrc || echo "source /home/ws/install/setup.bash" >> /root/.bashrc
