@@ -1,4 +1,4 @@
-name: docker build & colcon-test
+name: Build Image and Run Tests
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
       - '!jazzy'
 
 jobs:
-  docker-build:
+  Build-image:
     runs-on: ubuntu-latest
 
     steps:
@@ -40,19 +40,24 @@ jobs:
             type=registry,ref=ghcr.io/helbling-technik/helmoro-software-ros2:${{ github.ref_name }}-buildcache,mode=max
 
 
-  colcon-test:
-    needs: docker-build
+  Run-tests:
+    needs: Build-image
     runs-on: ubuntu-latest
     container: 
       image: ghcr.io/helbling-technik/helmoro-software-ros2:${{ github.ref_name }}-latest
     steps:
-      - name: colcon test
+      - name: Source packages
+        shell: bash
         run: |
           cd /home/ws
           source entrypoint.sh
+
+      - name: Run tests
+        run: |
           colcon test
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload logs
+        uses: actions/upload-artifact@v4
         with:
             name: colcon-logs
             path: /home/ws/log
