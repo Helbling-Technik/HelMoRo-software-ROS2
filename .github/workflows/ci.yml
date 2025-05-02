@@ -53,8 +53,10 @@ jobs:
       - name: Run tests
         shell: bash
         run: |
+          set -e
           source entrypoint.sh
           colcon test
+          colcon test-result --all --verbose
 
       - name: Upload logs
         uses: actions/upload-artifact@v4
@@ -62,4 +64,4 @@ jobs:
             name: colcon-logs
             path: /home/ws/log
             if-no-files-found: error
-        if: always() # upload the logs even when the build fails
+        if: always() # upload the logs even when the test fails

@@ -140,6 +140,7 @@ class TestCollection(unittest.TestCase):
             time.sleep(0.1)
 
         # Assert that the node was found
+        assert False
         assert found, 'Node not found!'
         
     def test_joint_state_publisher_advertise_topic(self, proc_output: ActiveIoHandler):
