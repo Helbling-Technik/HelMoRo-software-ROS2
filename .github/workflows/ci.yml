@@ -48,6 +48,7 @@ jobs:
     steps:
       - name: colcon test
         run: |
+          cd /home/ws
           colcon test
 
       - uses: actions/upload-artifact@v4
