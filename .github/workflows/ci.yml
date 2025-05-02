@@ -43,13 +43,15 @@ jobs:
   Run-tests:
     needs: Build-image
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: /home/ws
     container: 
       image: ghcr.io/helbling-technik/helmoro-software-ros2:${{ github.ref_name }}-latest
     steps:
       - name: Source packages
         shell: bash
         run: |
-          cd /home/ws
           source entrypoint.sh
 
       - name: Run tests
