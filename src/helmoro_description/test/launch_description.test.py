@@ -48,7 +48,7 @@ def generate_test_description():
     ld.add_action(ready_to_test)
     return ld
 
-class TestRobotStatePublisher(unittest.TestCase):
+class TestCollection(unittest.TestCase):
     """Test suite for checking the robot_state_publisher functionality."""
 
     def setUp(self):
@@ -61,7 +61,7 @@ class TestRobotStatePublisher(unittest.TestCase):
         self.node.destroy_node()
         rclpy.shutdown()
 
-    def test_node_start(self, proc_output: ActiveIoHandler):
+    def test_robot_state_publisher_node_start(self, proc_output: ActiveIoHandler):
         """Test if the robot_state_publisher node has started."""
         found = False
         print('Waiting for node...')
@@ -75,7 +75,7 @@ class TestRobotStatePublisher(unittest.TestCase):
         # Assert that the node was found
         assert found, 'Node not found!'
         
-    def test_advertise_topic(self, proc_output: ActiveIoHandler):
+    def test_robot_state_publisher_advertise_topic(self, proc_output: ActiveIoHandler):
         """Test if the robot_description topic is advertised by the node."""
         received = False
         print("Listening for topics...")
@@ -94,7 +94,7 @@ class TestRobotStatePublisher(unittest.TestCase):
         # Assert that the topic was advertised 
         assert received, 'Topic not advertised!'
 
-    def test_publish_msgs(self, proc_output: ActiveIoHandler):
+    def test_robot_state_publisher_publish_msgs(self, proc_output: ActiveIoHandler):
         """Test if messages are published to the correct topic."""
         msgs_rx = []  # List to store received messages
         
@@ -128,20 +128,7 @@ class TestRobotStatePublisher(unittest.TestCase):
             # Ensure that the subscription is destroyed after the test
             self.node.destroy_subscription(sub)
 
-class TestJointStatePublisher(unittest.TestCase):
-    """Test suite for checking the joint_state_publisher functionality."""
-
-    def setUp(self):
-        """Initialize the ROS node before each test."""
-        rclpy.init()
-        self.node = rclpy.create_node('test_node')
-
-    def tearDown(self):
-        """Shut down the ROS node after each test."""
-        self.node.destroy_node()
-        rclpy.shutdown()
-
-    def test_node_start(self, proc_output: ActiveIoHandler):
+    def test_joint_state_publisher_node_start(self, proc_output: ActiveIoHandler):
         """Test if the joint_state_publisher node has started."""
         found = False
         print('Waiting for node...')
@@ -155,7 +142,7 @@ class TestJointStatePublisher(unittest.TestCase):
         # Assert that the node was found
         assert found, 'Node not found!'
         
-    def test_advertise_topic(self, proc_output: ActiveIoHandler):
+    def test_joint_state_publisher_advertise_topic(self, proc_output: ActiveIoHandler):
         """Test if the joint_state topic is advertised by the node."""
         received = False
         print("Listening for topics...")
