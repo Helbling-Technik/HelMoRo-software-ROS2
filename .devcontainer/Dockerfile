@@ -1,4 +1,4 @@
-FROM ros:jazzy AS dev
+FROM ros@sha256:9749355a0760334fa5ea3c660f2de1ecc5e8a5af8047e4bbaa9afa8a7843da80 AS dev
 
 # ********************************************************
 # * Install Dependencies *
