@@ -4,6 +4,7 @@
   "remoteUser": "htkz",
   "build": {
       "dockerfile": "Dockerfile",
+      "context": "..",
       "target": "dev",
       "args": {
           "USERNAME": "htkz"
