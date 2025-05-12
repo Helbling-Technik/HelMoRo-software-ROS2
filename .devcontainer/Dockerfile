@@ -7,25 +7,18 @@ FROM ros@sha256:9749355a0760334fa5ea3c660f2de1ecc5e8a5af8047e4bbaa9afa8a7843da80
 # Override default shell, because ROS needs bash
 SHELL [ "/bin/bash", "-c" ]
 
-# Update the system and install essential tools
-# This step upgrades all packages and installs utilities needed for development
-RUN apt-get update -q && \
-    apt-get upgrade -yq && \
-    apt-get install -yq --no-install-recommends \
-    apt-utils wget curl git build-essential vim sudo lsb-release locales bash-completion tzdata gosu gedit htop nano libserial-dev iproute2
-
-# Install additional tools required for ROS 2 development
-# These packages help with building and managing ROS 2 workspaces
-RUN apt-get update -q && \
-    apt-get install -y gnupg2 iputils-ping usbutils \
-    python3-argcomplete python3-colcon-common-extensions python3-networkx python3-pip python3-rosdep python3-vcstool
+# Install ros_dev_tools
+RUN sudo apt update && sudo apt install -y \
+    ros-dev-tools \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Linux packages
 # xterm: to use teleop_twist_keyboard
 # xvfb: virtual display for headless testing
 RUN apt-get update && apt-get install -y \
     xterm \
-    xvfb
+    xvfb \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install ROS debug packages
 RUN apt-get update && apt-get install -y \
@@ -33,7 +26,8 @@ RUN apt-get update && apt-get install -y \
     ros-jazzy-demo-nodes-py \
     ros-jazzy-rqt-graph \
     ros-jazzy-rqt-common-plugins \
-    ros-jazzy-rqt-robot-steering
+    ros-jazzy-rqt-robot-steering \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install ROS 2 packages
 RUN apt-get update && apt-get install -y \
@@ -51,11 +45,13 @@ RUN apt-get update && apt-get install -y \
     ros-jazzy-nav2-bringup \
     ros-jazzy-teleop-twist-keyboard \
     ros-jazzy-teleop-twist-joy \
-    ros-jazzy-fuse
+    ros-jazzy-fuse \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install cyclonedds rmw and set up the configuration
 RUN apt-get update && apt-get install -y \
-    ros-jazzy-rmw-cyclonedds-cpp
+    ros-jazzy-rmw-cyclonedds-cpp \
+    && rm -rf /var/lib/apt/lists/*
 ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 ENV RMW_CYCLONEDDS_URI=file:///home/ws/config/cyclonedds.xml
 
@@ -78,8 +74,6 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && apt-get install -y sudo \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
-RUN apt-get update && apt-get upgrade -y
-RUN apt-get install -y python3-pip
 ENV SHELL=/bin/bash
 
 # Define entrypoint
