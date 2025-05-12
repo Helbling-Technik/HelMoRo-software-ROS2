@@ -16,24 +16,24 @@ namespace = "test_robot"
 ARGUMENTS = [
     ("use_sim_time", "true"),
     ("namespace", namespace),
-    ("rviz_config", "standard"),
+    ("rviz_config", "debug.rviz"),
 ]
 
 
 @pytest.mark.launch_test
 def generate_test_description():
     """Generate a LaunchDescription for the test."""
-    pkg_viz = get_package_share_directory("helmoro_visualization")
-    viz_launch = PathJoinSubstitution([pkg_viz, "launch", "launch.py"])
+    visualization_dir = get_package_share_directory("helmoro_visualization")
+    visualization_path = PathJoinSubstitution([visualization_dir, "launch", "launch.py"])
 
     # Include the launch description with arguments
-    launch_description = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([viz_launch]),
+    launch_visualization = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([visualization_path]),
         launch_arguments=ARGUMENTS,
     )
 
     ld = LaunchDescription()
-    ld.add_action(launch_description)
+    ld.add_action(launch_visualization)
     ld.add_action(TimerAction(period=0.5, actions=[ReadyToTest()]))
 
     return ld
