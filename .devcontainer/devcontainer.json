@@ -36,12 +36,12 @@
       "--net=host",
       "--pid=host",
       "--ipc=host",
-      "-e", "DISPLAY=${env:DISPLAY}",
+      //"-e", "DISPLAY=${env:DISPLAY}",
       "--gpus=all",
       "--runtime=nvidia"
   ],
   "mounts": [
-     "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
+     //"source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
      "source=/dev/dri,target=/dev/dri,type=bind,consistency=cached",
      "source=/dev/input,target=/dev/input,type=bind,consistency=delegated"
   ],

@@ -22,8 +22,10 @@ RUN apt-get update -q && \
 
 # Install Linux packages
 # xterm: to use teleop_twist_keyboard
+# xvfb: virtual display for headless testing
 RUN apt-get update && apt-get install -y \
-    xterm
+    xterm \
+    xvfb
 
 # Install ROS debug packages
 RUN apt-get update && apt-get install -y \
