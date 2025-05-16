@@ -1,0 +1,54 @@
+services:
+    helmoro_template_service:
+      command: bash
+      image: helmoro
+      environment:
+        - DISPLAY=${DISPLAY}
+        - ROS_DOMAIN_ID=42
+      network_mode: host
+      ipc: host
+      volumes:
+        - /tmp/.X11-unix:/tmp/.X11-unix
+
+    cli:
+      extends: helmoro_template_service
+      command: python3 src/helmoro_cli/src/main.py
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+
+    simulation:
+      extends: helmoro_template_service
+      command: ros2 launch helmoro_simulation simulation.launch.py
+
+    spawn_robot:
+      extends: helmoro_template_service
+      command: bash -c "ros2 launch helmoro_simulation spawn_robot.launch.py namespace:=$${NAMESPACE} x:=$${X} y:=$${Y} z:=$${Z} yaw:=$${YAW}"
+      environment:
+        - NAMESPACE
+        - X
+        - Y
+        - Z
+        - YAW
+      
+    despawn_robot:
+      extends: helmoro_template_service
+      command: bash -c "ros2 launch ros_gz_sim gz_remove_model.launch.py world:=$${WORLD} entity_name:=$${ENTITY_NAME}"
+      environment:
+        - WORLD
+        - ENTITY_NAME
+
+    gz_ros_bridge:
+      extends: helmoro_template_service
+      command: bash -c "ros2 launch helmoro_simulation ros_gz_bridge.launch.py namespace:=$${NAMESPACE} word:=$${WORLD}"
+      environment:
+        - NAMESPACE
+        - WORLD
+
+    description:
+      extends:
+        service: helmoro_template_service
+      command: bash -c "ros2 launch helmoro_description description.launch.py namespace:=$${NAMESPACE} run_in_simulation:=$${USE_SIM_TIME}"
+      environment:
+        - NAMESPACE
+        - USE_SIM_TIME
+
