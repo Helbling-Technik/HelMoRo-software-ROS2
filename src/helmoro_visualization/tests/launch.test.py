@@ -1,3 +1,4 @@
+import time
 import unittest
 import rclpy
 
@@ -24,7 +25,9 @@ ARGUMENTS = [
 def generate_test_description():
     """Generate a LaunchDescription for the test."""
     visualization_dir = get_package_share_directory("helmoro_visualization")
-    visualization_path = PathJoinSubstitution([visualization_dir, "launch", "launch.py"])
+    visualization_path = PathJoinSubstitution(
+        [visualization_dir, "launch", "launch.py"]
+    )
 
     # Include the launch description with arguments
     launch_visualization = IncludeLaunchDescription(
@@ -34,7 +37,7 @@ def generate_test_description():
 
     ld = LaunchDescription()
     ld.add_action(launch_visualization)
-    ld.add_action(TimerAction(period=0.5, actions=[ReadyToTest()]))
+    ld.add_action(ReadyToTest())
 
     return ld
 
@@ -54,12 +57,26 @@ class TestProcess(unittest.TestCase):
     def test_namespace(self):
         nodes_and_namespaces = self.node.get_node_names_and_namespaces()
         rviz_ns = None
-        for name, ns in nodes_and_namespaces:
-            if name == "rviz2":
-                rviz_ns = ns
-                break
 
-        assert rviz_ns is not None, "rviz2 node not found!"
-        assert (
-            rviz_ns == f"/{namespace}"
-        ), f"Expected namespace '/{namespace}', got '{rviz_ns}'"
+        node_found = False
+        namespace_found = False
+        start = time.time()
+
+        # Look for node
+        while time.time() - start < 5.0 and not namespace_found:
+            for name, ns in nodes_and_namespaces:
+                if name == "rviz2":
+                    node_found = True
+                    rviz_ns
+                    if ns == f"/{namespace}":
+                        namespace_found = True
+                        break
+
+        # If test fails, give debug output
+        if not namespace_found:
+            print("Printing all found nodes...")
+            for name, ns in nodes_and_namespaces:
+                print("Nodename: ", name, " namespace: ", namespace)
+
+        assert node_found, "rviz2 node not found!"
+        assert namespace_found, f"Expected namespace '/{namespace}', got '{rviz_ns}'"
