@@ -46,7 +46,14 @@ jobs:
       - name: Run test
         shell: bash
         run: |
-          docker exec test_container bash -c "
+          set -e
+
+          echo "Starting virtual display (Xvfb)..."
+          Xvfb :99 -screen 0 1024x768x24 &
+          export DISPLAY=:99
+          
+          echo "Start testing..."
+          docker exec -e DISPLAY=$DISPLAY test_container bash -c "
             source ./entrypoint.sh &&
             colcon test &&
             colcon test-result --verbose
