@@ -56,7 +56,7 @@ jobs:
           echo "Start testing..."
           docker exec -e DISPLAY=$DISPLAY test_container bash -c "
             source ./entrypoint.sh &&
-            colcon test &&
+            colcon test --executor sequential &&
             colcon test-result --verbose
           "
       
