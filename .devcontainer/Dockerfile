@@ -18,7 +18,12 @@ RUN sudo apt update && sudo apt install -y \
 RUN apt-get update && apt-get install -y \
     xterm \
     xvfb \
+    curl \
     && rm -rf /var/lib/apt/lists/*
+
+RUN curl -fsSL https://get.docker.com -o get-docker.sh && \
+    sh get-docker.sh && \
+    rm get-docker.sh
 
 # Install ROS debug packages
 RUN apt-get update && apt-get install -y \
@@ -96,5 +101,6 @@ USER root
 WORKDIR /home/ws
 COPY config config
 COPY src src
+COPY .devcontainer .devcontainer
 RUN source /opt/ros/jazzy/setup.bash \
     && colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
