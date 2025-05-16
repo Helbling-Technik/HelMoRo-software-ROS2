@@ -31,47 +31,35 @@ jobs:
           context: .
           file: .devcontainer/Dockerfile
           tags: ghcr.io/helbling-technik/helmoro-software-ros2:${{ github.ref_name }}-latest
-          push: true
+          load: true
           cache-from: |
             type=gha
             type=registry,ref=ghcr.io/helbling-technik/helmoro-software-ros2:${{ github.ref_name }}-buildcache
           cache-to: |
             type=gha,mode=max
             type=registry,ref=ghcr.io/helbling-technik/helmoro-software-ros2:${{ github.ref_name }}-buildcache,mode=max
+        
+      - name: Start container
+        shell: bash
+        run: docker run --name test_container --detach ghcr.io/helbling-technik/helmoro-software-ros2:${{ github.ref_name }}-latest tail -f /dev/null
 
-
-  Run-tests:
-    needs: Build-image
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: /home/ws
-    container: 
-      image: ghcr.io/helbling-technik/helmoro-software-ros2:${{ github.ref_name }}-latest
-
-    steps:
-      - name: Run tests
+      - name: Run test
         shell: bash
         run: |
-          set -e
-
-          echo "Starting virtual display (Xvfb)..."
-          Xvfb :99 -screen 0 1024x768x24 &
-          export DISPLAY=:99
-
-          echo "Sourcing ROS environment..."
-          source entrypoint.sh
-
-          echo "Running colcon tests..."
-          colcon test
-
-          echo "Collecting test results..."
-          colcon test-result --all --verbose
+          docker exec test_container bash -c "
+            source ./entrypoint.sh &&
+            colcon test &&
+            colcon test-result --verbose
+          "
+      
+      - name: Export logs to runner
+        shell: bash
+        run: docker cp test_container:/home/ws/log ./log
 
       - name: Upload logs
         uses: actions/upload-artifact@v4
         with:
           name: colcon-logs
-          path: /home/ws/log
+          path: ./log
           if-no-files-found: error
         if: always() # upload logs even if tests fail
