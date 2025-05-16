@@ -41,7 +41,7 @@ jobs:
         
       - name: Start container
         shell: bash
-        run: docker run --name test_container --detach ghcr.io/helbling-technik/helmoro-software-ros2:${{ github.ref_name }}-latest tail -f /dev/null
+        run: docker run --name test_container -v /tmp/.X11-unix:/tmp/.X11-unix --detach ghcr.io/helbling-technik/helmoro-software-ros2:${{ github.ref_name }}-latest tail -f /dev/null
 
       - name: Run test
         shell: bash
