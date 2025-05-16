@@ -41,7 +41,7 @@ jobs:
         
       - name: Start container
         shell: bash
-        run: docker run --name test_container -v /tmp/.X11-unix:/tmp/.X11-unix --detach ghcr.io/helbling-technik/helmoro-software-ros2:${{ github.ref_name }}-latest tail -f /dev/null
+        run: docker run --name test_container -v /tmp/.X11-unix:/tmp/.X11-unix -v /var/run/docker.sock:/var/run/docker.sock --detach ghcr.io/helbling-technik/helmoro-software-ros2:${{ github.ref_name }}-latest tail -f /dev/null
 
       - name: Run test
         shell: bash
@@ -62,6 +62,7 @@ jobs:
       - name: Export logs to runner
         shell: bash
         run: docker cp test_container:/home/ws/log ./log
+        if: always() # export logs even if tests fail
 
       - name: Upload logs
         uses: actions/upload-artifact@v4
