@@ -51,6 +51,7 @@ jobs:
           echo "Starting virtual display (Xvfb)..."
           Xvfb :99 -screen 0 1024x768x24 &
           export DISPLAY=:99
+          export ROS_DOMAIN_ID=42
           
           echo "Start testing..."
           docker exec -e DISPLAY=$DISPLAY test_container bash -c "
