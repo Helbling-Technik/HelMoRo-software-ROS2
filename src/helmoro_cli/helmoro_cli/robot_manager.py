@@ -31,7 +31,7 @@ class RobotManager:
         containers = [line.strip().split() for line in raw_output.splitlines()]
         for container_id, container_name in containers:
             result = os.system(
-                f"sudo docker container stop {container_id} --timeout 1 > /dev/null"
+                f"sudo docker container stop {container_id} --timeout 1 && sudo docker container rm {container_id} > /dev/null"
             )
             if result == 0:
                 print(f"{container_name}  Stopped")
