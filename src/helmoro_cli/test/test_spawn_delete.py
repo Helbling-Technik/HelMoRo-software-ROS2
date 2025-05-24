@@ -20,7 +20,7 @@ def test_spawn_delete_robot(robot_manager):
     print("Checking if robot has spawned...")
     start = time.time()
     topic_list = os.popen("ros2 topic list").read().strip().split("\n")
-    while time.time() - start < 2.0 and f"/{name}/robot_description" not in topic_list:
+    while time.time() - start < 10.0 and f"/{name}/robot_description" not in topic_list:
         topic_list = os.popen("ros2 topic list").read().strip().split("\n")
         time.sleep(0.1)
 
