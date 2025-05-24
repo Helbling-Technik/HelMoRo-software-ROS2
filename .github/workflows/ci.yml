@@ -30,7 +30,7 @@ jobs:
         with:
           context: .
           file: .devcontainer/Dockerfile
-          tags: ghcr.io/helbling-technik/helmoro-software-ros2:${{ github.ref_name }}-latest
+          tags: helmoro
           load: true
           cache-from: |
             type=gha
@@ -41,7 +41,7 @@ jobs:
         
       - name: Start container
         shell: bash
-        run: docker run --name test_container --net host -v /tmp/.X11-unix:/tmp/.X11-unix -v /var/run/docker.sock:/var/run/docker.sock --detach ghcr.io/helbling-technik/helmoro-software-ros2:${{ github.ref_name }}-latest tail -f /dev/null
+        run: docker run --name test_container --net host -v /tmp/.X11-unix:/tmp/.X11-unix -v /var/run/docker.sock:/var/run/docker.sock --detach helmoro tail -f /dev/null
 
       - name: Run test
         shell: bash
