@@ -21,6 +21,8 @@ def generate_launch_description():
         [
             PushRosNamespace(LaunchConfiguration("namespace")),
             # TODO: Update to ROS Kilted will add support for custom URDF frames making this file unnecessary
+            # The new launchfile for models integrates the ros_gz_bridge https://github.com/gazebosim/ros_gz/blob/kilted/ros_gz_sim/launch/ros_gz_spawn_model.launch.py
+            
             # Depth Camera
             Node(
                 package="ros_gz_bridge",
