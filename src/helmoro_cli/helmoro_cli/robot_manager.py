@@ -10,7 +10,7 @@ class RobotManager:
         self.robots[name] = {"pos": (x, y, z), "yaw": yaw, "status": "idle"}
         # Here you would trigger a ROS 2 launch or service call
         spawn = f"sudo NAMESPACE={name} USE_SIM_TIME=True \
-            docker compose -p robot_{name} -f /home/ws/.devcontainer/docker-compose.yml up description --detach --wait"
+            docker compose -p robot_{name} -f /home/ws/.devcontainer/docker-compose.yml up robot_description --detach --wait"
         print(f"Start core nodes of {name}")
         os.system(spawn)
 
