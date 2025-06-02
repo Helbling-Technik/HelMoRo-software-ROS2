@@ -44,7 +44,7 @@ services:
         - NAMESPACE
         - WORLD
 
-    description:
+    robot_description:
       extends:
         service: helmoro_template_service
       command: bash -c "ros2 launch helmoro_description description.launch.py namespace:=$${NAMESPACE} run_in_simulation:=$${USE_SIM_TIME}"
