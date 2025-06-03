@@ -12,7 +12,7 @@ services:
 
     cli:
       extends: helmoro_template_service
-      command: python3 src/helmoro_cli/src/main.py
+      command: python3 src/helmoro_cli/helmoro_cli/main.py
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
 
