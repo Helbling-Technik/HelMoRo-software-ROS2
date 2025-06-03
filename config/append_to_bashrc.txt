@@ -1,5 +1,5 @@
 # Custom Alias
-alias src='source /opt/ros/jazzy/setub.bash && source /home/ws/install/setup.bash'
+alias src='source /opt/ros/jazzy/setup.bash && source /home/ws/install/setup.bash'
 
 # Integrate entrypoint.sh
 source /home/ws/.devcontainer/entrypoint.sh
