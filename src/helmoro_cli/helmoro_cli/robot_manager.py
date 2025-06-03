@@ -12,6 +12,7 @@ class RobotManager:
         spawn = f"sudo NAMESPACE={name} USE_SIM_TIME=True \
             docker compose -p robot_{name} -f /home/ws/.devcontainer/docker-compose.yml up robot_description --detach --wait"
         print(f"Start core nodes of {name}")
+        print(f"Executing command: {spawn}")
         os.system(spawn)
 
     def delete_robot(self, name):

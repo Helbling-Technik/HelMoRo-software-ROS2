@@ -59,16 +59,30 @@ class RobotCLI(cmd.Cmd):
         print("Exiting CLI...")
         return True
 
+    # TODO: This function is meant as a helper during development. Do not use this function for production.
     def do_multi_robot_spawn(self, arg):
         "Run multi-robot test"
         self.do_start_simulation(arg)
-        arg1 = "alfred -1 0 1 0 "
-        arg2 = "bob 1 1 1 1"
-        arg3 = "charlie 3 2 1 2"
+        arg1 = "alfred -0.5 3 0 2.2 "
+        arg2 = "bob -0.5 -3.5 0 2.6"
+        arg3 = "charlie 3 -1.2 0 0"
+        arg4 = "echo 5.5 -1.3 0 0"
+        arg5 = "foxtrott 7.4 -1.6 0 1.8"
+        arg6 = "golf 2.4 2.5 0 1.6"        
+        arg7 = "hotel -2.6 2.9 0 -1.6"
+        arg8 = "india -1.6 -3.5 0 -0.2"
+        arg9 = "juliett 2.6 1 0 -0.1"
+        arg10 = "kilo 13 -0.6 0 -1.5"
         self.do_spawn(arg1)
         self.do_spawn(arg2)
         self.do_spawn(arg3)
-
+        self.do_spawn(arg4)
+        # self.do_spawn(arg5)
+        # self.do_spawn(arg6)
+        # self.do_spawn(arg7)
+        # self.do_spawn(arg8)
+        # self.do_spawn(arg9)
+        # self.do_spawn(arg10)
 
 def main():
     try:
