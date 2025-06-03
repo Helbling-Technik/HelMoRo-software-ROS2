@@ -12,9 +12,11 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import PathJoinSubstitution
 
 from launch_testing.actions import ReadyToTest
-import launch_testing.markers
 
-from rosgraph_msgs.msg import Clock
+import launch_testing.markers
+import rosgraph_msgs.msg
+
+from helmoro_utils.test_collection import wait_for_node, wait_for_message
 
 
 ARGUMENTS = [
@@ -54,20 +56,10 @@ class TestProcess(unittest.TestCase):
         rclpy.shutdown()
 
     def test_clock_bridge_start(self):
-        """Test if the clock_bridge node started"""      
-        assert "clock_bridge" in self.node.get_node_names(), "clock_bridge node not found!"
-                
+        """Test if the clock_bridge node started"""     
+        wait_for_node(self.node, 'clock_bridge', timeout=10.0)
+            
+            
     def test_publishes_clock(self, proc_output):
         """Check whether clock messages are published"""
-        msgs_rx = []
-        sub = self.node.create_subscription(
-            Clock, '/clock',
-            lambda msg: msgs_rx.append(msg), 1)
-        try:
-            end_time = time.time() + 10
-            while time.time() < end_time and len(msgs_rx) < 1:
-                rclpy.spin_once(self.node, timeout_sec=0.1)
-
-            assert len(msgs_rx) > 0, "No clock messages received"
-        finally:
-            self.node.destroy_subscription(sub)
+        wait_for_message(self.node, '/clock', rosgraph_msgs.msg.Clock, timeout=10.0)

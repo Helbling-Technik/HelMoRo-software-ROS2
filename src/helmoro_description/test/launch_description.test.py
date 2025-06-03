@@ -19,6 +19,8 @@ import launch_testing.markers
 from launch_testing.io_handler import ActiveIoHandler
 from rclpy.qos import DurabilityPolicy, HistoryPolicy, QoSProfile, ReliabilityPolicy
 
+from helmoro_utils.test_collection import wait_for_node, wait_for_topic, wait_for_message
+
 NAMESPACE = "robot_namespace"
 
 
@@ -64,102 +66,41 @@ class TestCollection(unittest.TestCase):
 
     def test_robot_state_publisher_node_start(self, proc_output: ActiveIoHandler):
         """Test if the robot_state_publisher node has started."""
-        found = False
-        print("Waiting for node...")
-        start = time.time()
-
-        # Wait for the node to start up and become available
-        while time.time() - start < 10.0 and not found:
-            found = "robot_state_publisher" in self.node.get_node_names()
-            time.sleep(0.1)
-
-        # Assert that the node was found
-        assert found, "Node not found!"
+        wait_for_node(self.node, "robot_state_publisher", timeout=2.0)
 
     def test_robot_state_publisher_advertise_topic(self, proc_output: ActiveIoHandler):
         """Test if the robot_description topic is advertised by the node."""
-        received = False
-        print("Listening for topics...")
-        start = time.time()
-
-        # Wait for the topic to be advertised by the robot_state_publisher node
-        while time.time() - start < 10.0 and not received:
-            # Check if the node is publishing messages
-            topic_names = self.node.get_topic_names_and_types()
-            for topic_name, types in topic_names:
-                if topic_name == "/" + NAMESPACE + "/robot_description":
-                    received = True
-                    break
-            time.sleep(0.1)
-
-        # Assert that the topic was advertised
-        assert received, "Topic not advertised!"
+        wait_for_topic(
+            self.node,
+            "/" + NAMESPACE + "/robot_description",
+            timeout=10.0
+        )
 
     def test_robot_state_publisher_publish_msgs(self, proc_output: ActiveIoHandler):
-        """Test if messages are published to the correct topic."""
-        msgs_rx = []  # List to store received messages
-
-        # Set up QoS profile with 'transient local' durability settings
+        """Test if messages are published to the correct topic.""" 
         qos_profile = QoSProfile(
             reliability=ReliabilityPolicy.RELIABLE,
             durability=DurabilityPolicy.TRANSIENT_LOCAL,
             history=HistoryPolicy.KEEP_LAST,
             depth=10,
         )
-
-        # Create a subscription to the robot_description topic
-        sub = self.node.create_subscription(
-            std_msgs.msg.String,
+        
+        wait_for_message(
+            self.node,
             "/" + NAMESPACE + "/robot_description",
-            lambda msg: msgs_rx.append(msg),
-            qos_profile,
+            std_msgs.msg.String,
+            timeout=3.0,
+            qos_profile=qos_profile
         )
-
-        try:
-            # Wait for messages to be received on the topic for up to 10 seconds
-            end_time = time.time() + 10
-            while time.time() < end_time and len(msgs_rx) == 0:
-                # Spin once to execute the subscriber callback
-                rclpy.spin_once(self.node, timeout_sec=1)
-
-            # Assert that at least one message has been received
-            assert (
-                len(msgs_rx) > 0
-            ), "No messages received on the robot_description topic!"
-
-        finally:
-            # Ensure that the subscription is destroyed after the test
-            self.node.destroy_subscription(sub)
 
     def test_joint_state_publisher_node_start(self, proc_output: ActiveIoHandler):
         """Test if the joint_state_publisher node has started."""
-        found = False
-        print("Waiting for node...")
-        start = time.time()
-
-        # Wait for the node to start up and become available
-        while time.time() - start < 10.0 and not found:
-            found = "joint_state_publisher" in self.node.get_node_names()
-            time.sleep(0.1)
-
-        # Assert that the node was found
-        assert found, "Node not found!"
+        wait_for_node(self.node, "joint_state_publisher", timeout=2.0)
 
     def test_joint_state_publisher_advertise_topic(self, proc_output: ActiveIoHandler):
         """Test if the joint_state topic is advertised by the node."""
-        received = False
-        print("Listening for topics...")
-        start = time.time()
-
-        # Wait for the topic to be advertised by the robot_state_publisher node
-        while time.time() - start < 10.0 and not received:
-            # Check if the node is publishing messages
-            topic_names = self.node.get_topic_names_and_types()
-            for topic_name, types in topic_names:
-                if topic_name == "/" + NAMESPACE + "/joint_states":
-                    received = True
-                    break
-            time.sleep(0.1)
-
-        # Assert that the topic was advertised
-        assert received, "Topic not advertised!"
+        wait_for_topic(
+            self.node,
+            "/" + NAMESPACE + "/joint_states",
+            timeout=10.0
+        )

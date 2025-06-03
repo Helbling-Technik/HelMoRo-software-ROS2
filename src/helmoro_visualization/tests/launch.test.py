@@ -13,6 +13,8 @@ from launch_testing.actions import ReadyToTest
 
 import pytest
 
+from helmoro_utils.test_collection import wait_for_node_with_namespace
+
 namespace = "test_robot"
 ARGUMENTS = [
     ("use_sim_time", "true"),
@@ -55,28 +57,7 @@ class TestProcess(unittest.TestCase):
         rclpy.shutdown()
 
     def test_namespace(self):
-        nodes_and_namespaces = self.node.get_node_names_and_namespaces()
-        rviz_ns = None
-
-        node_found = False
-        namespace_found = False
-        start = time.time()
-
-        # Look for node
-        while time.time() - start < 5.0 and not namespace_found:
-            for name, ns in nodes_and_namespaces:
-                if name == "rviz2":
-                    node_found = True
-                    rviz_ns
-                    if ns == f"/{namespace}":
-                        namespace_found = True
-                        break
-
-        # If test fails, give debug output
-        if not namespace_found:
-            print("Printing all found nodes...")
-            for name, ns in nodes_and_namespaces:
-                print("Nodename: ", name, " namespace: ", namespace)
-
-        assert node_found, "rviz2 node not found!"
-        assert namespace_found, f"Expected namespace '/{namespace}', got '{rviz_ns}'"
+        """Check if rviz2 node is running in the expected namespace."""
+        wait_for_node_with_namespace(
+            self.node, "rviz2", f"/{namespace}", timeout=3.0
+        )
