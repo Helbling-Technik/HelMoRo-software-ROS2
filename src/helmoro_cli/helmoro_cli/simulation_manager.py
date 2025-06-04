@@ -25,7 +25,7 @@ class SimulationManager:
     def delete_robot(self, name):
         "Deletes the robot from the simulation"
         os.system(
-            f"sudo WORLD:={self.world} ENTITY_NAME={name} \
+            f"sudo WORLD={self.world} ENTITY_NAME={name} \
             docker compose -p sim_{name} -f /home/ws/docker/docker-compose.yml up despawn_robot --detach --wait"
         )
 
@@ -35,7 +35,7 @@ class SimulationManager:
     def start_simulation(self, world):
         # Start the simulation environment
         print("Starting simulation environment...")
-        simulation = f"sudo docker compose -f /home/ws/docker/docker-compose.yml up simulation --detach --wait"
+        simulation = f"sudo WORLD={world} docker compose -f /home/ws/docker/docker-compose.yml up simulation --detach --wait"
         print(f"Executing command: {simulation}")
         os.system(simulation)
         self.simulation_status = "running"

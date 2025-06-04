@@ -18,7 +18,9 @@ services:
 
     simulation:
       extends: template
-      command: ros2 launch helmoro_simulation simulation.launch.py
+      command: bash -c "ros2 launch helmoro_simulation simulation.launch.py world:=$${WORLD}"
+      environment:
+        - WORLD
 
     spawn_robot:
       extends: template
