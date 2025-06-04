@@ -95,7 +95,7 @@ ENV SHELL=/bin/bash
 
 # Define entrypoint
 RUN mkdir -p /home/ws
-COPY .devcontainer/entrypoint.sh /home/ws
+COPY docker/entrypoint.sh /home/ws
 RUN chmod +x /home/ws/entrypoint.sh
 ENTRYPOINT [ "/home/ws/entrypoint.sh" ]
 CMD ["/bin/bash"]
@@ -111,8 +111,7 @@ FROM dev AS prod
 # Copy our packages into the image and build them
 USER root
 WORKDIR /home/ws
-COPY config config
 COPY src src
-COPY .devcontainer .devcontainer
+COPY docker/docker-compose.yml docker/
 RUN source /opt/ros/jazzy/setup.bash \
     && colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
