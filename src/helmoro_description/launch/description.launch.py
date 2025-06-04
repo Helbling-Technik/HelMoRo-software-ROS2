@@ -13,7 +13,7 @@ ARGUMENTS = [
     DeclareLaunchArgument(
         "run_in_simulation",
         default_value="false",
-        choices=["true", "false", "True", "False"],
+        choices=["true", "false"],
         description="run_in_simulation",
     ),
     DeclareLaunchArgument(
