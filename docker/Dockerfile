@@ -1,5 +1,6 @@
 FROM osrf/ros@sha256:f2f03a667950570edcaa14ed414a636912acd44ea9c25c10b5a7c5d44eea5142 AS dev
 
+# NOTE: this updates the GPG key for ros2 apt repository (to be deleted when new ros2 jazzy docker image is released)
 RUN rm /etc/apt/sources.list.d/ros2-latest.list \
   && rm /usr/share/keyrings/ros2-latest-archive-keyring.gpg
 
@@ -33,6 +34,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Docker Engine
 RUN curl -fsSL https://get.docker.com -o get-docker.sh && \
     sh get-docker.sh && \
     rm get-docker.sh
