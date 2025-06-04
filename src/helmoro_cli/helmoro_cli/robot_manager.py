@@ -17,6 +17,10 @@ class RobotManager:
 
     def delete_robot(self, name):
         "Stops all containers spawned by the robot"
+        
+        # To delete all robots, change identifier
+        if name == "all": name = "robot"
+        
         raw_output = (
             os.popen(
                 f"sudo docker container ls --filter name={name} --format '{{{{.ID}}}} {{{{.Names}}}}'"
