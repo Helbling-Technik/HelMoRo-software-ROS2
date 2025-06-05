@@ -16,7 +16,7 @@ from launch_testing.actions import ReadyToTest
 import launch_testing.markers
 import rosgraph_msgs.msg
 
-from helmoro_utils.test_collection import wait_for_node, wait_for_message
+from helmoro_utils.test_helpers import wait_for_node, wait_for_message
 
 
 ARGUMENTS = [

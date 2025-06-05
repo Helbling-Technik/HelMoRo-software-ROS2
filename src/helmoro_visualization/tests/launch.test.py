@@ -13,7 +13,7 @@ from launch_testing.actions import ReadyToTest
 
 import pytest
 
-from helmoro_utils.test_collection import wait_for_node_with_namespace
+from helmoro_utils.test_helpers import wait_for_node_with_namespace
 
 namespace = "test_robot"
 ARGUMENTS = [

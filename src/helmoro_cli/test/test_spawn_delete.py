@@ -4,7 +4,7 @@ import os
 import rclpy
 
 from helmoro_cli.robot_manager import RobotManager
-from helmoro_utils.test_collection import wait_for_topic
+from helmoro_utils.test_helpers import wait_for_topic
 
 @pytest.fixture(scope="module")
 def robot_manager():
