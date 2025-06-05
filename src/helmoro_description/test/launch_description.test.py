@@ -19,7 +19,7 @@ import launch_testing.markers
 from launch_testing.io_handler import ActiveIoHandler
 from rclpy.qos import DurabilityPolicy, HistoryPolicy, QoSProfile, ReliabilityPolicy
 
-from helmoro_utils.test_collection import wait_for_node, wait_for_topic, wait_for_message
+from helmoro_utils.test_helpers import wait_for_node, wait_for_topic, wait_for_message
 
 NAMESPACE = "robot_namespace"
 
