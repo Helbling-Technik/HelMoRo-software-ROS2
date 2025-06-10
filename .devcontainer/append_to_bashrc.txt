@@ -2,4 +2,4 @@
 alias src='source /opt/ros/jazzy/setup.bash && source /home/ws/install/setup.bash'
 
 # Integrate entrypoint.sh
-source /home/ws/.devcontainer/entrypoint.sh
+source /home/ws/docker/entrypoint.sh
