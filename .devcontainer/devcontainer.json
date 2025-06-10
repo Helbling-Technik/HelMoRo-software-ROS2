@@ -46,5 +46,5 @@
      "source=/dev/input,target=/dev/input,type=bind,consistency=delegated",
      "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
   ],
-  "postCreateCommand": "sudo chown -R $(whoami) /home/ws/ && python3 /home/ws/.devcontainer/append_to_bashrc.py"
+  "postCreateCommand": "sudo chown -R $(whoami) /home/ws/ && sudo chown -R $(whoami) /var/run/docker.sock && python3 /home/ws/.devcontainer/append_to_bashrc.py"
 }
