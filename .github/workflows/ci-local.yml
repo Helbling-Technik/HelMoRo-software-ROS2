@@ -1,0 +1,46 @@
+name: Build Image and Run Tests with act
+
+on:
+  act:
+    branches:
+      - '**'
+
+jobs:
+  test-locally:
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: test-image
+      CONTAINER_NAME: test-container
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Xvfb
+        run: sudo apt-get update && sudo apt-get install -y xvfb
+
+      - name: Build Docker image and use local cache
+        run: docker build --file docker/Dockerfile --tag ${{ env.IMAGE_NAME }} --target prod .
+
+      - name: Start container
+        run: docker run --name ${{ env.CONTAINER_NAME }} --net host -v /tmp/.X11-unix:/tmp/.X11-unix -v /var/run/docker.sock:/var/run/docker.sock --detach ${{ env.IMAGE_NAME }} tail -f /dev/null
+
+      - name: Run test
+        shell: bash
+        run: |
+          set -e
+          echo "Starting virtual display (Xvfb)..."
+          Xvfb :99 -screen 0 1024x768x24 &
+          export DISPLAY=:99
+          export ROS_DOMAIN_ID=42
+
+          echo "Start testing..."
+          docker exec -e DISPLAY=$DISPLAY -e ROS_DOMAIN_ID=$ROS_DOMAIN_ID ${{ env.CONTAINER_NAME }} bash -c "
+            source ./entrypoint.sh &&
+            colcon test --executor sequential &&
+            colcon test-result --verbose
+          "
+
+      - name: Stop and remove container
+        run: docker stop -t 0 ${{ env.CONTAINER_NAME }} && docker rm ${{ env.CONTAINER_NAME }}
+        if: always()

@@ -1,5 +1,7 @@
 # Custom Alias
 alias src='source /opt/ros/jazzy/setup.bash && source /home/ws/install/setup.bash'
+alias build='/home/ws/docker/build.sh'
+alias test='build && sudo /home/ws/act act'
 
 # Integrate entrypoint.sh
 source /home/ws/docker/entrypoint.sh
