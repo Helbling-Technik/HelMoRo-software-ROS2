@@ -1,9 +1,9 @@
 name: Build Image and Run Tests with act
 
 on:
-  act:
+  push:
     branches:
-      - '**'
+      - '!**' # Exclude all branches from triggering this workflow
 
 jobs:
   test-locally:
@@ -41,6 +41,10 @@ jobs:
             colcon test-result --verbose
           "
 
+      - name: Export logs to runner
+        shell: bash
+        run: docker cp ${{ env.CONTAINER_NAME }}:/home/ws/log ./log
+        if: always() # export logs even if tests fail
       - name: Stop and remove container
         run: docker stop -t 0 ${{ env.CONTAINER_NAME }} && docker rm ${{ env.CONTAINER_NAME }}
         if: always()
