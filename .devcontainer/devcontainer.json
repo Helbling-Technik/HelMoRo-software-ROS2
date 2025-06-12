@@ -1,50 +1,53 @@
 {
-  "name": "ROS 2 Development Container HelMoRo",
-  "privileged": true,
-  "remoteUser": "htkz",
-  "build": {
-      "dockerfile": "../docker/Dockerfile",
-      "context": "..",
-      "target": "dev",
-      "args": {
-          "USERNAME": "htkz"
-      }
-  },
-  "workspaceFolder": "/home/ws",
-  "workspaceMount": "source=${localWorkspaceFolder},target=/home/ws,type=bind",
-  "customizations": {
-      "vscode": {
-          "extensions":[
-              "ms-vscode.cpptools",
-              "ms-vscode.cpptools-themes",
-              "donjayamanne.python-extension-pack",
-              "eamodio.gitlens",
-              "ms-iot.vscode-ros",
-              "ms-azuretools.vscode-docker",
-              "ms-vscode.cmake-tools",
-              "github.vscode-github-actions"
-          ]
-      }
-  },
-  "containerEnv": {
-      "DISPLAY": "unix:0",
-      "ROS_AUTOMATIC_DISCOVERY_RANGE": "LOCALHOST",
-      "ROS_DOMAIN_ID": "42",
-      "NVIDIA_DRIVER_CAPABILITIES": "all"
-  },
-  "runArgs": [
-      "--net=host",
-      "--pid=host",
-      "--ipc=host",
-      "-e", "DISPLAY=${env:DISPLAY}",
-      "--gpus=all",
-      "--runtime=nvidia"
-  ],
-  "mounts": [
-     "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
-     "source=/dev/dri,target=/dev/dri,type=bind,consistency=cached",
-     "source=/dev/input,target=/dev/input,type=bind,consistency=delegated",
-     "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
-  ],
-  "postCreateCommand": "sudo chown -R $(whoami) /home/ws/ && sudo chown -R $(whoami) /var/run/docker.sock && python3 /home/ws/.devcontainer/append_to_bashrc.py"
+    "name": "ROS 2 Development Container HelMoRo",
+    "privileged": true,
+    "remoteUser": "htkz",
+    "build": {
+        "dockerfile": "../docker/Dockerfile",
+        "context": "..",
+        "target": "dev",
+        "args": {
+            "USERNAME": "htkz"
+        },
+        "options": [
+            "--tag", "helmoro_dev"
+        ]
+    },
+    "workspaceFolder": "/home/ws",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/home/ws,type=bind",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.cpptools",
+                "ms-vscode.cpptools-themes",
+                "donjayamanne.python-extension-pack",
+                "eamodio.gitlens",
+                "ms-iot.vscode-ros",
+                "ms-azuretools.vscode-docker",
+                "ms-vscode.cmake-tools",
+                "github.vscode-github-actions"
+            ]
+        }
+    },
+    "containerEnv": {
+        "DISPLAY": "unix:0",
+        "ROS_AUTOMATIC_DISCOVERY_RANGE": "LOCALHOST",
+        "ROS_DOMAIN_ID": "42",
+        "NVIDIA_DRIVER_CAPABILITIES": "all"
+    },
+    "runArgs": [
+        "--net=host",
+        "--pid=host",
+        "--ipc=host",
+        "-e", "DISPLAY=${env:DISPLAY}",
+        "--gpus=all",
+        "--runtime=nvidia"
+    ],
+    "mounts": [
+        "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
+        "source=/dev/dri,target=/dev/dri,type=bind,consistency=cached",
+        "source=/dev/input,target=/dev/input,type=bind,consistency=delegated",
+        "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+    ],
+    "postCreateCommand": "sudo chown -R $(whoami) /home/ws/ && sudo chown -R $(whoami) /var/run/docker.sock && python3 /home/ws/.devcontainer/append_to_bashrc.py"
 }
