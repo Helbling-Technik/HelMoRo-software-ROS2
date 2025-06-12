@@ -74,6 +74,12 @@ RUN apt-get update && apt-get install -y \
 ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 ENV RMW_CYCLONEDDS_URI=file:///home/ws/config/cyclonedds.xml
 
+# Install act for local github actions execution
+RUN mkdir -p /home/ws \
+    && wget https://github.com/nektos/act/releases/download/v0.2.78/act_Linux_x86_64.tar.gz \
+    && tar -xzf act_Linux_x86_64.tar.gz -C /home act \
+    && rm act_Linux_x86_64.tar.gz
+
 # ********************************************************
 # * Set up the user *
 # ********************************************************
