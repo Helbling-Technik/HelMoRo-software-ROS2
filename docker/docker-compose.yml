@@ -41,7 +41,7 @@ services:
 
     gz_ros_bridge:
       extends: template
-      command: bash -c "ros2 launch helmoro_simulation ros_gz_bridge.launch.py namespace:=$${NAMESPACE} word:=$${WORLD}"
+      command: bash -c "ros2 launch helmoro_simulation ros_gz_bridge.launch.py namespace:=$${NAMESPACE} world:=$${WORLD}"
       environment:
         - NAMESPACE
         - WORLD

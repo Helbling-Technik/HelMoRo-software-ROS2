@@ -72,7 +72,6 @@ def wait_for_topic(node, topic_name: str, timeout: float = 10.0):
         node: rclpy Node object used to query topics.
         topic_name: Name of the topic to look for.
         timeout: How long to wait before failing.
-        poll_interval: How often to check.
 
     Raises:
         AssertionError: If the topic is not found within the timeout.
