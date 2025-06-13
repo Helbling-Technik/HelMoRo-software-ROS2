@@ -54,3 +54,10 @@ services:
         - NAMESPACE
         - USE_SIM_TIME
 
+    ros2_control:
+      extends:
+        service: template
+      command: bash -c "ros2 launch helmoro_control control.launch.py namespace:=$${NAMESPACE} run_in_simulation:=$${USE_SIM_TIME}"
+      environment:
+        - NAMESPACE
+        - USE_SIM_TIME
