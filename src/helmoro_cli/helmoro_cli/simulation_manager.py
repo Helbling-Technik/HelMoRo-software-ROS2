@@ -12,7 +12,7 @@ class SimulationManager:
     def spawn_robot(self, name, x, y, z, yaw):
         # Trigger a ROS 2 launch command to spawn the robot
         spawn = f"sudo NAMESPACE={name} X={x} Y={y} Z={z} YAW={yaw} \
-            docker compose -p sim_{name} -f /home/ws/docker/docker-compose.yml up spawn_robot"
+            docker compose -p sim_{name} -f /home/ws/docker/docker-compose.yml up spawn_robot --detach --wait"
 
         ros_gz_bridge = f"sudo NAMESPACE={name} WORLD={self.world} \
             docker compose -p robot_{name} -f /home/ws/docker/docker-compose.yml up gz_ros_bridge --detach --wait"
@@ -43,7 +43,7 @@ class SimulationManager:
     def stop_simulation(self):
         # Stop the simulation environment
         print("Stopping simulation environment...")
-        stop_simulation = f"sudo docker compose -f /home/ws/docker/docker-compose.yml down simulation --timeout 1"
+        stop_simulation = f"sudo docker compose -f /home/ws/docker/docker-compose.yml down simulation --timeout 0"
         print(f"Executing command: {stop_simulation}")
         os.system(stop_simulation)
         self.simulation_status = "stopped"
