@@ -41,7 +41,7 @@ class RobotCLI(cmd.Cmd):
         if len(args) != 5:
             print("Usage: spawn <name> <x> <y> <z> <yaw>")
             return
-        self.robot_manager.spawn_robot(*args)
+        self.robot_manager.add_robot(*args)
         self.simulation_manager.spawn_robot(*args)
 
     def do_delete(self, arg):

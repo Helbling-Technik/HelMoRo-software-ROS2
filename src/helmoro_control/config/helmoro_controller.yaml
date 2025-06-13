@@ -1,0 +1,68 @@
+/**:
+  ros__parameters:
+    update_rate: 100 # Hz
+    hardware_plugin: gz_ros2_control/GazeboSimSystem
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    diff_drive_controller:
+      type: diff_drive_controller/DiffDriveController
+
+/**/diff_drive_controller:
+  ros__parameters:
+    left_wheel_names: ["wheel_left_front_joint", "wheel_left_back_joint"]
+    right_wheel_names: ["wheel_right_front_joint", "wheel_right_back_joint"]
+
+    wheel_separation: 0.185
+    wheels_per_side: 1  
+    wheel_radius: 0.045
+
+    wheel_separation_multiplier: 1.0
+    left_wheel_radius_multiplier: 1.0
+    right_wheel_radius_multiplier: 1.0
+
+    publish_rate: 60.0
+    odom_frame_id: wheel_odom
+    base_frame_id: base_link
+    pose_covariance_diagonal : [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
+    twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
+
+    open_loop: true
+    position_feedback: false
+
+    # Publishes transform between odom_frame_id and base_frame_id
+    enable_odom_tf: false 
+
+    cmd_vel_timeout: 1.0
+    publish_limited_velocity: true
+    use_stamped_vel: true
+    velocity_rolling_window_size: 10
+
+    # Publishing rate (Hz) of the odometry and TF message
+    publish_rate: 50.0
+
+    # Velocity and acceleration limits
+    # Whenever a min_* is unspecified, default to -max_*
+    linear:
+      x:
+        max_velocity: 1.3
+        min_velocity: -0.5
+        max_acceleration: 2.0
+        max_deceleration: -2.0
+        max_acceleration_reverse: .NAN
+        max_deceleration_reverse: .NAN
+        max_jerk: .NAN
+        min_jerk: .NAN
+    
+    angular:
+      z:
+        max_velocity: 6.2
+        min_velocity: .NAN
+        max_acceleration: 40.0
+        max_deceleration: -40.0
+        max_acceleration_reverse: .NAN
+        max_deceleration_reverse: .NAN
+        max_jerk: .NAN
+        min_jerk: .NAN
+

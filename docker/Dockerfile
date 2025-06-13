@@ -54,6 +54,7 @@ RUN apt-get update && apt-get install -y \
     ros-jazzy-ros-gz \
     ros-jazzy-ros-gz-sim \
     ros-jazzy-ros2-control \
+    ros-jazzy-gz-ros2-control \
     ros-jazzy-diff-drive-controller \
     ros-jazzy-joint-state-broadcaster \
     ros-jazzy-rviz2 \

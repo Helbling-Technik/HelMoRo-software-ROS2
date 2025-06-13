@@ -6,14 +6,15 @@ class RobotManager:
     def __init__(self):
         self.robots = {}
 
-    def spawn_robot(self, name, x, y, z, yaw):
+    def add_robot(self, name, x, y, z, yaw):
         self.robots[name] = {"pos": (x, y, z), "yaw": yaw, "status": "idle"}
-        # Here you would trigger a ROS 2 launch or service call
         spawn = f"sudo NAMESPACE={name} USE_SIM_TIME=true \
             docker compose -p robot_{name} -f /home/ws/docker/docker-compose.yml up robot_description --detach --wait"
+        ros2_control = f"sudo NAMESPACE={name} USE_SIM_TIME=true \
+            docker compose -p robot_{name}_control -f /home/ws/docker/docker-compose.yml up ros2_control --detach --wait"
         print(f"Start core nodes of {name}")
-        print(f"Executing command: {spawn}")
         os.system(spawn)
+        os.system(ros2_control)
 
     def delete_robot(self, name):
         "Stops all containers spawned by the robot"
