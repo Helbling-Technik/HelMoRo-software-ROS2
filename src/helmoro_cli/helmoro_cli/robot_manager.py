@@ -8,9 +8,9 @@ class RobotManager:
 
     def add_robot(self, name, x, y, z, yaw):
         self.robots[name] = {"pos": (x, y, z), "yaw": yaw, "status": "idle"}
-        spawn = f"sudo NAMESPACE={name} USE_SIM_TIME=true \
+        spawn = f"NAMESPACE={name} USE_SIM_TIME=true \
             docker compose -p robot_{name} -f /home/ws/docker/docker-compose.yml up robot_description --detach --wait"
-        ros2_control = f"sudo NAMESPACE={name} USE_SIM_TIME=true \
+        ros2_control = f"NAMESPACE={name} USE_SIM_TIME=true \
             docker compose -p robot_{name}_control -f /home/ws/docker/docker-compose.yml up ros2_control --detach --wait"
         print(f"Start core nodes of {name}")
         os.system(spawn)
@@ -24,7 +24,7 @@ class RobotManager:
         
         raw_output = (
             os.popen(
-                f"sudo docker container ls --filter name={name} --format '{{{{.ID}}}} {{{{.Names}}}}'"
+                f"docker container ls --filter name={name} --format '{{{{.ID}}}} {{{{.Names}}}}'"
             )
             .read()
             .strip()
@@ -37,7 +37,7 @@ class RobotManager:
         containers = [line.strip().split() for line in raw_output.splitlines()]
         for container_id, container_name in containers:
             result = os.system(
-                f"sudo docker container stop {container_id} --timeout 0 && sudo docker container rm {container_id} > /dev/null"
+                f"docker container stop {container_id} --timeout 0 && docker container rm {container_id} > /dev/null"
             )
             if result == 0:
                 print(f"{container_name}  Stopped")

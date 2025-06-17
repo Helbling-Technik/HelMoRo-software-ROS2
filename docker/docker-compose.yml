@@ -4,7 +4,7 @@ services:
       image: helmoro
       environment:
         - DISPLAY=${DISPLAY}
-        - ROS_DOMAIN_ID=42
+        - ROS_DOMAIN_ID=${ROS_DOMAIN_ID}
       network_mode: host
       ipc: host
       volumes:
