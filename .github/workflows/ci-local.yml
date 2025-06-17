@@ -32,7 +32,7 @@ jobs:
           echo "Starting virtual display (Xvfb)..."
           Xvfb :99 -screen 0 1024x768x24 &
           export DISPLAY=:99
-          export ROS_DOMAIN_ID=42
+          export ROS_DOMAIN_ID=50
 
           echo "Start testing..."
           docker exec -e DISPLAY=$DISPLAY -e ROS_DOMAIN_ID=$ROS_DOMAIN_ID ${{ env.CONTAINER_NAME }} bash -c "
