@@ -6,7 +6,7 @@ from rclpy.node import Node
 from rosidl_runtime_py.utilities import get_message
 import std_msgs.msg
 import rosgraph_msgs.msg
-from rclpy.qos import DurabilityPolicy, HistoryPolicy, QoSProfile, ReliabilityPolicy
+from rclpy.qos import QoSProfile
 
 
 def wait_for_node(node, node_name: str, timeout: float = 10.0):
@@ -89,7 +89,22 @@ def wait_for_topic(node, topic_name: str, timeout: float = 10.0):
     assert received, f"Topic '{topic_name}' not advertised within {timeout} seconds. Topics: {topic_names}"
     
 def wait_for_message(node: Node, topic_name: str, msg_type_str: str, timeout: float = 10.0, qos_profile: QoSProfile = 10):
-    """Waits until a message is received on the topic within the timeout."""
+    """
+    Waits for a message to be received on the specified topic within a timeout period.
+
+    Args:
+        node (Node): The rclpy Node used to create the subscription and spin.
+        topic_name (str): The full name of the topic to subscribe to (e.g., '/robot1/cmd_vel').
+        msg_type_str (str): The string type of the message (e.g., 'geometry_msgs/msg/Twist').
+        timeout (float, optional): Maximum time to wait in seconds. Defaults to 10.0.
+        qos_profile (QoSProfile, optional): QoS profile to use for the subscription. Defaults to 10 (depth-based).
+
+    Returns:
+        msg: The first message received on the topic.
+
+    Raises:
+        AssertionError: If no message is received before the timeout expires.
+    """
     received_msg = []
     
     def callback(msg):
@@ -105,3 +120,34 @@ def wait_for_message(node: Node, topic_name: str, msg_type_str: str, timeout: fl
 
     node.destroy_subscription(sub)
     assert received_msg, f"No message received on {topic_name} within {timeout} seconds."
+    return received_msg[-1]
+
+def wait_for_goal_reached(node: Node, robot_name: str, x: float, y: float, timeout: float = 10.0):
+    """
+    Waits until the specified robot reaches the given (x, y) goal position based on its Odometry.
+
+    Args:
+        node (Node): rclpy Node used to receive messages.
+        robot_name (str): Robot name used to resolve the odometry topic (e.g., 'robot1').
+        x (float): Target x-coordinate.
+        y (float): Target y-coordinate.
+        timeout (float): Maximum time to wait for the robot to reach the goal (in seconds).
+        tolerance (float): Distance threshold to consider the goal reached. Defaults to 0.1 meters.
+
+    Raises:
+        AssertionError: If the goal is not reached within the timeout.
+    """
+    topic_name = f"/{robot_name}/diff_drive_controller/odom"
+    msg_type = get_message("nav_msgs/msg/Odometry")
+    
+    start = time.time()
+    while time.time() - start < timeout:
+        odom_msg = wait_for_message(node, topic_name, msg_type, timeout=5.0)
+        
+        # Check if the robot is at the goal position
+        pos = odom_msg.pose.pose.position
+        
+        if (abs(pos.x - x) < 0.1 and abs(pos.y - y) < 0.1):
+            return
+        print(f"Robot {robot_name} at position ({pos.x}, {pos.y})")
+    raise AssertionError(f"Robot {robot_name} did not reach goal ({x}, {y}) within {timeout} seconds. Robot is currently at position ({pos.x}, {pos.y}).")
