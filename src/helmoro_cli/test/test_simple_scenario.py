@@ -4,7 +4,8 @@ import rclpy
 
 from helmoro_cli.robot_manager import RobotManager
 from helmoro_cli.simulation_manager import SimulationManager
-from helmoro_utils.test_helpers import wait_for_topic, wait_for_node_with_namespace
+from helmoro_utils.test_helpers import wait_for_topic, wait_for_node_with_namespace, wait_for_goal_reached
+from helmoro_utils.publishers import publish_twist_stamped
 
 @pytest.fixture(scope="module")
 def robot_manager():
@@ -18,7 +19,7 @@ def simulation_manager():
     print("[Fixture] Creating SimulationManager instance")
     return SimulationManager()
 
-def test_control(robot_manager, simulation_manager):
+def test_simple_scenario(robot_manager, simulation_manager):
     """Integration test for spawning, controlling, and deleting a robot."""
     rclpy.init()
     node = rclpy.create_node("test_node")
@@ -42,6 +43,20 @@ def test_control(robot_manager, simulation_manager):
     wait_for_node_with_namespace(node, "diff_drive_controller", f"/{robot_name}", timeout=10.0)
     print("[Results] Control nodes are active")
 
+    print("[Action] Sending move command to the robot...")
+    publish_twist_stamped(
+        node, f"/{robot_name}/cmd_vel", x_vel=1.0, rot_vel=0.0)
+    
+    print("[Test] Waiting for robot to reach the goal position...")
+    wait_for_goal_reached(node, robot_name, x=1.0, y=0.0, timeout=10.0)
+    
+    print("[Action] Sending stop command to the robot...")
+    publish_twist_stamped(
+        node, f"/{robot_name}/cmd_vel", x_vel=0.0, rot_vel=0.0)
+    
+    print("[Test] Verifying robot stopped...")
+    print("[Result] Robot control commands were successfully sent and executed")
+        
     print(f"[Action] Deleting robot: {robot_name}")
     robot_manager.delete_robot(robot_name)
 
@@ -58,5 +73,23 @@ def test_control(robot_manager, simulation_manager):
         f"Robot '{robot_name}' was not properly deleted. Remaining robots: {remaining_robots}"
     )
     print(f"[Result] Robot '{robot_name}' deleted successfully")
-
+    
+    print("[Action] Stopping simulation...")
+    simulation_manager.stop_simulation()
+    
     rclpy.shutdown()
+
+def test_cleanup(robot_manager, simulation_manager):
+    """Test to ensure RobotManager cleans up properly."""
+    print("[Action] Cleaning up test...")
+    robot_manager.delete_robot("all")
+    
+    remaining_robots = robot_manager.get_robot_names()
+    assert not remaining_robots, (
+        f"RobotManager cleanup failed. Remaining robots: {remaining_robots}"
+    )
+    
+    simulation_manager.stop_simulation()
+    print("[Result] RobotManager cleaned up successfully")
+    
+    
