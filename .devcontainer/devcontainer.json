@@ -7,7 +7,9 @@
         "context": "..",
         "target": "dev",
         "args": {
-            "USERNAME": "htkz"
+            "USERNAME": "htkz",
+            "USER_ID": "1000",
+            "DOCKER_GID": "999"
         },
         "options": [
             "--tag", "helmoro_dev"
@@ -22,7 +24,7 @@
                 "ms-vscode.cpptools-themes",
                 "donjayamanne.python-extension-pack",
                 "eamodio.gitlens",
-                "ms-iot.vscode-ros",
+                "ranch-hand-robotics.rde-pack",
                 "ms-azuretools.vscode-docker",
                 "ms-vscode.cmake-tools",
                 "github.vscode-github-actions"
@@ -39,13 +41,13 @@
         "--net=host",
         "--pid=host",
         "--ipc=host",
-        "-e", "DISPLAY=${env:DISPLAY}",
-        "--gpus=all",
-        "--runtime=nvidia"
+        "-e", "DISPLAY=${env:DISPLAY}"
+        // "--gpus=all",
+        // "--runtime=nvidia"
     ],
     "mounts": [
         "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
-        "source=/dev/dri,target=/dev/dri,type=bind,consistency=cached",
+        // "source=/dev/dri,target=/dev/dri,type=bind,consistency=cached",
         "source=/dev/input,target=/dev/input,type=bind,consistency=delegated",
         "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
     ],

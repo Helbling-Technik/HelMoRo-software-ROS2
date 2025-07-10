@@ -102,7 +102,8 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME \
     \
     # Give user privilege to start docker without sudo
-    && usermod -aG systemd-network $USERNAME
+    # docker is usually group 999, adjust this if it doesn't work
+    && usermod -aG 999 $USERNAME 
     
 ENV SHELL=/bin/bash
 

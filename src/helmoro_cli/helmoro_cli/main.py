@@ -58,6 +58,23 @@ class RobotCLI(cmd.Cmd):
 
         print("Exiting CLI...")
         return True
+    
+    def do_teleop(self, arg):
+        "Start teleoperation: teleop <name>"
+        if self.simulation_manager.get_status() == "stopped":
+            print("Can't start teleoperation. Simulation is not running.")
+            return
+        
+        args = arg.split()
+        if len(args) != 1:
+            print("Usage: teleop <name>")
+            return
+        
+        if args[0] not in self.robot_manager.get_robot_names():
+            print(f"{args[0]} is not available for teleoperation.")
+            return
+
+        self.robot_manager.teleop(args[0])
 
     # TODO: This function is meant as a helper during development. Do not use this function for production.
     def do_multi_robot_spawn(self, arg):

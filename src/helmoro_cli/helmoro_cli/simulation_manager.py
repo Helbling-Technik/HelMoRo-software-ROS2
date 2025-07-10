@@ -35,7 +35,7 @@ class SimulationManager:
     def start_simulation(self, world):
         # Start the simulation environment
         print("Starting simulation environment...")
-        simulation = f"WORLD={world} docker compose -f /home/ws/docker/docker-compose.yml up simulation --detach --wait"
+        simulation = f"WORLD={world} docker compose -f /home/ws/docker/docker-compose.yml up simulation"
         print(f"Executing command: {simulation}")
         os.system(simulation)
         self.simulation_status = "running"

@@ -33,7 +33,7 @@ Welcome to the microservices branch! This branch provides a modular and extensib
 
 ### Prerequisites
 - Linux OS
-- Docker
+- Docker for [non-root user](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user)
 - VSCode with Devcontainer Extension
 
 ### Setup

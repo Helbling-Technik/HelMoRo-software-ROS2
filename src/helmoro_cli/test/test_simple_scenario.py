@@ -39,7 +39,7 @@ def test_simple_scenario(robot_manager, simulation_manager):
     print("[Result] Robot description topic is active")
 
     print("[Test] Checking for control nodes...")
-    wait_for_node_with_namespace(node, "joint_state_broadcaster", f"/{robot_name}", timeout=10.0)
+    wait_for_node_with_namespace(node, "joint_state_broadcaster", f"/{robot_name}", timeout=20.0)
     wait_for_node_with_namespace(node, "diff_drive_controller", f"/{robot_name}", timeout=10.0)
     print("[Results] Control nodes are active")
 
